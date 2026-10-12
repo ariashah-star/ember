@@ -1128,6 +1128,8 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
       <h3>Cookies</h3>
       <p>We use cookies and similar technologies to operate the site, remember preferences, understand site traffic and interaction, and improve our offerings. You can control cookies through your browser settings; disabling them may affect some features.</p>
 
+      <p>For details on how we handle health information shared in our surrogate eligibility quiz, see our <a href="#/health-data" data-route>Consumer Health Data Privacy Policy</a>.</p>
+
       <h3>How we share information</h3>
       <p>We do not sell, rent, or trade your personally identifiable information. We share it only with trusted service providers who help us operate our website, run our business, or serve you &mdash; and only where they agree to keep it confidential. For example, we may share information with providers that support our communications and marketing, partners who assist with screening and evaluation, and, once you are working with us, insurers, healthcare providers, attorneys, and others as needed to deliver your services. We may also disclose information when we believe it is appropriate to comply with the law, enforce our policies, or protect the rights, property, or safety of Ember or others. We may share aggregated or de-identified information that does not identify you.</p>
 
@@ -1151,6 +1153,52 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 
       <h3>Changes to this Policy</h3>
       <p>We may update this Policy from time to time. When we do, we will revise the effective date above and post the changes on this page.</p>
+
+      <h3>Contact us</h3>
+      <p>Ember Surrogacy LLC, 1 Fair Oaks St., San Francisco, CA 94110, United States &middot; <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a></p>
+
+      <p style="margin-top:2rem"><a class="textlink" href="#/home" data-route>Back to home</a></p>
+    </div>
+  </section>
+</main>
+
+<!-- ================================================== -->
+<!-- CONSUMER HEALTH DATA PRIVACY POLICY                -->
+<!-- ================================================== -->
+<main class="page" data-page="health-data">
+  <div class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow">Legal</span>
+      <h1>Health Data <em class="lux">Privacy</em></h1>
+      <p>How Ember Surrogacy LLC collects, uses, and protects health information shared with us.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap legal-prose">
+      <p><strong>Last updated:</strong> October 2026</p>
+
+      <p>This Consumer Health Data Privacy Policy supplements our <a href="#/privacy" data-route>Privacy Policy</a>. It explains how Ember Surrogacy LLC (&ldquo;Ember,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;) handles &ldquo;consumer health data&rdquo; as defined by laws such as Washington&rsquo;s My Health My Data Act, Nevada SB 370, and the Connecticut Data Privacy Act. Ember is not a healthcare provider and is not subject to HIPAA, but we treat the health information you share with care.</p>
+
+      <h3>Health data we collect</h3>
+      <p>When you complete our surrogate eligibility quiz, we collect your answers about your pregnancy and birth history, whether your pregnancies were healthy and full-term, whether your BMI is within a typical range, and whether you smoke or live in a smoke-free home. We collect this together with your name, email address, and phone number.</p>
+
+      <h3>Where it comes from</h3>
+      <p>We collect this information only from you, directly, when you submit the quiz.</p>
+
+      <h3>Why we collect and use it</h3>
+      <p>We use it only to evaluate whether you may be eligible to become a surrogate with Ember and to contact you about your application. We do not use it for advertising, and we do not sell it.</p>
+
+      <h3>Your consent</h3>
+      <p>We collect this information only after you give separate consent on the quiz. You can withdraw your consent at any time by emailing <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>.</p>
+
+      <h3>Who we share it with</h3>
+      <p>We share it only with service providers that process it on our behalf to receive and store your application: our form-processing provider and our email and cloud storage provider. They may not use it for their own purposes. We do not share it with affiliates or any other third parties without your separate consent, unless required by law.</p>
+
+      <h3>How long we keep it</h3>
+      <p>We keep your quiz answers only for as long as we need them to evaluate your application, support your journey if we work together, and meet our legal obligations, as described in our <a href="#/privacy" data-route>Privacy Policy</a>.</p>
+
+      <h3>Your rights</h3>
+      <p>You may ask us to confirm whether we hold your health data, to send you a copy, to tell you who we have shared it with, or to delete it. Email <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a> with the subject &ldquo;Health data request.&rdquo; We may need to verify your identity, and we will respond within 45 days. If we decline your request, you may appeal by replying to our response. If we deny your appeal, you may contact your state Attorney General.</p>
 
       <h3>Contact us</h3>
       <p>Ember Surrogacy LLC, 1 Fair Oaks St., San Francisco, CA 94110, United States &middot; <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a></p>
@@ -1306,7 +1354,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
     </div>
     <div class="foot-legal">
       <span>© 2026 ember</span>
-      <span><a href="#/privacy" data-route>Privacy Policy</a> &nbsp;·&nbsp; <a href="#/terms" data-route>Terms of Service</a></span>
+      <span><a href="#/privacy" data-route>Privacy Policy</a> &nbsp;·&nbsp; <a href="#/health-data" data-route>Health Data Privacy</a> &nbsp;·&nbsp; <a href="#/terms" data-route>Terms of Service</a></span>
     </div>
   </div>
 </footer>
@@ -1702,15 +1750,18 @@ window.addEventListener('hashchange', () => {
     let html = '<span class="quiz-tag">Review</span><h2 class="quiz-q">Ready to send your application?</h2>';
     html += '<ul class="quiz-review-list">'+rows+'</ul>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizConsent"><label for="quizConsent">I consent to Ember collecting and using the information I\u2019ve provided to evaluate my eligibility for the surrogacy program and to contact me, as described in the <a href="#/privacy" data-route>Privacy Policy</a>. I understand this quiz is not medical or legal advice.</label></div>';
+    html += '<div class="quiz-consent"><input type="checkbox" id="quizHealthConsent"><label for="quizHealthConsent">I also specifically consent to Ember collecting my health information (my pregnancy history, BMI range, and smoking status) only to evaluate my eligibility, as described in the <a href="#/health-data" data-route>Health Data Privacy Policy</a>. I can withdraw this consent at any time.</label></div>';
     html += '<button type="button" class="btn btn-ember" id="quizSubmit" style="width:100%" disabled>Submit application</button>';
     html += navHtml();
     body.innerHTML = html;
     document.getElementById('quizBack').onclick = () => { state.i--; render(); };
     const consent = document.getElementById('quizConsent');
+    const healthConsent = document.getElementById('quizHealthConsent');
     const submit = document.getElementById('quizSubmit');
-    consent.onchange = () => { submit.disabled = !consent.checked; };
+    const bothChecked = () => consent.checked && healthConsent.checked;
+    consent.onchange = healthConsent.onchange = () => { submit.disabled = !bothChecked(); };
     submit.onclick = async () => {
-      if(!consent.checked) return;
+      if(!bothChecked()) return;
       submit.disabled = true; submit.textContent = 'Sending…';
       const a = state.answers;
       let utmText = '';
@@ -1726,6 +1777,8 @@ window.addEventListener('hashchange', () => {
         'Phone: ' + (a.phone || '—') + '\n\n' +
         'ELIGIBILITY ANSWERS\n----------------------------------------\n' +
         Object.keys(labels).filter(k => !['name','email','phone'].includes(k) && a[k]).map(k => labels[k] + ': ' + a[k]).join('\n') +
+        '\n\nCONSENT\n----------------------------------------\n' +
+        'Privacy Policy consent: Yes\nHealth data consent: Yes (Health Data Privacy Policy, Oct 2026)\nConsented at: ' + new Date().toISOString() +
         utmText;
       const payload = { apiKey: 'sf_3a6157e080d62e9879505751', subject: 'Ember Surrogate Application', name: a.name || '', email: a.email || '', replyTo: a.email || '', message: composed };
       window.EmberLog && window.EmberLog('Quiz submitting', payload);
