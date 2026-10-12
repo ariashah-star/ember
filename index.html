@@ -1764,23 +1764,36 @@ window.addEventListener('hashchange', () => {
       if(!bothChecked()) return;
       submit.disabled = true; submit.textContent = 'Sending…';
       const a = state.answers;
-      let utmText = '';
-      try {
-        const utms = window.EmberUTMs ? window.EmberUTMs.get() : {};
-        if(Object.keys(utms).length){
-          utmText = '\n\n----------------------------------------\nMARKETING ATTRIBUTION\n----------------------------------------\n' + window.EmberUTMs.formatForMessage(utms);
-        }
-      } catch(e){}
-      const composed = 'Surrogate Eligibility Application\n\n' +
-        'Name: ' + (a.name || '—') + '\n' +
-        'Email: ' + (a.email || '—') + '\n' +
-        'Phone: ' + (a.phone || '—') + '\n\n' +
-        'ELIGIBILITY ANSWERS\n----------------------------------------\n' +
-        Object.keys(labels).filter(k => !['name','email','phone'].includes(k) && a[k]).map(k => labels[k] + ': ' + a[k]).join('\n') +
-        '\n\nCONSENT\n----------------------------------------\n' +
-        'Privacy Policy consent: Yes\nHealth data consent: Yes (Health Data Privacy Policy, Oct 2026)\nConsented at: ' + new Date().toISOString() +
-        utmText;
-      const payload = { apiKey: 'sf_3a6157e080d62e9879505751', subject: 'Ember Surrogate Application', name: a.name || '', email: a.email || '', replyTo: a.email || '', message: composed };
+      let utms = {};
+      try { utms = window.EmberUTMs ? window.EmberUTMs.get() : {}; } catch(e){}
+      // Each answer is its own field so it lands in its own Google Sheets column.
+      // Key order sets the column order on the first submission; keep keys stable.
+      const payload = {
+        apiKey: 'sf_3a6157e080d62e9879505751',
+        subject: 'Ember Surrogate Application',
+        replyTo: a.email || '',
+        name: a.name || '',
+        email: a.email || '',
+        phone: a.phone || '',
+        age: a.age || '',
+        given_birth: a.given_birth || '',
+        healthy_pregnancies: a.healthy_preg || '',
+        raising_child: a.raising_child || '',
+        bmi_healthy_range: a.bmi || '',
+        non_smoker: a.nonsmoker || '',
+        us_citizen_or_resident: a.citizen || '',
+        support_system: a.support || '',
+        consent_privacy_policy: 'Yes',
+        consent_health_data: 'Yes',
+        consented_at: new Date().toISOString(),
+        utm_source: utms.utm_source || '',
+        utm_medium: utms.utm_medium || '',
+        utm_campaign: utms.utm_campaign || '',
+        utm_content: utms.utm_content || '',
+        utm_term: utms.utm_term || '',
+        fbclid: utms.fbclid || '',
+        gclid: utms.gclid || ''
+      };
       window.EmberLog && window.EmberLog('Quiz submitting', payload);
       try {
         const res = await fetch('https://api.staticforms.dev/submit', {
