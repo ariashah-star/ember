@@ -31,6 +31,11 @@
   // No analytics on the surrogate quiz or health data pages: visits there can reveal health information.
   window.EMBER_NO_ANALYTICS_PAGES = ['apply', 'health-data'];
   window.emberPageFromHash = function(){ return (location.hash.replace('#/','').split('?')[0].split('#')[0]) || 'home'; };
+  // Google's official opt-out flag: while it is true, gtag sends nothing at all (no page views,
+  // scroll/click/form events or engagement pings). Re-checked on every page change.
+  window.emberSyncGaDisable = function(){ window['ga-disable-G-BVRBX1FZB1'] = window.EMBER_NO_ANALYTICS_PAGES.includes(window.emberPageFromHash()); };
+  window.emberSyncGaDisable();
+  window.addEventListener('hashchange', window.emberSyncGaDisable);
   gtag('config', 'G-BVRBX1FZB1', { send_page_view: !window.EMBER_NO_ANALYTICS_PAGES.includes(window.emberPageFromHash()) });
 </script>
 
