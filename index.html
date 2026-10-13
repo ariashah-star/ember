@@ -240,6 +240,11 @@ footer .logo-mark path{stroke:var(--alabaster)}
 .svc:nth-child(2) .glyph{background:var(--sandstone)}
 .svc h3{font-size:var(--fs-h3)}
 .svc p{color:var(--espresso-soft);font-size:.95rem;flex:1}
+.svc-actions{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;padding-top:.6rem}
+.svc-actions .btn,.svc-actions .svc-more{display:flex;align-items:center;justify-content:center;text-align:center;padding:.95rem 1rem;font-size:.66rem;letter-spacing:.15em;border-radius:999px;font-weight:500;text-transform:uppercase}
+.svc-actions .svc-more{border:1px solid rgba(59,38,32,.35);color:var(--espresso);transition:all .28s ease}
+.svc-actions .svc-more:hover{background:var(--espresso);color:var(--alabaster);border-color:var(--espresso)}
+@media (max-width:480px){.svc-actions{grid-template-columns:1fr}}
 
 /* ---------- Moments strip ---------- */
 .moments{padding:0 0 clamp(4.5rem,9vw,7rem)}
@@ -587,18 +592,18 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
           <div class="glyph">✦</div>
           <h3>Become a Parent</h3>
           <p>Becoming a parent through surrogacy can feel overwhelming, and you deserve a partner who makes it clear and human. From the very first conversation to the moment you finally hold your child, we're upfront about every step, anticipate what you'll need before you ask, and stay in your corner the entire way.</p>
-          <div class="hero-ctas" style="margin-top:1.2rem;align-items:center">
+          <div class="svc-actions">
             <a href="#/contact?i=parent" data-route class="btn btn-solid">Book a Consultation</a>
-            <a class="textlink" href="#/parents" data-route>Learn more</a>
+            <a class="svc-more" href="#/parents" data-route>Learn More</a>
           </div>
         </div>
         <div class="svc">
           <div class="glyph">❋</div>
           <h3>Become a Surrogate</h3>
           <p>You're doing something extraordinary, and you deserve to feel valued and protected through all of it. We advocate fiercely on your behalf and pair generous compensation and benefits with support that's there whenever you need it.</p>
-          <div class="hero-ctas" style="margin-top:1.2rem;align-items:center">
+          <div class="svc-actions">
             <a href="#/apply" data-route class="btn btn-solid">See If You Qualify</a>
-            <a class="textlink" href="#/surrogates" data-route>Learn more</a>
+            <a class="svc-more" href="#/surrogates" data-route>Learn More</a>
           </div>
         </div>
       </div>
