@@ -240,6 +240,10 @@ footer .logo-mark path{stroke:var(--alabaster)}
 .svc:nth-child(2) .glyph{background:var(--sandstone)}
 .svc h3{font-size:var(--fs-h3)}
 .svc p{color:var(--espresso-soft);font-size:.95rem;flex:1}
+.svc-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.9rem 1.2rem;padding-top:1.4rem;border-top:1px solid rgba(188,143,99,.22)}
+.svc-actions .btn{padding:.85rem 1.7rem;font-size:.68rem}
+.svc-actions .svc-more{font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--espresso-soft);transition:color .2s}
+.svc-actions .svc-more:hover{color:var(--ember)}
 
 /* ---------- Moments strip ---------- */
 .moments{padding:0 0 clamp(4.5rem,9vw,7rem)}
@@ -587,18 +591,18 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
           <div class="glyph">✦</div>
           <h3>Become a Parent</h3>
           <p>Becoming a parent through surrogacy can feel overwhelming, and you deserve a partner who makes it clear and human. From the very first conversation to the moment you finally hold your child, we're upfront about every step, anticipate what you'll need before you ask, and stay in your corner the entire way.</p>
-          <div class="hero-ctas" style="margin-top:1.2rem;align-items:center">
-            <a href="#/contact?i=parent" data-route class="btn btn-solid">Book a Consultation</a>
-            <a class="textlink" href="#/parents" data-route>Learn more</a>
+          <div class="svc-actions">
+            <a href="#/contact?i=parent" data-route class="btn btn-ghost">Book a Consultation</a>
+            <a class="svc-more" href="#/parents" data-route>Learn more &rarr;</a>
           </div>
         </div>
         <div class="svc">
           <div class="glyph">❋</div>
           <h3>Become a Surrogate</h3>
           <p>You're doing something extraordinary, and you deserve to feel valued and protected through all of it. We advocate fiercely on your behalf and pair generous compensation and benefits with support that's there whenever you need it.</p>
-          <div class="hero-ctas" style="margin-top:1.2rem;align-items:center">
-            <a href="#/apply" data-route class="btn btn-solid">See If You Qualify</a>
-            <a class="textlink" href="#/surrogates" data-route>Learn more</a>
+          <div class="svc-actions">
+            <a href="#/apply" data-route class="btn btn-ghost">See If You Qualify</a>
+            <a class="svc-more" href="#/surrogates" data-route>Learn more &rarr;</a>
           </div>
         </div>
       </div>
