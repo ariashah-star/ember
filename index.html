@@ -514,6 +514,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
       <li><a href="#/parents" data-route data-nav="parents">Intended Parents</a></li>
       <li><a href="#/surrogates" data-route data-nav="surrogates">Surrogates</a></li>
       <li><a href="#/about" data-route data-nav="about">About</a></li>
+      <li><a href="#/contact" data-route data-nav="contact">Contact</a></li>
       <li><a href="#/home#ready-to-begin" data-route class="btn btn-solid">Start Your Journey</a></li>
     </ul>
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
@@ -586,13 +587,19 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
           <div class="glyph">✦</div>
           <h3>Become a Parent</h3>
           <p>Becoming a parent through surrogacy can feel overwhelming, and you deserve a partner who makes it clear and human. From the very first conversation to the moment you finally hold your child, we're upfront about every step, anticipate what you'll need before you ask, and stay in your corner the entire way.</p>
-          <a class="textlink" href="#/parents" data-route>Learn more</a>
+          <div class="hero-ctas" style="margin-top:1.2rem;align-items:center">
+            <a href="#/contact?i=parent" data-route class="btn btn-solid">Book a Consultation</a>
+            <a class="textlink" href="#/parents" data-route>Learn more</a>
+          </div>
         </div>
         <div class="svc">
           <div class="glyph">❋</div>
           <h3>Become a Surrogate</h3>
           <p>You're doing something extraordinary, and you deserve to feel valued and protected through all of it. We advocate fiercely on your behalf and pair generous compensation and benefits with support that's there whenever you need it.</p>
-          <a class="textlink" href="#/surrogates" data-route>Learn more</a>
+          <div class="hero-ctas" style="margin-top:1.2rem;align-items:center">
+            <a href="#/apply" data-route class="btn btn-solid">See If You Qualify</a>
+            <a class="textlink" href="#/surrogates" data-route>Learn more</a>
+          </div>
         </div>
       </div>
     </div>
@@ -700,6 +707,9 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
       <span class="eyebrow">Intended Parents</span>
       <h1>Your path to parenthood, <em class="lux">walked together.</em></h1>
       <p>Every path to parenthood is different, and all of them are welcome here. Whatever brought a family to this moment, Ember walks beside them every step of the way, with warmth, discretion, and the expertise this moment deserves.</p>
+      <div class="hero-ctas" style="margin-top:2rem">
+        <a href="#/contact?i=parent" data-route class="btn btn-solid">Book a Consultation</a>
+      </div>
     </div>
   </div>
 
@@ -825,6 +835,9 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
       <span class="eyebrow">Surrogates</span>
       <h1>Give an extraordinary gift. <em class="lux">Make parenthood possible.</em></h1>
       <p>Choosing to carry for another family is one of the most generous things a person can do, and it deserves to be met with real support. Ember surrogates receive a compensation package that includes base compensation, comprehensive benefits, and premium support, alongside a team that treats every surrogate with respect, from application through postpartum and beyond. A full breakdown is provided below.</p>
+      <div class="hero-ctas" style="margin-top:2rem">
+        <a href="#/apply" data-route class="btn btn-solid">See If You Qualify</a>
+      </div>
     </div>
   </div>
 
@@ -872,7 +885,10 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
           <li>Reliable support system at home</li>
         </ul>
       </div>
-      <p style="margin-top:2rem;color:var(--espresso-soft);max-width:40rem">Not sure if you meet every requirement? Reach out anyway. We review every application personally and give you an honest answer.</p>
+      <p style="margin-top:2rem;color:var(--espresso-soft);max-width:40rem">Not sure if you meet every requirement? Take the quiz anyway. We review every application personally and give you an honest answer.</p>
+      <div class="hero-ctas" style="margin-top:1.4rem">
+        <a href="#/apply" data-route class="btn btn-solid">Take the 1-Minute Eligibility Quiz</a>
+      </div>
     </div>
   </section>
 
@@ -884,7 +900,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
         <div class="info-card">
           <span class="num">01 · Apply</span>
           <h3>A simple, private application</h3>
-          <p>Tell us about yourself in about 15 minutes. Our team reviews every application personally and responds within days, not weeks.</p>
+          <p>Start with a quick eligibility quiz that takes about a minute. Our team reviews every application personally and responds within days, not weeks.</p>
         </div>
         <div class="info-card">
           <span class="num">02 · Screen</span>
@@ -919,7 +935,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
     <div class="wrap">
       <span class="eyebrow">Join Us</span>
       <h2>Ready to change a family's life <em class="lux">forever?</em></h2>
-      <p>Start your application today. It takes about 15 minutes, and our team responds personally.</p>
+      <p>Start your application today. The eligibility quiz takes about a minute, and our team responds personally.</p>
       <div class="cta-btns">
         <a href="#/apply" data-route class="btn btn-light">Apply to Become a Surrogate</a>
       </div>
@@ -1062,7 +1078,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
             </div>
             <div class="form-success" id="formSuccess">
               <h3>Thank you.</h3>
-              <p>A member of our team will be in touch within 1-3 business days.</p>
+              <p>Check your inbox: we&rsquo;ve just emailed you a link to choose a time for your consultation. A member of our team will also be in touch within 1-3 business days.</p>
             </div>
           </form>
         </div>
@@ -1778,7 +1794,7 @@ window.addEventListener('hashchange', () => {
       // Each answer is its own field so it lands in its own Google Sheets column.
       // Key order sets the column order on the first submission; keep keys stable.
       const payload = {
-        apiKey: 'sf_3a6157e080d62e9879505751',
+        apiKey: 'sf_ec42af1d9b760335558da878',
         subject: 'Ember Surrogate Application',
         replyTo: a.email || '',
         name: a.name || '',
