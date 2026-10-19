@@ -88,7 +88,7 @@ strong{font-weight:600}
   font-weight:500;color:var(--ember);display:inline-flex;align-items:center;gap:.8rem;
 }
 .eyebrow::before{content:"";width:28px;height:1px;background:var(--cashmere)}
-section{padding:clamp(4.5rem,9vw,7.5rem) 0}
+section{padding:clamp(3.5rem,7vw,5.5rem) 0}
 :focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:4px}
 
 /* ---------- Buttons ---------- */
@@ -266,7 +266,14 @@ footer .logo-mark path{stroke:var(--alabaster)}
 .section-head-photo + .info-grid,.section-head-photo + .why-grid,.section-head-photo + .check-cols{margin-top:3rem}
 .story-split .wide-photo{margin-top:2.25rem}
 /* Alternate photos left and right down a page on desktop; phones keep text first */
-@media (min-width:701px){.photo-left > .photo-block,.photo-left > .wide-photo{order:-1}}
+@media (min-width:701px){
+  .photo-left > .photo-block,.photo-left > .wide-photo{order:-1}
+  /* Keep photos in proportion to the text beside them */
+  .split > .photo-block{width:100%;max-width:400px;justify-self:center}
+  .page-hero .photo-block{max-width:320px;height:min(46svh,380px)}
+  .wide-photo{max-width:400px;max-height:none;justify-self:end}
+  .photo-left > .wide-photo,.story-split .wide-photo{justify-self:start}
+}
 .wide-photo{position:relative;aspect-ratio:3/2;max-height:320px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 28px 56px -30px rgba(59,38,32,.4)}
 .wide-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 55%;filter:saturate(.72) sepia(.14) contrast(.95) brightness(1.03)}
 .story-split h2{margin-bottom:0}
@@ -883,7 +890,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
         <div class="info-card">
           <span class="num">01 · Apply</span>
           <h3>A simple, private application</h3>
-          <p>Start with a quick eligibility quiz that takes about a minute. Our team reviews every application personally and responds within days, not weeks.</p>
+          <p>Start with a quick eligibility quiz that takes about 1 minute. Our team reviews every application personally and responds within days, not weeks.</p>
         </div>
         <div class="info-card">
           <span class="num">02 · Screen</span>
@@ -918,7 +925,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
     <div class="wrap">
       <span class="eyebrow">Join Us</span>
       <h2>Ready to change a family's life <em class="lux">forever?</em></h2>
-      <p>Start your application today. The eligibility quiz takes about a minute, and our team responds personally.</p>
+      <p>Start your application today. The eligibility quiz takes about 1 minute, and our team responds personally.</p>
       <div class="cta-btns">
         <a href="#/apply" data-route class="btn btn-light">Apply to Become a Surrogate</a>
       </div>
@@ -983,7 +990,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
         <div class="why-card">
           <div class="pct">Candor</div>
           <h3>Honest at Every Step</h3>
-          <p>Transparent costs, realistic timelines, and straight answers, even when the answer is "not yet."</p>
+          <p>Transparent costs, realistic timelines, and straight answers, even when the answer is "not yet." We work with independent legal and escrow services, so there is never a conflict of interest in how your journey or your funds are handled.</p>
         </div>
         <div class="why-card">
           <div class="pct">Craft</div>
@@ -1092,7 +1099,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
     <div class="wrap">
       <span class="eyebrow">For Surrogates</span>
       <h1>See if surrogacy is <em class="lux">right for you.</em></h1>
-      <p>A few quick questions to see if you qualify. It takes about two minutes, and a real member of our team reviews every answer personally.</p>
+      <p>A few quick questions to see if you qualify. It takes about 1 minute, and a real member of our team reviews every answer personally.</p>
     </div>
   </div>
   <section>
