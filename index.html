@@ -269,9 +269,12 @@ footer .logo-mark path{stroke:var(--alabaster)}
 @media (min-width:701px){
   .photo-left > .photo-block,.photo-left > .wide-photo{order:-1}
   /* Keep photos in proportion to the text beside them */
-  .split > .photo-block{width:100%;max-width:400px;justify-self:center}
-  .page-hero .photo-block{max-width:320px;height:min(46svh,380px)}
-  .wide-photo{max-width:400px;max-height:none;justify-self:end}
+  /* Side photos stretch to the height of the text beside them, so neither looks lost */
+  .split > .photo-block{width:100%;max-width:440px;justify-self:center;align-self:stretch;aspect-ratio:auto!important;min-height:420px}
+  .page-hero-grid{align-items:stretch}
+  .page-hero-grid > div:first-child{align-self:center}
+  .page-hero .photo-block{max-width:360px;height:auto;min-height:min(46svh,380px)}
+  .wide-photo{max-width:440px;max-height:none;justify-self:end}
   .photo-left > .wide-photo,.story-split .wide-photo{justify-self:start}
 }
 .wide-photo{position:relative;aspect-ratio:3/2;max-height:320px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 28px 56px -30px rgba(59,38,32,.4)}
