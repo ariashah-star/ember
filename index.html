@@ -283,8 +283,10 @@ footer .logo-mark path{stroke:var(--alabaster)}
   .page .section-head-photo.photo-left{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
   .page .section-head-photo .wide-photo{aspect-ratio:21/9;max-height:300px}
   /* The About hero photo is portrait, so give it a portrait frame and show the whole picture */
-  .page[data-page="about"] .page-hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,300px);align-items:center}
-  .page[data-page="about"] .page-hero .photo-block{aspect-ratio:5/7;height:auto;min-height:0}
+  .page[data-page="about"] .page-hero-grid{grid-template-columns:minmax(0,max-content) minmax(0,250px);justify-content:start;column-gap:clamp(3rem,6vw,6rem);align-items:center}
+  .page[data-page="about"] .page-hero h1{max-width:none}
+  .page[data-page="about"] .page-hero .photo-block{aspect-ratio:10/11;height:auto;min-height:0}
+  .page[data-page="about"] .page-hero .photo-block img{object-position:50% 35%}
 }
 .wide-photo{position:relative;aspect-ratio:3/2;max-height:320px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 28px 56px -30px rgba(59,38,32,.4)}
 .wide-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 55%;filter:saturate(.72) sepia(.14) contrast(.95) brightness(1.03)}
