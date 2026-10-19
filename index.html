@@ -278,6 +278,9 @@ footer .logo-mark path{stroke:var(--alabaster)}
   .page-hero .photo-block{max-width:none;justify-self:stretch;height:auto;min-height:min(46svh,380px)}
   .page .wide-photo{max-width:none;max-height:340px}
   .page .story-split{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  /* The About hero photo is portrait, so give it a portrait frame and show the whole picture */
+  .page[data-page="about"] .page-hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,300px);align-items:center}
+  .page[data-page="about"] .page-hero .photo-block{aspect-ratio:5/7;height:auto;min-height:0}
 }
 .wide-photo{position:relative;aspect-ratio:3/2;max-height:320px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 28px 56px -30px rgba(59,38,32,.4)}
 .wide-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 55%;filter:saturate(.72) sepia(.14) contrast(.95) brightness(1.03)}
