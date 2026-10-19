@@ -118,9 +118,15 @@ header{
   background:rgba(250,243,234,.92);backdrop-filter:blur(12px);
   border-bottom:1px solid rgba(59,38,32,.09);
 }
-.nav{display:flex;align-items:center;justify-content:space-between;padding:1.15rem 6vw;max-width:var(--maxw);margin:0 auto}
+.nav{display:flex;align-items:center;justify-content:space-between;height:81px;padding:0 6vw;max-width:var(--maxw);margin:0 auto}
 .logo{font-family:'Marcellus',serif;font-size:1.6rem;letter-spacing:.06em;display:inline-flex;align-items:center;gap:.6rem}
 .logo i{font-style:normal;color:var(--ember)}
+.logo-word{display:inline-flex;flex-direction:column;align-items:center;line-height:1}
+.logo-word small{font-family:'Albert Sans',sans-serif;font-size:.5rem;font-weight:500;letter-spacing:.38em;text-transform:uppercase;margin-top:.35rem;margin-right:-.38em;color:var(--ember)}
+footer .logo-word small{color:var(--cashmere)}
+.nav-tagline{margin-right:auto;margin-left:1.6rem;padding-left:1.6rem;border-left:1px solid rgba(188,143,99,.55);
+  font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:var(--espresso-soft);white-space:nowrap}
+@media (max-width:1100px){.nav-tagline{display:none}}
 .logo-mark{width:26px;height:auto;flex-shrink:0}
 .logo-mark path{fill:none;stroke:var(--espresso);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
 .logo-mark .vein{stroke-width:4}
@@ -502,7 +508,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
   .foot-brand{grid-column:1/-1}
   /* collapse nav to a menu on tablets, iPads & half-screen windows */
   .nav-links{
-    position:fixed;inset:64px 0 auto 0;background:var(--alabaster);
+    position:fixed;inset:82px 0 auto 0;background:var(--alabaster);
     flex-direction:column;padding:2rem 6vw 2.5rem;gap:1.4rem;align-items:flex-start;
     border-bottom:1px solid rgba(59,38,32,.12);
     transform:translateY(-120%);transition:transform .35s ease;
@@ -581,8 +587,9 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
         <path class="vein" d="M49.2,46.2 C37,52 23,58.5 12.4,64"/>
         <path class="vein" d="M49.2,46.2 C63,52 77,58.5 87.6,64"/>
       </svg>
-      ember
+      <span class="logo-word">ember<small>Surrogacy</small></span>
     </a>
+    <span class="nav-tagline">A premium surrogacy agency</span>
     <ul class="nav-links" id="navLinks">
       <li><a href="#/about" data-route data-nav="about">About</a></li>
       <li><a href="#/contact" data-route data-nav="contact">Contact</a></li>
@@ -1259,7 +1266,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
             <path class="vein" d="M49.2,46.2 C37,52 23,58.5 12.4,64"/>
             <path class="vein" d="M49.2,46.2 C63,52 77,58.5 87.6,64"/>
           </svg>
-          ember
+          <span class="logo-word">ember<small>Surrogacy</small></span>
         </span>
         <p>A premium surrogacy agency serving parents nationwide.</p>
         <p class="foot-address">Ember Surrogacy LLC<br>
