@@ -532,7 +532,13 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
   .page-hero-grid{grid-template-columns:1fr}
   .section-head-photo{grid-template-columns:1fr}
   .wide-photo{margin-top:1.5rem}
-  .page-hero .photo-block{justify-self:center;height:clamp(280px,80vw,380px);margin-top:1.5rem}
+  /* On phones every photo becomes a short banner after its text, so the copy is never pushed far down */
+  .photo-block,.page-hero .photo-block{aspect-ratio:auto!important;width:100%;max-width:none;height:clamp(170px,46vw,220px);border-radius:16px;margin-top:1.75rem;justify-self:stretch}
+  .wide-photo{aspect-ratio:auto;height:clamp(150px,40vw,190px);margin-top:1.5rem}
+  .story-split .wide-photo{margin-top:1.5rem}
+  .page-hero{padding-bottom:2.5rem}
+  [data-page="about"] .page-hero .photo-block img{object-position:50% 40%}
+  [data-page="surrogates"] .page-hero .photo-block img{object-position:50% 34%}
   .process .sticky{position:static;margin-bottom:2.5rem}
 }
 @media (max-width:760px){
