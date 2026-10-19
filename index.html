@@ -192,38 +192,42 @@ footer .logo-mark path{stroke:var(--alabaster)}
 }
 .path{
   position:relative;overflow:hidden;isolation:isolate;
-  display:flex;flex-direction:column;text-align:center;color:var(--alabaster);
+  display:flex;flex-direction:column;justify-content:flex-end;text-align:center;color:var(--alabaster);
 }
-.path-surrogate{--panel:var(--ember-deep)}
-.path-parent{--panel:var(--espresso-soft)}
+.path-surrogate{--panel:var(--ember-deep);--panel-rgb:124,49,33}
+.path-parent{--panel:var(--espresso-soft);--panel-rgb:92,68,58}
 .path + .path{border-left:1px solid rgba(188,143,99,.45)}
-.path-photo{position:relative;flex:1 1 46%;min-height:240px;overflow:hidden}
+.path-photo{position:absolute;inset:0;z-index:-1;overflow:hidden}
 .path-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   filter:saturate(.72) sepia(.14) contrast(.95) brightness(1.03);transition:transform 1.2s ease}
 .path-parent .path-bg{object-position:50% 34%}
 .path-surrogate .path-bg{object-position:35% 42%}
 .path:hover .path-bg,.path:focus-within .path-bg{transform:scale(1.04)}
 .path-body{
-  position:relative;flex:0 0 auto;background:var(--panel);
+  position:relative;
   display:flex;flex-direction:column;align-items:center;
-  padding:clamp(2.2rem,4vw,3.2rem) clamp(1.5rem,5vw,4.5rem) clamp(2.6rem,4.5vw,3.6rem);
+  padding:clamp(7rem,14vw,11rem) clamp(1.5rem,5vw,4.5rem) clamp(2.6rem,4.5vw,3.6rem);
+  /* translucent brand tint that fades up into the photo */
+  background:linear-gradient(180deg,
+    rgba(var(--panel-rgb),0) 0%,
+    rgba(var(--panel-rgb),.55) 28%,
+    rgba(var(--panel-rgb),.74) 55%,
+    rgba(var(--panel-rgb),.82) 100%);
 }
-/* soft arc where the photo meets the colour block */
-.path-body::before{content:"";position:absolute;left:-12%;right:-12%;top:-34px;height:70px;border-radius:50%;background:var(--panel)}
-.path-body > *{position:relative}
 .path-kicker{font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;font-weight:500;color:var(--sandstone);
   display:inline-flex;align-items:center;gap:.9rem}
 .path-kicker::before,.path-kicker::after{content:"";width:32px;height:1px;background:var(--cashmere)}
+.path-body > *{text-shadow:0 1px 14px rgba(var(--panel-rgb),.35)}
 .path h2{font-size:clamp(1.7rem,2.9vw,2.7rem);letter-spacing:.14em;white-space:nowrap;text-transform:uppercase;line-height:1.2;margin:1.1rem 0 .9rem;color:var(--alabaster)}
 .path-sub{font-size:1.02rem;letter-spacing:.03em;max-width:25rem;color:rgba(250,243,234,.9);margin-bottom:2rem}
 .path-actions{display:flex;flex-direction:column;align-items:center;gap:1.1rem}
-.path .btn{min-width:15rem;text-align:center;background:var(--alabaster);border-color:var(--alabaster);color:var(--panel)}
+.path .btn{min-width:15rem;text-align:center;background:var(--alabaster);border-color:var(--alabaster);color:var(--panel);text-shadow:none}
 .path .btn:hover{background:transparent;color:var(--alabaster)}
 .path .textlink{color:var(--alabaster);border-color:rgba(188,143,99,.7)}
 .path .textlink:hover{color:var(--sandstone);border-color:var(--sandstone)}
 @media (max-width:760px){
   .split-hero{grid-template-columns:1fr;min-height:0}
-  .path-photo{flex:none;height:clamp(240px,58vw,340px)}
+  .path{min-height:max(520px, 78svh)}
   .path h2{white-space:normal}
   .path + .path{border-left:0}
 }
