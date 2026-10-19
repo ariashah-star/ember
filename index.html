@@ -268,14 +268,25 @@ footer .logo-mark path{stroke:var(--alabaster)}
 /* Alternate photos left and right down a page on desktop; phones keep text first */
 @media (min-width:701px){
   .photo-left > .photo-block,.photo-left > .wide-photo{order:-1}
-  /* Keep photos in proportion to the text beside them */
-  /* Side photos stretch to the height of the text beside them, so neither looks lost */
-  .split > .photo-block{width:100%;max-width:440px;justify-self:center;align-self:stretch;aspect-ratio:auto!important;min-height:420px}
-  .page-hero-grid{align-items:stretch}
+  /* Photos get a fixed-width column right beside the text, and stretch to the text's height */
+  .page .split,.page .section-head-photo{grid-template-columns:minmax(0,1fr) minmax(0,480px);gap:clamp(2.5rem,4.5vw,4.5rem)}
+  .page .split.photo-left,.page .section-head-photo.photo-left,.page .team .split{grid-template-columns:minmax(0,480px) minmax(0,1fr)}
+  .split > .photo-block{width:100%;max-width:none;justify-self:stretch;align-self:stretch;aspect-ratio:auto!important;min-height:420px}
+  .page-hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:clamp(2.5rem,4.5vw,4.5rem);align-items:stretch}
   .page-hero-grid > div:first-child{align-self:center}
-  .page-hero .photo-block{max-width:360px;height:auto;min-height:min(46svh,380px)}
-  .wide-photo{max-width:440px;max-height:none;justify-self:end}
-  .photo-left > .wide-photo,.story-split .wide-photo{justify-self:start}
+  .page-hero-grid p{max-width:44rem}
+  .page-hero .photo-block{max-width:none;justify-self:stretch;height:auto;min-height:min(46svh,380px)}
+  .page .wide-photo{max-width:none;max-height:340px}
+  .page .story-split{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  /* Heading-plus-photo rows: a wider, shorter banner photo closes the gap beside a short heading */
+  .page .section-head-photo{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+  .page .section-head-photo.photo-left{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+  .page .section-head-photo .wide-photo{aspect-ratio:21/9;max-height:300px}
+  /* The About hero photo is portrait, so give it a portrait frame and show the whole picture */
+  .page[data-page="about"] .page-hero-grid{grid-template-columns:minmax(0,max-content) minmax(0,250px);justify-content:start;column-gap:clamp(3rem,6vw,6rem);align-items:center}
+  .page[data-page="about"] .page-hero h1{max-width:none}
+  .page[data-page="about"] .page-hero .photo-block{aspect-ratio:10/11;height:auto;min-height:0}
+  .page[data-page="about"] .page-hero .photo-block img{object-position:50% 35%}
 }
 .wide-photo{position:relative;aspect-ratio:3/2;max-height:320px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 28px 56px -30px rgba(59,38,32,.4)}
 .wide-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 55%;filter:saturate(.72) sepia(.14) contrast(.95) brightness(1.03)}
@@ -348,9 +359,9 @@ footer .logo-mark path{stroke:var(--alabaster)}
 
 /* ---------- Process ---------- */
 .process{background:var(--sandstone)}
-.process-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:5vw;align-items:start}
+.process-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:5vw;align-items:center}
 .process h2{font-size:var(--fs-h2);margin:1.3rem 0 1.5rem}
-.process .sticky{position:sticky;top:110px}
+.process .sticky{position:static}
 .process p.intro{color:var(--espresso-soft);margin-bottom:2.2rem}
 .steps{list-style:none;counter-reset:step;position:relative}
 .steps::before{content:"";position:absolute;left:19px;top:14px;bottom:14px;border-left:1px dashed var(--ember);opacity:.5}
