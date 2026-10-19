@@ -268,14 +268,16 @@ footer .logo-mark path{stroke:var(--alabaster)}
 /* Alternate photos left and right down a page on desktop; phones keep text first */
 @media (min-width:701px){
   .photo-left > .photo-block,.photo-left > .wide-photo{order:-1}
-  /* Keep photos in proportion to the text beside them */
-  /* Side photos stretch to the height of the text beside them, so neither looks lost */
-  .split > .photo-block{width:100%;max-width:440px;justify-self:center;align-self:stretch;aspect-ratio:auto!important;min-height:420px}
-  .page-hero-grid{align-items:stretch}
+  /* Photos get a fixed-width column right beside the text, and stretch to the text's height */
+  .page .split,.page .section-head-photo{grid-template-columns:minmax(0,1fr) minmax(0,480px);gap:clamp(2.5rem,4.5vw,4.5rem)}
+  .page .split.photo-left,.page .section-head-photo.photo-left,.page .team .split{grid-template-columns:minmax(0,480px) minmax(0,1fr)}
+  .split > .photo-block{width:100%;max-width:none;justify-self:stretch;align-self:stretch;aspect-ratio:auto!important;min-height:420px}
+  .page-hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:clamp(2.5rem,4.5vw,4.5rem);align-items:stretch}
   .page-hero-grid > div:first-child{align-self:center}
-  .page-hero .photo-block{max-width:360px;height:auto;min-height:min(46svh,380px)}
-  .wide-photo{max-width:440px;max-height:none;justify-self:end}
-  .photo-left > .wide-photo,.story-split .wide-photo{justify-self:start}
+  .page-hero-grid p{max-width:44rem}
+  .page-hero .photo-block{max-width:none;justify-self:stretch;height:auto;min-height:min(46svh,380px)}
+  .page .wide-photo{max-width:none;max-height:340px}
+  .page .story-split{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 }
 .wide-photo{position:relative;aspect-ratio:3/2;max-height:320px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 28px 56px -30px rgba(59,38,32,.4)}
 .wide-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 55%;filter:saturate(.72) sepia(.14) contrast(.95) brightness(1.03)}
