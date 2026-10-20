@@ -1,0 +1,14 @@
+name: Generated pages up to date
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check page copies, sitemap and robots.txt match index.html
+        run: python3 scripts/build_pages.py --check

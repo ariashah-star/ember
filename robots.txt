@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://embersurrogacy.com/sitemap.xml
