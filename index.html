@@ -589,6 +589,8 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .quiz-back{background:none;border:none;color:var(--espresso-soft);font-family:inherit;font-size:.85rem;cursor:pointer;padding:.4rem 0}
 .quiz-back:hover{color:var(--ember)}
 .quiz-back[hidden]{visibility:hidden}
+.quiz-hint{font-size:.85rem;color:var(--espresso-soft);margin:-1rem 0 1.4rem}
+.quiz-body-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 .quiz-review-list{list-style:none;padding:0;margin:0 0 1.6rem}
 .quiz-review-list li{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 0;border-bottom:1px solid rgba(59,38,32,.1);font-size:.9rem}
 .quiz-review-list .rq{color:var(--espresso-soft)}
@@ -902,7 +904,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
         <div class="info-card">
           <span class="num">01 · Apply</span>
           <h3>A simple, private application</h3>
-          <p>Start with a quick eligibility quiz that takes about 1 minute. Our team reviews every application personally and responds within days, not weeks.</p>
+          <p>Start with a quick eligibility quiz that takes about 2 minutes. Our team reviews every application personally and responds within days, not weeks.</p>
         </div>
         <div class="info-card">
           <span class="num">02 · Screen</span>
@@ -937,7 +939,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
     <div class="wrap">
       <span class="eyebrow">Join Us</span>
       <h2>Ready to change a family's life <em class="lux">forever?</em></h2>
-      <p>Start your application today. The eligibility quiz takes about 1 minute, and our team responds personally.</p>
+      <p>Start your application today. The eligibility quiz takes about 2 minutes, and our team responds personally.</p>
       <div class="cta-btns">
         <a href="#/apply" data-route class="btn btn-light">Apply to Become a Surrogate</a>
       </div>
@@ -1097,7 +1099,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
     <div class="wrap">
       <span class="eyebrow">For Surrogates</span>
       <h1>See if surrogacy is <em class="lux">right for you.</em></h1>
-      <p>A few quick questions to see if you qualify. It takes about 1 minute, and a real member of our team reviews every answer personally.</p>
+      <p>A few quick questions to see if you qualify. It takes about 2 minutes, and a real member of our team reviews every answer personally.</p>
     </div>
   </div>
   <section>
@@ -1205,7 +1207,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
       <p>This Consumer Health Data Privacy Policy supplements our <a href="#/privacy" data-route>Privacy Policy</a>. It explains how Ember Surrogacy LLC (&ldquo;Ember,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;) handles &ldquo;consumer health data&rdquo; as defined by laws such as Washington&rsquo;s My Health My Data Act, Nevada SB 370, and the Connecticut Data Privacy Act. Ember is not a healthcare provider and is not subject to HIPAA, but we treat the health information you share with care.</p>
 
       <h3>Health data we collect</h3>
-      <p>When you complete our surrogate eligibility quiz, we collect your answers about your pregnancy and birth history, whether your pregnancies were healthy and full-term, whether your BMI is within a typical range, and whether you smoke or live in a smoke-free home. We collect this together with your name, email address, and phone number.</p>
+      <p>When you complete our surrogate eligibility quiz, we collect your answers about your pregnancy and birth history (including how many births and C-sections you have had and whether your pregnancies were healthy and full-term), your height and weight (which we use to calculate your BMI), whether you have had weight-loss surgery, an eating disorder in the last five years, or a history of serious mental illness or suicidal thoughts, and whether you smoke, vape, or use illegal drugs or live in a smoke-free home. We collect this together with your name, date of birth, state, email address, and phone number, and your answers about citizenship, government assistance, criminal history in your household, transportation, and support at home.</p>
 
       <h3>Where it comes from</h3>
       <p>We collect this information only from you, directly, when you submit the quiz.</p>
@@ -1700,16 +1702,27 @@ window.addEventListener('hashchange', () => {
 
 /* ---------- Surrogate eligibility quiz ---------- */
 (function(){
+  const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','I live outside the U.S.'];
+  const hadBirth = a => a.given_birth === 'Yes';
+  // A step with `when` is skipped unless when(answers) is true.
   const steps = [
-    {tag:'Requirement 1', q:'How old are you?', key:'age', options:['Under 21','Between 21 and 42','Over 42']},
-    {tag:'Requirement 2', q:'Have you given birth to at least one child of your own?', key:'given_birth', options:['Yes','No']},
-    {tag:'Requirement 3', q:'Have your pregnancies been healthy and full-term?', key:'healthy_preg', options:['Yes','No']},
-    {tag:'Requirement 4', q:'Are you currently raising a child of your own?', key:'raising_child', options:['Yes','No']},
-    {tag:'Requirement 5', q:'Is your BMI within a healthy range? (typically 19\u201332)', key:'bmi', options:['Yes','No','Not sure']},
-    {tag:'Requirement 6', q:'Are you a non-smoker living in a smoke-free household?', key:'nonsmoker', options:['Yes','No']},
-    {tag:'Requirement 7', q:'Are you a U.S. citizen or permanent resident?', key:'citizen', options:['Yes','No']},
-    {tag:'Requirement 8', q:'Do you have a reliable support system at home?', key:'support', options:['Yes','No']},
-    {tag:'Almost there', q:"What's your name?", key:'name', input:'text', placeholder:'Your name', auto:'name'},
+    {tag:'About you', q:"What's your date of birth?", key:'dob', input:'date', placeholder:'', auto:'bday'},
+    {tag:'About you', q:'Which state do you live in?', key:'state', input:'select', placeholder:'Select your state', choices:STATES},
+    {tag:'About you', q:'Are you a U.S. citizen or permanent resident?', key:'citizen', options:['Yes','No']},
+    {tag:'Pregnancy history', q:'Have you given birth to at least one child of your own?', key:'given_birth', options:['Yes','No']},
+    {tag:'Pregnancy history', q:'How many times have you given birth?', key:'births', options:['1','2','3','4','5','6 or more'], when:hadBirth},
+    {tag:'Pregnancy history', q:'How many of those births were C-sections?', key:'c_sections', options:['None','1','2','3 or more'], when:hadBirth},
+    {tag:'Pregnancy history', q:'Have your pregnancies been healthy and full-term?', key:'healthy_preg', options:['Yes','No'], when:hadBirth},
+    {tag:'Pregnancy history', q:'Are you currently raising a child of your own?', key:'raising_child', options:['Yes','No']},
+    {tag:'Health', q:'What are your height and weight?', key:'body', input:'body'},
+    {tag:'Health', q:'Have you ever had weight-loss surgery, an eating disorder in the last 5 years, or a history of serious mental illness or suicidal thoughts?', hint:'Mild anxiety, depression, or postpartum depression doesn’t count here.', key:'health_history', options:['No','Yes']},
+    {tag:'Lifestyle', q:'Do you avoid smoking, vaping, and illegal drugs, and live in a smoke-free home?', key:'nonsmoker', options:['Yes','No']},
+    {tag:'Lifestyle', q:'Do you currently receive government financial assistance, such as SNAP, TANF, or housing assistance?', hint:'State health insurance for your children is fine to leave out.', key:'gov_assistance', options:['No','Yes']},
+    {tag:'Lifestyle', q:'Have you, your partner, or any other adult in your home ever been convicted of a felony?', key:'felony', options:['No','Yes']},
+    {tag:'Lifestyle', q:'Do you have a car, a valid driver’s license, and childcare for appointments?', key:'transport', options:['Yes','No']},
+    {tag:'Lifestyle', q:'Do you have a reliable support system at home?', key:'support', options:['Yes','No']},
+    {tag:'Almost there', q:"What's your first name?", key:'first_name', input:'text', placeholder:'First name', auto:'given-name'},
+    {tag:'Almost there', q:"And your last name?", key:'last_name', input:'text', placeholder:'Last name', auto:'family-name'},
     {tag:'Almost there', q:"What's your email?", key:'email', input:'email', placeholder:'you@example.com', auto:'email'},
     {tag:'Last one', q:'Best phone number?', key:'phone', input:'tel', placeholder:'(555) 555-5555', auto:'tel'}
   ];
@@ -1722,6 +1735,14 @@ window.addEventListener('hashchange', () => {
   const success = document.getElementById('quizSuccess');
   const state = {i:0, answers:{}};
   const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  // Date of birth arrives as YYYY-MM-DD; parse as a local date so it never shifts a day.
+  const parseDob = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v||''); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; };
+  const ageFrom = d => { const n = new Date(); let y = n.getFullYear()-d.getFullYear(); if(n.getMonth()<d.getMonth() || (n.getMonth()===d.getMonth() && n.getDate()<d.getDate())) y--; return y; };
+  const shown = i => !steps[i].when || steps[i].when(state.answers);
+  const next = () => { do { state.i++; } while(state.i < steps.length && !shown(state.i)); render(); };
+  const prev = () => { do { state.i--; } while(state.i > 0 && !shown(state.i)); render(); };
+  const bmiOf = a => { const h = (+a.height_ft)*12 + (+a.height_in); return h && +a.weight ? (703 * +a.weight / (h*h)).toFixed(1) : ''; };
+  const fmtDob = v => { const d = parseDob(v); return d ? d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : v; };
 
   function navHtml(){
     return '<div class="quiz-nav"><button type="button" class="quiz-back" id="quizBack"'+(state.i===0?' hidden':'')+'>&larr; Back</button><span></span></div>';
@@ -1735,6 +1756,7 @@ window.addEventListener('hashchange', () => {
     if(state.i >= steps.length){ return renderReview(); }
     const s = steps[state.i];
     let html = '<span class="quiz-tag">'+esc(s.tag)+'</span><h2 class="quiz-q">'+esc(s.q)+'</h2>';
+    if(s.hint) html += '<p class="quiz-hint">'+esc(s.hint)+'</p>';
     if(s.options){
       html += '<div class="quiz-options">';
       s.options.forEach(opt => {
@@ -1742,6 +1764,19 @@ window.addEventListener('hashchange', () => {
         html += '<button type="button" class="quiz-option'+sel+'" data-opt="'+esc(opt)+'">'+esc(opt)+'</button>';
       });
       html += '</div>';
+    } else if(s.input==='select'){
+      html += '<div class="field"><select id="quizInput" autocomplete="address-level1"><option value="">'+esc(s.placeholder)+'</option>';
+      s.choices.forEach(c => { html += '<option'+(state.answers[s.key]===c?' selected':'')+'>'+esc(c)+'</option>'; });
+      html += '</select></div>';
+      html += '<button type="button" class="btn btn-ember" id="quizContinue" style="width:100%">Continue</button>';
+    } else if(s.input==='body'){
+      const a = state.answers, opt = (n, v, lbl) => '<option value="'+n+'"'+(String(v)===String(n)?' selected':'')+'>'+n+' '+lbl+'</option>';
+      let ft = '<option value="">Feet</option>', inch = '<option value="">Inches</option>';
+      for(let f=4; f<=6; f++) ft += opt(f, a.height_ft, 'ft');
+      for(let n=0; n<=11; n++) inch += opt(n, a.height_in, 'in');
+      html += '<div class="quiz-body-row"><div class="field"><select id="quizFt" aria-label="Height in feet">'+ft+'</select></div><div class="field"><select id="quizIn" aria-label="Height in inches">'+inch+'</select></div></div>';
+      html += '<div class="field"><input id="quizWeight" type="number" inputmode="numeric" min="70" max="500" placeholder="Weight in pounds" aria-label="Weight in pounds"'+(a.weight?' value="'+esc(a.weight)+'"':'')+'></div>';
+      html += '<button type="button" class="btn btn-ember" id="quizContinue" style="width:100%">Continue</button>';
     } else {
       const val = state.answers[s.key] ? ' value="'+esc(state.answers[s.key])+'"' : '';
       html += '<div class="field"><input id="quizInput" type="'+s.input+'" autocomplete="'+s.auto+'" placeholder="'+esc(s.placeholder)+'"'+val+'></div>';
@@ -1753,14 +1788,29 @@ window.addEventListener('hashchange', () => {
   }
   function bindStep(s){
     const back = document.getElementById('quizBack');
-    if(back) back.onclick = () => { state.i--; render(); };
+    if(back) back.onclick = prev;
+    if(s.input==='body'){
+      const ft = document.getElementById('quizFt'), inch = document.getElementById('quizIn'), w = document.getElementById('quizWeight');
+      const go = () => {
+        const bad = [ft, inch].filter(el => el.value==='');
+        if(!(+w.value >= 70 && +w.value <= 500)) bad.push(w);
+        [ft, inch, w].forEach(el => el.style.borderColor = bad.includes(el) ? 'var(--ember)' : '');
+        if(bad.length){ bad[0].focus(); return; }
+        Object.assign(state.answers, {height_ft:ft.value, height_in:inch.value, weight:String(Math.round(+w.value))});
+        state.answers.body = ft.value+'\u2032 '+inch.value+'\u2033, '+state.answers.weight+' lbs';
+        next();
+      };
+      document.getElementById('quizContinue').onclick = go;
+      w.onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); go(); } };
+      return;
+    }
     if(s.options){
       body.querySelectorAll('.quiz-option').forEach(btn => {
         btn.onclick = () => {
           state.answers[s.key] = btn.dataset.opt;
           body.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
           btn.classList.add('selected');
-          setTimeout(() => { state.i++; render(); }, 170);
+          setTimeout(next, 170);
         };
       });
     } else {
@@ -1771,24 +1821,26 @@ window.addEventListener('hashchange', () => {
         const v = input.value.trim();
         if(!v){ input.focus(); return; }
         if(s.input==='email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ input.style.borderColor = 'var(--ember)'; return; }
-        state.answers[s.key] = v; state.i++; render();
+        if(s.input==='date'){ const d = parseDob(v); const age = d && ageFrom(d); if(!d || age < 18 || age > 100){ input.style.borderColor = 'var(--ember)'; return; } }
+        state.answers[s.key] = v; next();
       };
       cont.onclick = go;
+      if(s.input==='select') input.onchange = () => { if(input.value) go(); };
       input.onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); go(); } };
     }
   }
   function renderReview(){
-    const labels = {age:'Age', given_birth:'Given birth to a child', healthy_preg:'Healthy, full-term pregnancies', raising_child:'Currently raising a child', bmi:'BMI in healthy range', nonsmoker:'Non-smoker', citizen:'U.S. citizen or permanent resident', support:'Reliable support system', name:'Name', email:'Email', phone:'Phone'};
+    const labels = {dob:'Date of birth', state:'State', citizen:'U.S. citizen or permanent resident', given_birth:'Given birth to a child', births:'Number of births', c_sections:'C-sections', healthy_preg:'Healthy, full-term pregnancies', raising_child:'Currently raising a child', body:'Height and weight', health_history:'Weight-loss surgery, eating disorder, or serious mental illness', nonsmoker:'No smoking, vaping, or drugs', gov_assistance:'Government financial assistance', felony:'Felony in household', transport:'Car, license, and childcare', support:'Reliable support system', first_name:'First name', last_name:'Last name', email:'Email', phone:'Phone'};
     let rows = '';
-    steps.forEach(s => { if(state.answers[s.key]) rows += '<li><span class="rq">'+esc(labels[s.key])+'</span><span class="ra">'+esc(state.answers[s.key])+'</span></li>'; });
+    steps.forEach((s, i) => { const v = state.answers[s.key]; if(v && shown(i)) rows += '<li><span class="rq">'+esc(labels[s.key])+'</span><span class="ra">'+esc(s.key==='dob' ? fmtDob(v) : v)+'</span></li>'; });
     let html = '<span class="quiz-tag">Review</span><h2 class="quiz-q">Ready to send your application?</h2>';
     html += '<ul class="quiz-review-list">'+rows+'</ul>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizConsent"><label for="quizConsent">I consent to Ember collecting and using the information I\u2019ve provided to evaluate my eligibility for the surrogacy program and to contact me, as described in the <a href="#/privacy" data-route>Privacy Policy</a>. I understand this quiz is not medical or legal advice.</label></div>';
-    html += '<div class="quiz-consent"><input type="checkbox" id="quizHealthConsent"><label for="quizHealthConsent">I also specifically consent to Ember collecting my health information (my pregnancy history, BMI range, and smoking status) only to evaluate my eligibility, as described in the <a href="#/health-data" data-route>Health Data Privacy Policy</a>. I can withdraw this consent at any time.</label></div>';
+    html += '<div class="quiz-consent"><input type="checkbox" id="quizHealthConsent"><label for="quizHealthConsent">I also specifically consent to Ember collecting my health information (my pregnancy and birth history, height and weight, health history, and smoking and substance use) only to evaluate my eligibility, as described in the <a href="#/health-data" data-route>Health Data Privacy Policy</a>. I can withdraw this consent at any time.</label></div>';
     html += '<button type="button" class="btn btn-ember" id="quizSubmit" style="width:100%" disabled>Submit application</button>';
     html += navHtml();
     body.innerHTML = html;
-    document.getElementById('quizBack').onclick = () => { state.i--; render(); };
+    document.getElementById('quizBack').onclick = prev;
     const consent = document.getElementById('quizConsent');
     const healthConsent = document.getElementById('quizHealthConsent');
     const submit = document.getElementById('quizSubmit');
@@ -1806,16 +1858,28 @@ window.addEventListener('hashchange', () => {
         apiKey: 'sf_ec42af1d9b760335558da878',
         subject: 'Ember Surrogate Application',
         replyTo: a.email || '',
-        name: a.name || '',
+        name: [a.first_name, a.last_name].filter(Boolean).join(' '),
+        first_name: a.first_name || '',
+        last_name: a.last_name || '',
         email: a.email || '',
         phone: a.phone || '',
-        age: a.age || '',
-        given_birth: a.given_birth || '',
-        healthy_pregnancies: a.healthy_preg || '',
-        raising_child: a.raising_child || '',
-        bmi_healthy_range: a.bmi || '',
-        non_smoker: a.nonsmoker || '',
+        date_of_birth: a.dob || '',
+        age: parseDob(a.dob) ? String(ageFrom(parseDob(a.dob))) : '',
+        state: a.state || '',
         us_citizen_or_resident: a.citizen || '',
+        given_birth: a.given_birth || '',
+        births: hadBirth(a) ? (a.births || '') : '0',
+        c_sections: hadBirth(a) ? (a.c_sections || '') : '',
+        healthy_pregnancies: hadBirth(a) ? (a.healthy_preg || '') : '',
+        raising_child: a.raising_child || '',
+        height: a.height_ft ? a.height_ft+"'"+a.height_in+'"' : '',
+        weight_lbs: a.weight || '',
+        bmi: bmiOf(a),
+        weight_loss_surgery_eating_disorder_or_mental_illness: a.health_history || '',
+        no_smoking_vaping_or_drugs: a.nonsmoker || '',
+        government_assistance: a.gov_assistance || '',
+        felony_in_household: a.felony || '',
+        car_license_and_childcare: a.transport || '',
         support_system: a.support || '',
         consent_privacy_policy: 'Yes',
         consent_health_data: 'Yes',
