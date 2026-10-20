@@ -595,6 +595,26 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+/* ---------- Decorative line art (Ember leaf, botanical sprigs, photo halos) ---------- */
+.why,.cta,.deco-sprigs,.deco-sprig-left{position:relative;overflow:hidden;overflow:clip;isolation:isolate}
+.why::before,.cta::before{content:"";position:absolute;z-index:-1;pointer-events:none;
+  width:440px;height:528px;right:-110px;bottom:-150px;transform:rotate(-14deg);opacity:.14;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120' fill='none' stroke='%23BC8F63' stroke-width='.35' stroke-linecap='round'%3E%3Cpath d='M50,22 C40,5 15,5 8,30 C2,55 20,85 50,112 C80,85 98,55 92,30 C85,5 60,5 50,22 Z'/%3E%3Cpath d='M50,22 C48,55 50,85 50,112'/%3E%3Cpath d='M49.2,46.2 C37,52 23,58.5 12.4,64'/%3E%3Cpath d='M49.2,46.2 C63,52 77,58.5 87.6,64'/%3E%3C/svg%3E") center/contain no-repeat}
+.cta::before{right:6vw;bottom:-260px;transform:rotate(-18deg)}
+.deco-sprigs::before,.deco-sprigs::after,.deco-sprig-left::before{content:"";position:absolute;z-index:-1;pointer-events:none;
+  width:200px;height:260px;opacity:.55;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 260' fill='none' stroke='%23BC8F63' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M100,258 C95,200 105,140 98,82 C95,52 100,28 108,6'/%3E%3Cg transform='translate(99,218) rotate(-155) scale(1)'%3E%3Cpath d='M0,0 C10,-12 32,-12 44,0 C32,12 10,12 0,0Z'/%3E%3Cpath d='M2,0 L38,0'/%3E%3C/g%3E%3Cg transform='translate(101,186) rotate(-28) scale(1)'%3E%3Cpath d='M0,0 C10,-12 32,-12 44,0 C32,12 10,12 0,0Z'/%3E%3Cpath d='M2,0 L38,0'/%3E%3C/g%3E%3Cg transform='translate(100,152) rotate(-150) scale(1)'%3E%3Cpath d='M0,0 C10,-12 32,-12 44,0 C32,12 10,12 0,0Z'/%3E%3Cpath d='M2,0 L38,0'/%3E%3C/g%3E%3Cg transform='translate(101,120) rotate(-32) scale(1)'%3E%3Cpath d='M0,0 C10,-12 32,-12 44,0 C32,12 10,12 0,0Z'/%3E%3Cpath d='M2,0 L38,0'/%3E%3C/g%3E%3Cg transform='translate(98,90) rotate(-142) scale(0.9)'%3E%3Cpath d='M0,0 C10,-12 32,-12 44,0 C32,12 10,12 0,0Z'/%3E%3Cpath d='M2,0 L38,0'/%3E%3C/g%3E%3Cg transform='translate(99,60) rotate(-40) scale(0.85)'%3E%3Cpath d='M0,0 C10,-12 32,-12 44,0 C32,12 10,12 0,0Z'/%3E%3Cpath d='M2,0 L38,0'/%3E%3C/g%3E%3Cg transform='translate(105,22) rotate(-80) scale(0.65)'%3E%3Cpath d='M0,0 C10,-12 32,-12 44,0 C32,12 10,12 0,0Z'/%3E%3Cpath d='M2,0 L38,0'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+.deco-sprigs::before{left:3vw;top:3.5rem;transform:rotate(-8deg)}
+.deco-sprigs::after{right:3vw;bottom:3rem;transform:scaleX(-1) rotate(-8deg)}
+.deco-sprig-left::before{left:2vw;bottom:1.5rem;width:140px;height:182px;transform:rotate(-6deg);opacity:.45}
+.info-card{position:relative}
+.info-card::after{content:"";position:absolute;top:1.6rem;right:1.6rem;width:20px;height:24px;opacity:.5;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120' fill='none' stroke='%23BC8F63' stroke-width='4' stroke-linecap='round'%3E%3Cpath d='M50,22 C40,5 15,5 8,30 C2,55 20,85 50,112 C80,85 98,55 92,30 C85,5 60,5 50,22 Z'/%3E%3Cpath d='M50,22 C48,55 50,85 50,112'/%3E%3Cpath d='M49.2,46.2 C37,52 23,58.5 12.4,64'/%3E%3Cpath d='M49.2,46.2 C63,52 77,58.5 87.6,64'/%3E%3C/svg%3E") center/contain no-repeat}
+.faq h2::after,.cta h2::after{content:"";display:block;width:120px;height:14px;margin:1.2rem auto 0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' fill='none' stroke='%23BC8F63' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M2,7 H46 M74,7 H118'/%3E%3Cpath d='M52,7 C55,2 65,2 68,7 C65,12 55,12 52,7Z'/%3E%3Ccircle cx='60' cy='7' r='.9' fill='%23BC8F63'/%3E%3C/svg%3E") center/contain no-repeat}
+@media (min-width:701px){
+  .page-hero .photo-block,.split > .photo-block{outline:1px solid rgba(188,143,99,.6);outline-offset:12px}
+}
+@media (max-width:1180px){.deco-sprigs::before,.deco-sprigs::after,.deco-sprig-left::before{display:none}}
 .field-hint{font-size:.8rem;color:var(--espresso-soft);margin-top:.6rem}
 .field-hint a{color:var(--ember);text-decoration:underline}
 /* ---------- Surrogate eligibility quiz ---------- */
@@ -784,7 +804,7 @@ section[id]{scroll-margin-top:82px}
     </div>
   </section>
 
-  <section id="parent-journey" class="process">
+  <section id="parent-journey" class="process deco-sprig-left">
     <div class="wrap">
       <div class="process-grid">
         <div class="sticky">
@@ -822,7 +842,7 @@ section[id]{scroll-margin-top:82px}
     </div>
   </section>
 
-  <section id="parent-faq" class="process" style="background:var(--greige)">
+  <section id="parent-faq" class="process deco-sprigs" style="background:var(--greige)">
     <div class="wrap">
       <div class="faq">
         <span class="eyebrow" style="justify-content:center;display:flex">Common Questions</span>
@@ -882,7 +902,7 @@ section[id]{scroll-margin-top:82px}
       <div>
       <span class="eyebrow">Become a Surrogate</span>
       <h1>Your journey matters. <em class="lux">So do you.</em></h1>
-      <p>Choosing to become a surrogate is one of the most generous decisions a person can make. At Ember, you are never just part of the process. You are at the heart of it. From your very first question to long after delivery, you'll have a team that listens, a community that understands, and compensation and care that honor everything you give.</p>
+      <p>Becoming a surrogate is one of the most generous choices a person can make. At Ember, you're at the heart of it, with a team that listens, a community that understands, and compensation that honors what you give.</p>
       <div class="hero-ctas" style="margin-top:2rem">
         <a href="/surrogate-application/" data-route class="btn btn-solid">See If You Qualify</a>
       </div>
@@ -897,37 +917,37 @@ section[id]{scroll-margin-top:82px}
     <div class="wrap">
       <span class="eyebrow">The Ember Surrogate</span>
       <h2>What it means to be <em class="lux">an Ember surrogate</em></h2>
-      <p class="traits-intro">Ember surrogates are some of the most remarkable people we know. Not because they're perfect, but because of who they are when it matters most. These are the qualities we look for, and the ones we see in our community every single day.</p>
+      <p class="traits-intro">The qualities we look for, and see in our community every day.</p>
       <div class="why-grid">
         <div class="why-card">
           <div class="pct">Reliability</div>
           <h3>You show up</h3>
-          <p>Appointments, medications, check-ins. A family is placing extraordinary trust in you, and you honor it by doing what you say you'll do.</p>
+          <p>A family trusts you completely, and you honor that by following through.</p>
         </div>
         <div class="why-card">
           <div class="pct">Compassion</div>
           <h3>You lead with heart</h3>
-          <p>You understand what it means for a family to wait and hope, and you meet their excitement and their worries with warmth and patience.</p>
+          <p>You meet a family's hopes and worries with warmth and patience.</p>
         </div>
         <div class="why-card">
           <div class="pct">Generosity</div>
-          <h3>You give what no one else can</h3>
-          <p>You're choosing to help bring a family into the world. That kind of generosity changes lives, and it's at the heart of everyone in our community.</p>
+          <h3>You give a rare gift</h3>
+          <p>You're helping bring a family into the world, and that changes lives.</p>
         </div>
         <div class="why-card">
           <div class="pct">Emotional Intelligence</div>
           <h3>You stay steady</h3>
-          <p>You communicate openly, move through the ups and downs with grace, and know when to ask for support. That self-awareness makes the whole journey stronger.</p>
+          <p>You communicate openly, handle the ups and downs with grace, and ask for support when you need it.</p>
         </div>
         <div class="why-card">
           <div class="pct">Integrity</div>
           <h3>You're honest and open</h3>
-          <p>You share openly about your health, your needs, and your boundaries, so every decision you and your intended parents make is built on trust.</p>
+          <p>You share your needs and boundaries, so every decision rests on trust.</p>
         </div>
         <div class="why-card">
           <div class="pct">Strength</div>
           <h3>You choose this for yourself</h3>
-          <p>You know your body, your support system, and your reasons. Becoming a surrogate is your decision, made freely and confidently, and we'll always respect that.</p>
+          <p>This is your decision, made freely and confidently, and we'll always respect it.</p>
         </div>
       </div>
     </div>
@@ -991,27 +1011,24 @@ section[id]{scroll-margin-top:82px}
     </div>
   </section>
 
-  <section id="surrogate-journey" class="process" style="background:var(--alabaster)">
+  <section id="surrogate-journey" class="process deco-sprig-left" style="background:var(--alabaster)">
     <div class="wrap">
       <div class="process-grid journey-grid">
         <div class="sticky">
           <span class="eyebrow">Your Journey, Step by Step</span>
           <h2>Exactly what to expect <em class="lux">with Ember</em></h2>
-          <p class="intro">From your first click to your postpartum recovery, here's every step of the journey, so nothing ever catches you off guard. Most surrogates go from application to delivery in about 12 to 18 months, and your dedicated case manager walks beside you the whole way.</p>
+          <p class="intro">Most journeys take 12 to 18 months from application to delivery, with your case manager beside you the whole way.</p>
           <a href="/surrogate-application/" data-route class="btn btn-solid">Take the First Step</a>
         </div>
         <ol class="steps">
-          <li><h3>Take the eligibility quiz</h3><p>Answer a few quick questions from your couch, your car, or your lunch break. It takes about a minute, it's private, and there's no commitment.</p></li>
-          <li><h3>Get to know us</h3><p>A real person on our team reaches out within 1-3 business days for a relaxed conversation. We'll learn about you and your family, walk through compensation, and answer every question, no matter how small.</p></li>
-          <li><h3>Complete your application</h3><p>Share a bit more about yourself and sign a release so we can request records from your past pregnancies. We handle the paperwork and the follow-up for you.</p></li>
-          <li><h3>Screening, on your schedule</h3><p>A medical records review, a conversation with a licensed mental health professional, and background checks for you and any adult partner in your home. All at no cost to you.</p></li>
-          <li><h3>Meet your intended parents</h3><p>We introduce you to intended parents whose values and hopes for the journey align with yours. You'll get to know each other on a video call, and nothing moves forward until it feels right on both sides.</p></li>
-          <li><h3>Sign your agreement</h3><p>You'll have your own independent attorney, paid for by the intended parents, to review every detail with you. Once your agreement is signed, funds for your compensation and expenses are placed with an independent escrow company before any medications begin.</p></li>
-          <li><h3>Medical clearance at the IVF clinic</h3><p>The intended parents' fertility clinic confirms you're ready with a visit, bloodwork, and an ultrasound. Travel for you and a companion is arranged and paid for.</p></li>
-          <li><h3>Embryo transfer</h3><p>After a few weeks of medications to prepare your body, the clinic transfers the embryo in a quick, minimally invasive procedure. We'll be cheering you on, and with you for every result.</p></li>
-          <li><h3>Pregnancy, fully supported</h3><p>Once your pregnancy is confirmed and you're released from the fertility clinic, you'll continue care with your own OB. Your compensation and monthly allowance arrive on the schedule in your agreement, and your case manager is a call away, day or night.</p></li>
-          <li><h3>Delivery day</h3><p>We help you and the intended parents plan a birth you're comfortable with and coordinate with your hospital, while the attorneys handle the parentage paperwork so the intended parents are recognized as the baby's legal parents.</p></li>
-          <li><h3>Postpartum and beyond</h3><p>Our care doesn't stop when the baby arrives. Recovery benefits, postpartum check-ins, and friendships with surrogates who truly understand are here for you long after you've given this gift.</p></li>
+          <li><h3>Take the 1-minute quiz</h3><p>Private, free, and no commitment.</p></li>
+          <li><h3>Meet our team</h3><p>We'll call within 1-3 business days to get to know you and answer your questions.</p></li>
+          <li><h3>Apply and screen</h3><p>A full application, a review of your pregnancy records, a mental health consultation, and background checks, all at no cost to you.</p></li>
+          <li><h3>Match with your intended parents</h3><p>Meet families who share your values. You only move forward when it feels right.</p></li>
+          <li><h3>Sign your agreement</h3><p>Your own attorney, paid for by the intended parents, reviews everything. Funds go into independent escrow before any medications begin.</p></li>
+          <li><h3>Clinic visit and embryo transfer</h3><p>A medical check at the IVF clinic, a few weeks of medications, then a quick transfer. Travel is covered.</p></li>
+          <li><h3>Pregnancy</h3><p>Once you're released from the clinic, you continue care with your own OB, with payments on schedule and support day or night.</p></li>
+          <li><h3>Delivery and postpartum</h3><p>A birth plan you're comfortable with, parentage handled by the attorneys, and recovery support long after delivery.</p></li>
         </ol>
       </div>
     </div>
@@ -1020,29 +1037,28 @@ section[id]{scroll-margin-top:82px}
   <section id="surrogate-community" class="process">
     <div class="wrap">
       <span class="eyebrow">Our Surrogate Community</span>
-      <h2 style="font-size:var(--fs-h2);max-width:40rem;margin-top:1.3rem">You're joining a community, <em class="lux">not just a program</em></h2>
-      <p style="max-width:42rem;color:var(--espresso-soft);margin-top:1.2rem">Surrogacy is deeply personal, but it should never feel lonely. When you become an Ember surrogate, you're surrounded by people who know exactly what this journey feels like, and who believe, as we do, that you deserve to be celebrated at every step.</p>
+      <h2 style="font-size:var(--fs-h2);max-width:40rem;margin-top:1.3rem">A community, <em class="lux">not just a program</em></h2>
       <div class="info-grid">
         <div class="info-card">
           <span class="num">Been there</span>
           <h3>Guided by former surrogates</h3>
-          <p>Our team includes former surrogates, so the people supporting you have lived this journey themselves. Ask them anything, from transfer-day nerves to how to explain surrogacy to your kids.</p>
+          <p>Our team includes former surrogates who've lived this journey themselves.</p>
         </div>
         <div class="info-card">
           <span class="num">Side by side</span>
           <h3>Surrogates on the same path</h3>
-          <p>Connect with fellow Ember surrogates to swap stories, share advice, and cheer each other on. The friendships made here often last long after delivery.</p>
+          <p>Swap stories and advice with fellow Ember surrogates, and cheer each other on.</p>
         </div>
         <div class="info-card">
           <span class="num">Celebrated</span>
           <h3>Honored at every milestone</h3>
-          <p>From your match to your transfer to delivery day, we mark the big moments with you. What you're doing is extraordinary, and you'll always be treated that way.</p>
+          <p>From match to delivery day, we celebrate the big moments with you.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="surrogate-faq" style="background:var(--greige)">
+  <section id="surrogate-faq" class="deco-sprigs" style="background:var(--greige)">
     <div class="wrap">
       <div class="faq">
         <span class="eyebrow" style="justify-content:center;display:flex">Common Questions</span>
@@ -1051,118 +1067,102 @@ section[id]{scroll-margin-top:82px}
         <h3 class="faq-group" id="faq-basics">Surrogacy basics</h3>
         <details>
           <summary>What is surrogacy?</summary>
-          <p>Surrogacy is a way of building a family in which one person, the surrogate (also called a gestational carrier), carries a pregnancy for another person or couple, the intended parents. In gestational surrogacy, an embryo is created through IVF using the intended parents' or donors' eggs and sperm, then transferred to the surrogate's uterus. The surrogate is not genetically related to the baby, and the intended parents are the baby's legal parents.</p>
+          <p>A surrogate (or gestational carrier) carries a pregnancy for intended parents. With gestational surrogacy, an embryo made through IVF from the parents' or donors' eggs and sperm is transferred to the surrogate, who isn't genetically related to the baby.</p>
         </details>
         <details>
-          <summary>What's the difference between gestational and traditional surrogacy?</summary>
-          <p>In traditional surrogacy, the surrogate's own egg is used, so the surrogate is the baby's biological parent. It's legally and emotionally more complex and is rarely practiced today. Ember works only with gestational surrogacy, where the embryo is created through IVF and your eggs are never used.</p>
-        </details>
-        <details>
-          <summary>Why do people choose surrogacy?</summary>
-          <p>Every family's story is different. Some intended parents have faced infertility, repeated pregnancy loss, or a medical condition that makes pregnancy unsafe. Others are LGBTQIA+ couples or single parents by choice. What they share is a deep hope for a family, and a surrogate is the person who makes that hope possible.</p>
+          <summary>Gestational vs. traditional surrogacy: what's the difference?</summary>
+          <p>Traditional surrogacy uses the surrogate's own egg and is rare today. Ember works only with gestational surrogacy, so your eggs are never used.</p>
         </details>
 
         <h3 class="faq-group" id="surrogacy-laws-by-state">Surrogacy laws by state</h3>
-        <p class="faq-lede">Surrogacy is governed by state law, and every state handles it a little differently. Here's a general picture of where things stand across the U.S.</p>
+        <p class="faq-lede">Each state sets its own surrogacy laws. Here's the general picture.</p>
         <div class="state-grid">
           <div class="state-card">
             <span class="state-tag state-friendly">Surrogacy-friendly</span>
-            <p>Clear laws or consistent court practice support compensated gestational surrogacy, and intended parents can usually be named legal parents before birth.</p>
+            <p>Clear legal support, and parents can usually be named before birth.</p>
             <p class="state-list">California, Colorado, Connecticut, Delaware, District of Columbia, Illinois, Maine, Michigan, Nevada, New Hampshire, New Jersey, New York, Oregon, Rhode Island, Vermont, Washington</p>
           </div>
           <div class="state-card">
             <span class="state-tag state-workable">Generally workable</span>
-            <p>Surrogacy is common and achievable, but the path depends on details like marital status, the county or judge, or whether parentage is finalized before or after birth.</p>
+            <p>Common and achievable, but details like marital status or the county can matter.</p>
             <p class="state-list">Most other states, including Florida, Georgia, Maryland, Massachusetts, North Carolina, Ohio, Pennsylvania, Tennessee, Texas, Utah, and Virginia</p>
           </div>
           <div class="state-card">
             <span class="state-tag state-restricted">Less friendly</span>
-            <p>The law limits or refuses to enforce compensated surrogacy agreements, which adds real legal risk for everyone involved.</p>
+            <p>Compensated agreements are limited or not enforced.</p>
             <p class="state-list">Arizona, Indiana, Louisiana, Nebraska</p>
           </div>
         </div>
-        <p class="faq-note">Surrogacy laws change, and this overview is general information, not legal advice. Before any match, your own attorney reviews the laws that apply to you, including where you live and where you plan to deliver. If your state isn't a good fit, we'll tell you honestly.</p>
-        <details>
-          <summary>Is surrogacy legal in my state?</summary>
-          <p>In most U.S. states, yes, though the rules vary. Our team checks the laws for your state (and for the hospital where you'd deliver) as soon as we talk, and your independent attorney confirms everything before you sign an agreement.</p>
-        </details>
+        <p class="faq-note">Laws change, and this is general information, not legal advice. Your attorney confirms the laws that apply to you before any match.</p>
         <details>
           <summary>What makes a state surrogacy-friendly?</summary>
-          <p>A few things: the law clearly allows compensated gestational surrogacy agreements; intended parents can be named legal parents before the baby is born (often called a pre-birth order), so they're on the birth certificate from day one; and the law treats every family equally, including LGBTQIA+, single, and unmarried intended parents.</p>
+          <p>The law clearly allows compensated gestational surrogacy, lets intended parents be named legal parents before birth, and treats every kind of family equally.</p>
         </details>
 
         <h3 class="faq-group" id="faq-requirements">Requirements</h3>
         <details>
-          <summary>What are the requirements to become a surrogate?</summary>
-          <p>Ember surrogates are between 21 and 42, have delivered at least one child of their own and are currently raising them, have a history of healthy, full-term pregnancies, have a BMI in a healthy range (typically 19 to 32), don't smoke and live in a smoke-free home, are U.S. citizens or permanent residents, and have a reliable support system. Not sure you meet every one? Take the quiz anyway. We review every application personally.</p>
+          <summary>What are the requirements?</summary>
+          <p>Age 21 to 42, at least one healthy full-term pregnancy and a child you're raising, a BMI of about 19 to 32, non-smoking, a U.S. citizen or permanent resident, and a reliable support system. Not sure? Take the quiz anyway.</p>
         </details>
         <details>
           <summary>Why does BMI matter?</summary>
-          <p>A BMI in a healthy range makes IVF medications more effective and lowers the risk of complications like gestational diabetes and high blood pressure during pregnancy and delivery. It's about keeping you safe, and fertility clinics set these guidelines for that reason.</p>
+          <p>A healthy BMI helps IVF work and lowers pregnancy risks like gestational diabetes. It's about keeping you safe.</p>
         </details>
         <details>
-          <summary>Can I be a surrogate if I've had my tubes tied?</summary>
-          <p>Yes. Because the embryo is placed directly in your uterus, a tubal ligation doesn't affect your ability to carry a pregnancy. If you've had other procedures on your tubes or uterus, we'll review them with the fertility clinic during screening.</p>
+          <summary>Can I be a surrogate if my tubes are tied?</summary>
+          <p>Yes. The embryo is placed directly in the uterus, so a tubal ligation doesn't matter.</p>
         </details>
         <details>
-          <summary>Is there a limit on how many births or C-sections I can have had?</summary>
-          <p>Generally, yes. Most fertility clinics follow guidance from the American Society for Reproductive Medicine, which suggests no more than five previous deliveries and no more than three C-sections. The clinic makes the final call after reviewing your records.</p>
+          <summary>Is there a limit on prior births or C-sections?</summary>
+          <p>Most clinics follow American Society for Reproductive Medicine guidance of no more than five prior deliveries and three C-sections. The clinic makes the final call.</p>
         </details>
         <details>
           <summary>Which vaccines do I need?</summary>
-          <p>Most fertility clinics ask that you're immune to measles, mumps, rubella, and chickenpox, and recommend the Tdap and flu vaccines during pregnancy. Expectations for other vaccines, like COVID-19, vary by clinic and by intended parents, so we talk about them openly before you match. You'll never be matched with a family whose expectations you aren't comfortable with.</p>
+          <p>Clinics usually require immunity to measles, mumps, rubella, and chickenpox. Other vaccines vary by clinic and family, and we discuss them before you match.</p>
         </details>
         <details>
-          <summary>Can I be a surrogate if I'm single?</summary>
-          <p>Absolutely. What matters is a reliable support system: someone who can help with your children, appointments, and recovery when you need it.</p>
-        </details>
-        <details>
-          <summary>Do I need to be a U.S. citizen?</summary>
-          <p>You'll need to be a U.S. citizen or permanent resident living in the United States.</p>
+          <summary>Do I need a partner?</summary>
+          <p>No, as long as you have people who can help with your kids, appointments, and recovery.</p>
         </details>
         <details>
           <summary>Why does my partner need a background check?</summary>
-          <p>Your partner and any other adults in your home are part of your support system and will be close to the pregnancy, so clinics and intended parents ask for a background check and sometimes a few simple medical tests. It's one more way we make sure everyone, including you, is safe and supported.</p>
+          <p>Adults in your home are part of your support system, so clinics and intended parents ask for one. It helps keep everyone safe.</p>
         </details>
 
         <h3 class="faq-group" id="faq-compensation">Compensation and costs</h3>
         <details>
-          <summary>How much do surrogates make, and how is it paid?</summary>
-          <p>Ember surrogates receive $70,000 to $100,000+ in base compensation. Your exact number depends on discussions with your intended parents, your state, and whether you've been a surrogate before. It's paid from an independent escrow account on the schedule in your agreement, alongside bonuses before transfer, a monthly allowance, and the other benefits listed above.</p>
+          <summary>How much do surrogates make?</summary>
+          <p>Ember surrogates receive $70,000 to $100,000+ in base compensation, depending on your state, experience, and agreement, paid from independent escrow, plus the benefits listed above.</p>
         </details>
         <details>
-          <summary>Will I pay for any medical or travel costs?</summary>
-          <p>No. Your pregnancy-related medical care, travel, legal fees, and screening are covered for you. Your agreement spells out exactly what's included, and your case manager helps if a question ever comes up.</p>
+          <summary>Will I pay for anything?</summary>
+          <p>No. Medical care, travel, legal fees, and screening are covered.</p>
         </details>
 
         <h3 class="faq-group" id="faq-journey">Your journey</h3>
         <details>
-          <summary>Do I get to choose my intended parents?</summary>
-          <p>Yes. Matching is always mutual. We introduce you to intended parents who share your values and hopes for the journey, and you only move forward when it feels right to you.</p>
+          <summary>Who decides on my match?</summary>
+          <p>You do, together with the intended parents. Matching is always mutual.</p>
         </details>
         <details>
-          <summary>How long does it take to be matched?</summary>
-          <p>Every journey is different. Once you've finished screening, many surrogates are matched within a few weeks to a few months. Because we match on values, not speed, we'll never rush you into a match that doesn't feel right.</p>
+          <summary>How long does matching take?</summary>
+          <p>It varies, often a few weeks to a few months after screening. We match on values, not speed.</p>
         </details>
         <details>
-          <summary>Do I need to live near Ember or the fertility clinic?</summary>
-          <p>No. Ember partners with surrogates across the U.S., and our support reaches you wherever you are. Trips to the fertility clinic, usually just a handful, are arranged and paid for.</p>
+          <summary>Do I need to live near Ember?</summary>
+          <p>No. We work with surrogates across the U.S., and clinic travel is arranged and paid for.</p>
         </details>
         <details>
-          <summary>What if the intended parents change their minds?</summary>
-          <p>You are never left on your own. Your agreement is reviewed by your own attorney and signed before any medical steps begin, and it makes the intended parents legally and financially responsible for the baby. Funds for your compensation and expenses are held in independent escrow before medications start, and the agreement plans for the unexpected, including who will care for the baby if something happens to the intended parents.</p>
+          <summary>What protects me if the intended parents back out?</summary>
+          <p>Your signed agreement makes them legally and financially responsible for the baby, and funds sit in escrow before medications start. You're never left on your own.</p>
         </details>
         <details>
-          <summary>Won't I get attached to the baby?</summary>
-          <p>It's one of the most natural questions there is. Because you know from the very beginning that you're helping another family's baby grow, many surrogates say the bond that grows deepest is with the intended parents. Our team, including former surrogates, is here to talk through every feeling, before and after delivery.</p>
+          <summary>Is it hard to say goodbye after delivery?</summary>
+          <p>You know from day one that you're helping another family grow, and many surrogates find their deepest bond is with the parents. Our team is here for every feeling.</p>
         </details>
         <details>
-          <summary>Will I stay in touch with the family after delivery?</summary>
-          <p>That's up to you and your intended parents, and it's something we talk about during matching. Some families share photos and holiday cards for years, while others prefer a lighter touch. Either way, your postpartum care and our support continue after delivery.</p>
-        </details>
-        <details>
-          <summary>How is Ember different from other surrogacy agencies?</summary>
-          <p>Ember is intentionally boutique. You'll have one dedicated case manager from your first call through postpartum, a team that includes former surrogates, independent legal and escrow services so there's never a conflict of interest, and a matching process built on shared values, not speed.</p>
+          <summary>How is Ember different?</summary>
+          <p>We're boutique: one dedicated case manager, a team that includes former surrogates, independent legal and escrow, and matching built on shared values.</p>
         </details>
       </div>
     </div>
@@ -1272,7 +1272,7 @@ section[id]{scroll-margin-top:82px}
 <!-- ================================================== -->
 <main class="page active" data-page="contact">
 
-  <section>
+  <section class="deco-sprig-left">
     <div class="wrap">
       <div class="contact-grid">
         <div>
