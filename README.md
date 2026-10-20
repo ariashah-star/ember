@@ -1,6 +1,19 @@
 # Ember Surrogacy Website 
 [embersurrogacy.com](https://embersurrogacy.com/)
 
+# Page URLs and SEO
+`index.html` is the only page to edit. Each page has its own URL, title and description, listed in `routes.json` (for example `/intended-parents/`, `/become-a-surrogate/`, `/surrogate-application/`).
+
+After changing `index.html` or `routes.json`, run:
+```
+python3 scripts/build_pages.py
+```
+This regenerates each page's copy (e.g. `become-a-surrogate/index.html`), `404.html`, `sitemap.xml` and `robots.txt`, with the right title, canonical link, social cards and FAQ structured data. Commit the generated files too. A GitHub check fails on any pull request where they are out of date.
+
+Old `#/page` links (ads, QR codes, bookmarks) still work: they redirect to the new URL and keep their UTM parameters.
+
+To preview locally: `python3 -m http.server 3000`, then open http://localhost:3000/.
+
 # Testing + Health Monitoring
 ### E2E Testing
 1. Test that the form submission results in StaticForms submission
@@ -13,7 +26,7 @@
 2. Check that Static Forms is not categorizing things into Spam
 
 # UTM Parameters for Tracking Lead Source
-UTM parameters are tracked across navigation (hash router `#/home`, `#/contact`, `#/apply`) and included in Staticforms email submissions for lead attribution, and also for analytics using GA4.
+UTM parameters are tracked across page navigation and included in Staticforms email submissions for lead attribution, and also for analytics using GA4.
 
 ### UTM Parameter List
 This is the complete list of UTM parameters that are tracked:
@@ -56,14 +69,14 @@ Full detailed guide with copy-paste links for every channel (Instagram, Facebook
 
 ```
 # Instagram feed -> Parents
-https://embersurrogacy.com/#/parents?utm_source=instagram&utm_medium=social&utm_campaign=parents_q3_2026&utm_content=feed_carousel_v1
+https://embersurrogacy.com/intended-parents/?utm_source=instagram&utm_medium=social&utm_campaign=parents_q3_2026&utm_content=feed_carousel_v1
 
 # LinkedIn founder post
-https://embersurrogacy.com/#/parents?utm_source=linkedin&utm_medium=social&utm_campaign=parents_q3_2026&utm_content=founder_post_july_era_v2
+https://embersurrogacy.com/intended-parents/?utm_source=linkedin&utm_medium=social&utm_campaign=parents_q3_2026&utm_content=founder_post_july_era_v2
 
 # Google Ads -> Surrogate quiz
-https://embersurrogacy.com/#/apply?utm_source=google&utm_medium=cpc&utm_campaign=surrogates_q3_search&utm_term=become+a+surrogate&utm_content=rsa_headline_pay_comp
+https://embersurrogacy.com/surrogate-application/?utm_source=google&utm_medium=cpc&utm_campaign=surrogates_q3_search&utm_term=become+a+surrogate&utm_content=rsa_headline_pay_comp
 
 # IVF clinic QR card
-https://embersurrogacy.com/#/contact?utm_source=ccrm&utm_medium=referral&utm_campaign=ivf_referral_q3_2026&utm_content=qr_lobby_card
+https://embersurrogacy.com/contact/?utm_source=ccrm&utm_medium=referral&utm_campaign=ivf_referral_q3_2026&utm_content=qr_lobby_card
 ```
