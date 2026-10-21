@@ -465,6 +465,14 @@ details p{padding-top:1rem;color:var(--espresso-soft);font-size:.95rem;max-width
   transition:border-color .2s;
 }
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--ember)}
+/* iOS Safari gives date inputs a built-in minimum width that ignores width:100%, so they spill out of the card */
+.field input[type="date"]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;min-height:2.9rem;text-align:left}
+.field input[type="date"]::-webkit-date-and-time-value{text-align:left}
+@media (max-width:700px){
+  .form-card{padding:1.6rem 1.25rem}
+  /* 16px stops iOS from zooming the page in when a field is tapped */
+  .field input,.field select,.field textarea{font-size:16px}
+}
 .form-note{font-size:.78rem;color:var(--espresso-soft);margin-top:1.2rem}
 .form-success{display:none;text-align:center;padding:3rem 1rem}
 .form-success h3{font-size:1.5rem;margin-bottom:.8rem}
