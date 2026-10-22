@@ -138,9 +138,11 @@ section{padding:clamp(3.5rem,7vw,5.5rem) 0}
 .textlink:hover{color:var(--ember);border-color:var(--ember)}
 
 /* ---------- Promo bar (inside the sticky header) ---------- */
-.promo-bar{background:var(--espresso);color:var(--alabaster);font-size:.85rem;text-align:center;padding:.6rem 3rem;position:relative;line-height:1.4}
-.promo-bar a{color:var(--alabaster);text-decoration:underline;text-underline-offset:3px;font-weight:500;margin-left:.35rem}
-.promo-close{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--alabaster);font-size:1.2rem;line-height:1;cursor:pointer;padding:.3rem .5rem;opacity:.8}
+.promo-bar{background:var(--ember);color:var(--white);font-size:.95rem;font-weight:500;letter-spacing:.01em;text-align:center;padding:.75rem 3rem;position:relative;line-height:1.4}
+.promo-bar a{color:var(--white);text-decoration:underline;text-underline-offset:3px;font-weight:600;margin-left:.4rem;white-space:nowrap}
+@media (max-width:700px){.promo-bar{font-size:.88rem;padding:.7rem 2.6rem}}
+.promo-bar a:hover{text-decoration-thickness:2px}
+.promo-close{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--white);font-size:1.2rem;line-height:1;cursor:pointer;padding:.3rem .5rem;opacity:.8}
 .promo-close:hover{opacity:1}
 /* Surrogate pages only: surrogate pay never shows to intended parents */
 .promo-bar{display:none}
@@ -738,10 +740,6 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
 
 <!-- ============ HEADER ============ -->
 <header>
-  <div class="promo-bar" id="promoBar">
-    Ember surrogates can earn up to $160K+ in total compensation.<a href="/become-a-surrogate/#pay-estimator" data-route>Estimate your pay</a>
-    <button type="button" class="promo-close" aria-label="Close this message">&times;</button>
-  </div>
   <nav class="nav" aria-label="Main">
     <a class="logo" href="/" data-route>
       <svg class="logo-mark" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -762,6 +760,10 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <span></span><span></span><span></span>
     </button>
   </nav>
+  <div class="promo-bar" id="promoBar">
+    Ember surrogates can earn up to $160K+ in total compensation.<a href="/become-a-surrogate/#pay-estimator" data-route>Estimate your pay</a>
+    <button type="button" class="promo-close" aria-label="Close this message">&times;</button>
+  </div>
 </header>
 
 <!-- ================================================== -->
