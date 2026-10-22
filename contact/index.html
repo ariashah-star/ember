@@ -707,7 +707,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .est-result{background:var(--greige);border-radius:14px;padding:clamp(1.4rem,3vw,2rem);min-height:100%}
 .est-result .est-label{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ember)}
 .est-result .est-range{font-family:'Marcellus',serif;font-size:clamp(1.7rem,3.6vw,2.4rem);line-height:1.1;margin:.5rem 0 .2rem}
-.est-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:.9rem}
+.est-row{display:grid;grid-template-columns:1fr;gap:.9rem;margin-bottom:.9rem}
 .est-result .est-total{color:var(--ember)}
 .est-extras{margin:0 0 1.3rem;border-top:1px solid rgba(59,38,32,.15);padding-top:.9rem}
 .est-extras summary{cursor:pointer;font-size:.88rem;font-weight:500}
@@ -715,8 +715,8 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .est-extras li{display:flex;justify-content:space-between;gap:1rem;font-size:.86rem;color:var(--espresso-soft);padding:.35rem 0;border-bottom:1px dashed rgba(59,38,32,.12)}
 .est-extras li span:last-child{white-space:nowrap;color:var(--espresso)}
 .est-extras p{font-size:.82rem;color:var(--espresso-soft)}
+.est-extras .est-group{margin-top:.9rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--espresso)}
 .est-jump{display:inline-block;font-size:.85rem;font-weight:500;color:var(--ember);border-bottom:1px solid currentColor;padding-bottom:2px}
-@media (max-width:480px){.est-row{grid-template-columns:1fr}}
 .est-result .est-sub{color:var(--espresso-soft);font-size:.95rem;margin-bottom:1.3rem}
 .est-result .btn{margin-top:.2rem}
 .est-result .faq-note{margin-top:1.2rem}
@@ -1017,8 +1017,8 @@ section[id]{scroll-margin-top:82px}
       <div class="estimator" id="pay-estimator">
         <div>
           <span class="eyebrow">Pay Estimator</span>
-          <h3>See what you could earn</h3>
-          <p class="est-lede">Answer two quick questions to see your estimated base pay.</p>
+          <h3>Earn up to $150K+ in total compensation</h3>
+          <p class="est-lede">Answer two quick questions to see your estimated base pay and total package.</p>
           <fieldset class="est-field">
             <legend>Have you been a surrogate before?</legend>
             <div class="est-choices" role="group">
@@ -1038,13 +1038,14 @@ section[id]{scroll-margin-top:82px}
               <div class="est-range" id="est-range">$70K&ndash;$100K+</div>
             </div>
             <div>
-              <div class="est-label">Estimated total pay</div>
-              <div class="est-range est-total" id="est-total">$80K&ndash;$125K+</div>
+              <div class="est-label">Estimated total package</div>
+              <div class="est-range est-total" id="est-total">$100K&ndash;$165K+</div>
             </div>
           </div>
           <p class="est-sub" id="est-sub">Pick your state to see your range.</p>
           <details class="est-extras">
-            <summary>What's included on top of base pay</summary>
+            <summary>What's in the total package</summary>
+            <p class="est-group">Paid to you, on top of base pay</p>
             <ul>
               <li><span>Monthly allowance</span><span>about $3,000</span></li>
               <li><span>Embryo transfer and medication start payments</span><span>$1,500&ndash;$2,500</span></li>
@@ -1053,10 +1054,16 @@ section[id]{scroll-margin-top:82px}
               <li><span>Lost wages and childcare for appointments</span><span>$2,000&ndash;$8,000</span></li>
               <li><span>If needed: C-section, twins, other procedures</span><span>$3,000&ndash;$10,000</span></li>
             </ul>
-            <p>Your medical insurance, legal fees and life insurance are also paid for you. They aren't counted in these numbers.</p>
+            <p class="est-group">Paid for you, at no cost to you</p>
+            <ul>
+              <li><span>Health insurance for your pregnancy</span><span>$15,000&ndash;$30,000</span></li>
+              <li><span>Your own independent attorney</span><span>$1,500&ndash;$3,000</span></li>
+              <li><span>Counseling and support groups</span><span>$1,500&ndash;$3,000</span></li>
+              <li><span>Life insurance policy</span><span>$500&ndash;$1,000</span></li>
+            </ul>
           </details>
           <a href="/surrogate-application/" data-route class="btn btn-solid" id="est-cta">Take the 2-Minute Eligibility Quiz</a>
-          <p class="faq-note">These are estimates, not an offer. Your final pay is set in your contract and depends on your state, your experience, your match, and how your pregnancy goes.</p>
+          <p class="faq-note">These are estimates, not an offer. The total package includes the value of insurance, legal and support costs paid on your behalf. Your final pay is set in your contract and depends on your state, your experience, your match, and how your pregnancy goes.</p>
         </div>
       </div>
       </div>
@@ -2060,8 +2067,10 @@ window.addEventListener('ember:navigate', () => {
   const sel = root.querySelector('#est-state');
   const rangeEl = root.querySelector('#est-range');
   const totalEl = root.querySelector('#est-total');
-  // Extra payments on top of base pay, in $K (see the breakdown list in the estimator).
+  // Payments on top of base pay, plus the value of costs paid on her behalf, in $K.
+  // Keep in sync with the two breakdown lists in the estimator.
   const EXTRAS = [10, 25];
+  const COVERED = [20, 40];
   const subEl = root.querySelector('#est-sub');
   const btns = root.querySelectorAll('[data-exp]');
   let exp = 'first';
@@ -2071,7 +2080,7 @@ window.addEventListener('ember:navigate', () => {
     const st = sel.value;
     if(!st){
       rangeEl.innerHTML = '$70K&ndash;$100K+';
-      totalEl.innerHTML = '$80K&ndash;$125K+';
+      totalEl.innerHTML = '$100K&ndash;$165K+';
       subEl.textContent = 'Pick your state to see your range.';
       return;
     }
@@ -2083,8 +2092,8 @@ window.addEventListener('ember:navigate', () => {
     } else {
       const r = RANGES[g][exp];
       rangeEl.innerHTML = '$' + r[0] + 'K&ndash;$' + r[1] + 'K' + (r[1] >= 100 ? '+' : '');
-      totalEl.innerHTML = '$' + (r[0] + EXTRAS[0]) + 'K&ndash;$' + (r[1] + EXTRAS[1]) + 'K+';
-      subEl.textContent = 'For ' + (exp === 'first' ? 'a first-time' : 'an experienced') + ' surrogate in ' + st + '. Total pay adds the payments below to your base pay.';
+      totalEl.innerHTML = '$' + (r[0] + EXTRAS[0] + COVERED[0]) + 'K&ndash;$' + (r[1] + EXTRAS[1] + COVERED[1]) + 'K+';
+      subEl.textContent = 'For ' + (exp === 'first' ? 'a first-time' : 'an experienced') + ' surrogate in ' + st + '. The total package adds extra payments and the costs we cover to your base pay.';
     }
     try { sessionStorage.setItem('ember_estimator_state', st); } catch(e){}
     if(typeof gtag === 'function') gtag('event', 'pay_estimate', {surrogate_state: st, experience: exp});
