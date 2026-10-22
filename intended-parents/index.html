@@ -305,6 +305,10 @@ footer .logo-mark path{stroke:var(--alabaster)}
 .about-story-text{margin-top:1.4rem;padding-top:1.4rem;border-top:1px solid rgba(188,143,99,.35)}
 .about-story-text p{font-size:.98rem}
 .about-story-text p + p{margin-top:.9rem}
+.about-points{list-style:none;margin:1.1rem 0 0;padding:0;display:grid;gap:.85rem}
+.about-points li{position:relative;padding-left:1.3rem;font-size:.98rem;color:var(--espresso-soft)}
+.about-points li::before{content:"";position:absolute;left:0;top:.6em;width:7px;height:7px;border-radius:50%;background:var(--ember)}
+.about-points strong{color:var(--espresso);font-weight:600}
 /* Alternate photos left and right down a page on desktop; phones keep text first */
 @media (min-width:701px){
   .photo-left > .photo-block,.photo-left > .wide-photo{order:-1}
@@ -1302,8 +1306,12 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
         <h1>Rooted in care. <em class="lux">Devoted to family.</em></h1>
         <p>Ember exists to make one of life's most profound journeys feel supported, personal, and deeply cared for, from the very first conversation.</p>
         <div class="about-story-text">
-          <p>We were founded on a simple conviction: that building a family deserves both the highest professional standards and genuinely personal care, and that no one should ever have to choose between the two. Too often an agency feels either large and impersonal or warm but unpolished. We built Ember to be neither.</p>
-          <p>We stay intentionally boutique, so every family and every surrogate has a senior team member's full attention from the very first conversation. That's not a tagline. It's how we're built.</p>
+          <p>We were founded on a simple conviction: building a family deserves the highest professional standards and genuinely personal care, without compromise. Many agencies feel either large and impersonal, often because they're backed by private equity, or warm but unpolished. We built Ember to be neither.</p>
+          <ul class="about-points">
+            <li><strong>Privately owned.</strong> Our decisions are made for families and surrogates, not investors.</li>
+            <li><strong>Intentionally boutique.</strong> Every family and every surrogate has a senior team member's full attention from the very first conversation.</li>
+            <li><strong>Independent legal and escrow.</strong> Surrogacy is a largely unregulated industry, so we hold ourselves to a higher standard. Every journey uses independent attorneys and third-party escrow, so there's never a conflict of interest.</li>
+          </ul>
         </div>
       </div>
       <div class="photo-block">
@@ -1667,7 +1675,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
           </svg>
           ember
         </span>
-        <p>A premium surrogacy agency serving parents nationwide.</p>
+        <p>A Premium Surrogacy Agency supporting intended parents and surrogates with intention and transparency.</p>
         <p class="foot-address">Ember Families LLC<br>
           1 Fair Oaks St.<br>
           San Francisco, CA 94110 &middot; United States</p>
@@ -1732,7 +1740,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
         </svg>
       </a>
     </div>
-      <span>&copy; 2026 Ember Families LLC. Ember Surrogacy is a trade name of Ember Families LLC. All rights reserved.</span>
+      <span>&copy; 2026 Ember Families LLC. All rights reserved.</span>
     </div>
   </div>
 </footer>
