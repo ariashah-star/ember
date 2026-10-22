@@ -1739,10 +1739,10 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
   const header = document.querySelector('header');
   const bar = document.getElementById('promoBar');
   window.emberSetHeaderHeight = () => document.documentElement.style.setProperty('--hdr', header.offsetHeight + 'px');
-  bar.querySelector('.promo-close').addEventListener('click', () => {
-    bar.hidden = true;
-    window.emberSetHeaderHeight();
-  });
+  const hideBar = () => { bar.hidden = true; window.emberSetHeaderHeight(); };
+  bar.querySelector('.promo-close').addEventListener('click', hideBar);
+  // Runs before the router's document-level click handler, so the scroll uses the shorter header
+  bar.querySelector('a').addEventListener('click', hideBar);
   window.addEventListener('resize', window.emberSetHeaderHeight);
   window.emberSetHeaderHeight();
 })();
