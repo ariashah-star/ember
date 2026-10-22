@@ -1735,17 +1735,15 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
 </footer>
 
 <script>
-/* ---------- Promo bar: dismissible; header height feeds the mobile menu and anchor offsets ---------- */
+/* ---------- Promo bar: dismissible until the next page load; header height feeds the mobile menu and anchor offsets ---------- */
 (function(){
   const header = document.querySelector('header');
   const bar = document.getElementById('promoBar');
   window.emberSetHeaderHeight = () => document.documentElement.style.setProperty('--hdr', header.offsetHeight + 'px');
-  try { if(sessionStorage.getItem('ember_promo_closed')) bar.hidden = true; } catch(e){}
-  bar.querySelector('.promo-close').addEventListener('click', () => {
-    bar.hidden = true;
-    try { sessionStorage.setItem('ember_promo_closed', '1'); } catch(e){}
-    window.emberSetHeaderHeight();
-  });
+  const hideBar = () => { bar.hidden = true; window.emberSetHeaderHeight(); };
+  bar.querySelector('.promo-close').addEventListener('click', hideBar);
+  // Runs before the router's document-level click handler, so the scroll uses the shorter header
+  bar.querySelector('a').addEventListener('click', hideBar);
   window.addEventListener('resize', window.emberSetHeaderHeight);
   window.emberSetHeaderHeight();
 })();
