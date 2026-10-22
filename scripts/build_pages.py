@@ -79,7 +79,7 @@ def head_block(cfg, name, doc, not_found=False):
     if name == 'home' and not not_found:
         schemas.append({
             '@context': 'https://schema.org', '@type': 'Organization', 'name': 'Ember Surrogacy',
-            'legalName': 'Ember Surrogacy LLC', 'url': site + '/', 'logo': site + '/favicon-512x512.png',
+            'legalName': 'Ember Families LLC', 'url': site + '/', 'logo': site + '/favicon-512x512.png',
             'email': 'info@embersurrogacy.com',
             'address': {'@type': 'PostalAddress', 'streetAddress': '1 Fair Oaks St.', 'addressLocality': 'San Francisco',
                         'addressRegion': 'CA', 'postalCode': '94110', 'addressCountry': 'US'},
