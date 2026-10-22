@@ -143,7 +143,9 @@ section{padding:clamp(3.5rem,7vw,5.5rem) 0}
 .promo-bar a{color:var(--alabaster);text-decoration:underline;text-underline-offset:3px;font-weight:500;margin-left:.35rem}
 .promo-close{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--alabaster);font-size:1.2rem;line-height:1;cursor:pointer;padding:.3rem .5rem;opacity:.8}
 .promo-close:hover{opacity:1}
-body[data-page="parents"] .promo-bar,.promo-bar[hidden]{display:none}
+/* Surrogate pages only: surrogate pay never shows to intended parents */
+.promo-bar{display:none}
+body[data-page="surrogates"] .promo-bar:not([hidden]),body[data-page="apply"] .promo-bar:not([hidden]){display:block}
 
 /* ---------- Header ---------- */
 header{
