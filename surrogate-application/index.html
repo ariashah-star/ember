@@ -693,6 +693,24 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .state-workable{background:rgba(188,143,99,.22);color:#7A5630}
 .state-restricted{background:rgba(158,69,49,.13);color:var(--ember-deep)}
 .faq-note{font-size:.8rem;line-height:1.6;color:var(--espresso-soft);margin:1.2rem 0 .6rem;font-style:italic}
+
+/* ---------- Compensation estimator ---------- */
+.estimator{margin-top:clamp(2.5rem,5vw,4rem);background:var(--white);border:1px solid rgba(188,143,99,.3);border-radius:16px;padding:clamp(1.6rem,3.5vw,2.6rem);display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
+.estimator h3{font-size:var(--fs-h3);margin:.9rem 0 .6rem}
+.estimator .est-lede{color:var(--espresso-soft);font-size:.95rem;margin-bottom:1.4rem}
+.est-field{margin-bottom:1.2rem;border:0}
+.est-field legend,.est-field label{display:block;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:.6rem}
+.est-choices{display:flex;flex-wrap:wrap;gap:.6rem}
+.est-choices button{font:inherit;font-size:.92rem;padding:.7rem 1.2rem;border-radius:999px;border:1px solid rgba(59,38,32,.3);background:transparent;color:var(--espresso);cursor:pointer;transition:all .2s ease}
+.est-choices button[aria-pressed="true"]{background:var(--espresso);border-color:var(--espresso);color:var(--alabaster)}
+.est-field select{width:100%;font:inherit;font-size:.95rem;padding:.75rem 1rem;border-radius:10px;border:1px solid rgba(59,38,32,.3);background:var(--alabaster);color:var(--espresso)}
+.est-result{background:var(--greige);border-radius:14px;padding:clamp(1.4rem,3vw,2rem);min-height:100%}
+.est-result .est-label{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ember)}
+.est-result .est-range{font-family:'Marcellus',serif;font-size:clamp(2rem,5vw,2.8rem);line-height:1.1;margin:.6rem 0 .4rem}
+.est-result .est-sub{color:var(--espresso-soft);font-size:.95rem;margin-bottom:1.3rem}
+.est-result .btn{margin-top:.2rem}
+.est-result .faq-note{margin-top:1.2rem}
+@media (max-width:760px){.estimator{grid-template-columns:1fr}}
 section[id]{scroll-margin-top:82px}
 @media (max-width:960px){.state-grid{grid-template-columns:1fr}}
 </style>
@@ -930,34 +948,34 @@ section[id]{scroll-margin-top:82px}
       <p class="traits-intro">The qualities we look for, and see in our community every day.</p>
       <div class="why-grid">
         <div class="why-card">
-          <div class="pct">Dependable</div>
+          <div class="pct">Reliability</div>
           <h3>You show up</h3>
           <p>A family trusts you completely, and you honor that by following through.</p>
         </div>
         <div class="why-card">
-          <div class="pct">Caring</div>
+          <div class="pct">Compassion</div>
           <h3>You lead with heart</h3>
           <p>You meet a family's hopes and worries with warmth and patience.</p>
         </div>
         <div class="why-card">
-          <div class="pct">Generous</div>
+          <div class="pct">Generosity</div>
           <h3>You give a rare gift</h3>
           <p>You're helping bring a family into the world, and that changes lives.</p>
         </div>
         <div class="why-card">
-          <div class="pct">Calm</div>
-          <h3>You stay steady</h3>
-          <p>You talk openly, handle the ups and downs, and ask for support when you need it.</p>
+          <div class="pct">Steadiness</div>
+          <h3>You stay calm</h3>
+          <p>You communicate openly, handle the ups and downs with grace, and ask for support when you need it.</p>
         </div>
         <div class="why-card">
-          <div class="pct">Honest</div>
-          <h3>You're open with us</h3>
+          <div class="pct">Integrity</div>
+          <h3>You're honest and open</h3>
           <p>You share your needs and boundaries, so every decision rests on trust.</p>
         </div>
         <div class="why-card">
-          <div class="pct">Confident</div>
+          <div class="pct">Strength</div>
           <h3>You choose this for yourself</h3>
-          <p>This is your decision, made freely, and we'll always respect it.</p>
+          <p>This is your decision, made freely and confidently, and we'll always respect it.</p>
         </div>
       </div>
     </div>
@@ -984,6 +1002,31 @@ section[id]{scroll-margin-top:82px}
         </div>
         <div class="photo-block">
           <img src="/images/expectant-person-cradling-belly-sunlit-field.jpg" alt="An expectant person cradling their belly in a sunlit field" loading="lazy" onerror="this.remove()">
+        </div>
+      </div>
+      <div class="estimator" id="pay-estimator">
+        <div>
+          <span class="eyebrow">Pay Estimator</span>
+          <h3>See what you could earn</h3>
+          <p class="est-lede">Answer two quick questions to see your estimated base pay.</p>
+          <fieldset class="est-field">
+            <legend>Have you been a surrogate before?</legend>
+            <div class="est-choices" role="group">
+              <button type="button" data-exp="first" aria-pressed="true">No, this would be my first time</button>
+              <button type="button" data-exp="experienced" aria-pressed="false">Yes, I have</button>
+            </div>
+          </fieldset>
+          <div class="est-field">
+            <label for="est-state">Which state do you live in?</label>
+            <select id="est-state"><option value="">Select your state</option></select>
+          </div>
+        </div>
+        <div class="est-result" aria-live="polite">
+          <div class="est-label">Estimated base pay</div>
+          <div class="est-range" id="est-range">$70K&ndash;$100K+</div>
+          <p class="est-sub" id="est-sub">Pick your state to see your range. Every Ember surrogate also gets the benefits above.</p>
+          <a href="/surrogate-application/" data-route class="btn btn-solid" id="est-cta">See If You Qualify</a>
+          <p class="faq-note">This is an estimate, not an offer. Your final pay is set in your contract and depends on your state, your experience, and your match.</p>
         </div>
       </div>
     </div>
@@ -1969,6 +2012,54 @@ window.addEventListener('ember:navigate', () => {
   });
 })();
 
+/* ---------- Surrogate pay estimator ---------- */
+(function(){
+  const root = document.getElementById('pay-estimator');
+  if(!root) return;
+  const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+  // Base pay ranges in $K, by state group and experience. Matches the $70K to $100K+ range above.
+  const FRIENDLY = ['Colorado','Connecticut','Delaware','District of Columbia','Illinois','Maine','Michigan','Nevada','New Hampshire','New Jersey','New York','Oregon','Rhode Island','Vermont','Washington'];
+  const LIMITED = ['Arizona','Indiana','Louisiana','Nebraska'];
+  const RANGES = {
+    california: {first:[80,90], experienced:[90,100]},
+    friendly:   {first:[75,85], experienced:[85,95]},
+    workable:   {first:[70,80], experienced:[80,90]}
+  };
+  const groupFor = st => st === 'California' ? 'california' : FRIENDLY.includes(st) ? 'friendly' : LIMITED.includes(st) ? 'limited' : 'workable';
+  const sel = root.querySelector('#est-state');
+  const rangeEl = root.querySelector('#est-range');
+  const subEl = root.querySelector('#est-sub');
+  const btns = root.querySelectorAll('[data-exp]');
+  let exp = 'first';
+  STATES.forEach(st => { const o = document.createElement('option'); o.textContent = st; sel.appendChild(o); });
+
+  function update(){
+    const st = sel.value;
+    if(!st){
+      rangeEl.innerHTML = '$70K&ndash;$100K+';
+      subEl.textContent = 'Pick your state to see your range. Every Ember surrogate also gets the benefits above.';
+      return;
+    }
+    const g = groupFor(st);
+    if(g === 'limited'){
+      rangeEl.textContent = 'Let\u2019s talk';
+      subEl.textContent = 'Surrogacy laws in ' + st + ' are more limited, so pay depends on how your journey is set up. Take the quiz and we\u2019ll walk you through your options.';
+    } else {
+      const r = RANGES[g][exp];
+      rangeEl.innerHTML = '$' + r[0] + 'K&ndash;$' + r[1] + 'K' + (r[1] >= 100 ? '+' : '');
+      subEl.textContent = 'Base pay for ' + (exp === 'first' ? 'a first-time' : 'an experienced') + ' surrogate in ' + st + ', plus every benefit above.';
+    }
+    try { sessionStorage.setItem('ember_estimator_state', st); } catch(e){}
+    if(typeof gtag === 'function') gtag('event', 'pay_estimate', {surrogate_state: st, experience: exp});
+  }
+  btns.forEach(b => b.addEventListener('click', () => {
+    exp = b.dataset.exp;
+    btns.forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    update();
+  }));
+  sel.addEventListener('change', update);
+})();
+
 /* ---------- Surrogate eligibility quiz ---------- */
 (function(){
   const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','I live outside the U.S.'];
@@ -2021,6 +2112,8 @@ window.addEventListener('ember:navigate', () => {
     count.textContent = 'Step '+Math.min(state.i+1,total)+' of '+total;
   }
   function render(){
+    // Carry the state picked in the pay estimator into the quiz.
+    if(!state.answers.state){ try { const est = sessionStorage.getItem('ember_estimator_state'); if(est && STATES.includes(est)) state.answers.state = est; } catch(e){} }
     setProgress();
     if(state.i >= steps.length){ return renderReview(); }
     const s = steps[state.i];
