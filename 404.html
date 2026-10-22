@@ -136,6 +136,13 @@ section{padding:clamp(3.5rem,7vw,5.5rem) 0}
 }
 .textlink:hover{color:var(--ember);border-color:var(--ember)}
 
+/* ---------- Promo bar (inside the sticky header) ---------- */
+.promo-bar{background:var(--espresso);color:var(--alabaster);font-size:.85rem;text-align:center;padding:.6rem 3rem;position:relative;line-height:1.4}
+.promo-bar a{color:var(--alabaster);text-decoration:underline;text-underline-offset:3px;font-weight:500;margin-left:.35rem}
+.promo-close{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--alabaster);font-size:1.2rem;line-height:1;cursor:pointer;padding:.3rem .5rem;opacity:.8}
+.promo-close:hover{opacity:1}
+body[data-page="parents"] .promo-bar,.promo-bar[hidden]{display:none}
+
 /* ---------- Header ---------- */
 header{
   position:sticky;top:0;z-index:100;
@@ -567,10 +574,10 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
   .foot-brand{grid-column:1/-1}
   /* collapse nav to a menu on tablets, iPads & half-screen windows */
   .nav-links{
-    position:fixed;inset:82px 0 auto 0;background:var(--alabaster);
+    position:fixed;inset:var(--hdr,82px) 0 auto 0;background:var(--alabaster);
     flex-direction:column;padding:2rem 6vw 2.5rem;gap:1.4rem;align-items:flex-start;
     border-bottom:1px solid rgba(59,38,32,.12);
-    transform:translateY(calc(-100% - 100px));transition:transform .35s ease;
+    transform:translateY(calc(-100% - var(--hdr,82px) - 20px));transition:transform .35s ease;
   }
   .nav-links.open{transform:none}
   .menu-toggle{display:flex}
@@ -679,8 +686,8 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .traits .why-grid{margin-top:3rem;row-gap:3rem}
 .traits .why-card .pct{font-size:1.75rem;line-height:1.2}
 .journey-grid{align-items:start}
-@media (min-width:701px){.journey-grid .sticky{position:sticky;top:110px}}
-.faq-group{font-size:1.35rem;margin:3rem 0 .4rem;padding-bottom:.6rem;border-bottom:1px solid var(--cashmere);scroll-margin-top:100px}
+@media (min-width:701px){.journey-grid .sticky{position:sticky;top:calc(var(--hdr,82px) + 28px)}}
+.faq-group{font-size:1.35rem;margin:3rem 0 .4rem;padding-bottom:.6rem;border-bottom:1px solid var(--cashmere);scroll-margin-top:calc(var(--hdr,82px) + 18px)}
 .faq h3.faq-group:first-of-type{margin-top:0}
 .faq-lede{color:var(--espresso-soft);margin:1rem 0 1.4rem;max-width:44rem}
 .state-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
@@ -694,7 +701,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .faq-note{font-size:.8rem;line-height:1.6;color:var(--espresso-soft);margin:1.2rem 0 .6rem;font-style:italic}
 
 /* ---------- Compensation estimator ---------- */
-.estimator{scroll-margin-top:100px;margin-top:clamp(2.5rem,5vw,4rem);background:var(--white);border:1px solid rgba(188,143,99,.3);border-radius:16px;padding:clamp(1.6rem,3.5vw,2.6rem);display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
+.estimator{scroll-margin-top:calc(var(--hdr,82px) + 18px);margin-top:clamp(2.5rem,5vw,4rem);background:var(--white);border:1px solid rgba(188,143,99,.3);border-radius:16px;padding:clamp(1.6rem,3.5vw,2.6rem);display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
 .estimator h3{font-size:var(--fs-h3);margin:.9rem 0 .6rem}
 .estimator .est-lede{color:var(--espresso-soft);font-size:.95rem;margin-bottom:1.4rem}
 .est-field{margin-bottom:1.2rem;border:0}
@@ -720,7 +727,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .est-result .btn{margin-top:.2rem}
 .est-result .faq-note{margin-top:1.2rem}
 @media (max-width:760px){.estimator{grid-template-columns:1fr}}
-section[id]{scroll-margin-top:82px}
+section[id]{scroll-margin-top:var(--hdr,82px)}
 @media (max-width:960px){.state-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -728,6 +735,10 @@ section[id]{scroll-margin-top:82px}
 
 <!-- ============ HEADER ============ -->
 <header>
+  <div class="promo-bar" id="promoBar">
+    Ember surrogates can earn up to $160K+ in total compensation.<a href="/become-a-surrogate/#pay-estimator" data-route>Estimate your pay</a>
+    <button type="button" class="promo-close" aria-label="Close this message">&times;</button>
+  </div>
   <nav class="nav" aria-label="Main">
     <a class="logo" href="/" data-route>
       <svg class="logo-mark" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1016,7 +1027,7 @@ section[id]{scroll-margin-top:82px}
       <div class="estimator" id="pay-estimator">
         <div>
           <span class="eyebrow">Pay Estimator</span>
-          <h3>Earn up to $150K+ in total compensation</h3>
+          <h3>Earn up to $160K+ in total compensation</h3>
           <p class="est-lede">Answer two quick questions to see your estimated base pay and total package.</p>
           <fieldset class="est-field">
             <legend>Have you been a surrogate before?</legend>
@@ -1719,6 +1730,21 @@ section[id]{scroll-margin-top:82px}
 </footer>
 
 <script>
+/* ---------- Promo bar: dismissible; header height feeds the mobile menu and anchor offsets ---------- */
+(function(){
+  const header = document.querySelector('header');
+  const bar = document.getElementById('promoBar');
+  window.emberSetHeaderHeight = () => document.documentElement.style.setProperty('--hdr', header.offsetHeight + 'px');
+  try { if(sessionStorage.getItem('ember_promo_closed')) bar.hidden = true; } catch(e){}
+  bar.querySelector('.promo-close').addEventListener('click', () => {
+    bar.hidden = true;
+    try { sessionStorage.setItem('ember_promo_closed', '1'); } catch(e){}
+    window.emberSetHeaderHeight();
+  });
+  window.addEventListener('resize', window.emberSetHeaderHeight);
+  window.emberSetHeaderHeight();
+})();
+
 /* ---------- Router: one real URL per page (paths come from routes.json) ---------- */
 const pages = document.querySelectorAll('.page');
 const navItems = document.querySelectorAll('[data-nav]');
@@ -1728,6 +1754,8 @@ function route(){
   const anchor = location.hash.slice(1);
   const meta = window.EMBER_ROUTES[target];
   pages.forEach(p => p.classList.toggle('active', p.dataset.page === target));
+  document.body.dataset.page = target;
+  if(window.emberSetHeaderHeight) window.emberSetHeaderHeight();
   navItems.forEach(n => n.classList.toggle('current', n.dataset.nav === target));
   document.title = meta.title;
   const desc = document.querySelector('meta[name="description"]');
