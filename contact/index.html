@@ -776,7 +776,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
     </button>
   </nav>
   <div class="promo-bar" id="promoBar">
-    Ember surrogates can earn up to $160K+ in total compensation.<a href="/become-a-surrogate/#pay-estimator" data-route>Estimate your pay</a>
+    Ember surrogates can earn up to $160K+ in total compensation.<a href="/become-a-surrogate/#surrogate-pay-calculator" data-route>Estimate your pay</a>
     <button type="button" class="promo-close" aria-label="Close this message">&times;</button>
   </div>
 </header>
@@ -1038,13 +1038,13 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
             <li>Independent legal representation, fully covered</li>
             <li>Dedicated support team and 24/7 access to your case manager</li>
           </ul>
-          <a href="#pay-estimator" class="est-jump">Estimate your pay below &darr;</a>
+          <a href="#surrogate-pay-calculator" class="est-jump">Estimate your pay below &darr;</a>
         </div>
         <div class="photo-block">
           <img src="/images/expectant-person-cradling-belly-sunlit-field.jpg" alt="An expectant person cradling their belly in a sunlit field" loading="lazy" onerror="this.remove()">
         </div>
       </div>
-      <div class="estimator" id="pay-estimator">
+      <div class="estimator" id="surrogate-pay-calculator">
         <div class="est-head">
           <span class="eyebrow">Surrogate Pay Calculator</span>
           <h3>Earn up to $160K+ in total compensation</h3>
@@ -2101,7 +2101,7 @@ window.addEventListener('ember:navigate', () => {
 
 /* ---------- Surrogate pay estimator ---------- */
 (function(){
-  const root = document.getElementById('pay-estimator');
+  const root = document.getElementById('surrogate-pay-calculator');
   if(!root) return;
   const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
   // Base pay ranges in $K, by state group and experience. Matches the $70K to $100K+ range above.
