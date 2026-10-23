@@ -710,24 +710,28 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .faq-note{font-size:.8rem;line-height:1.6;color:var(--espresso-soft);margin:1.2rem 0 .6rem;font-style:italic}
 
 /* ---------- Compensation estimator ---------- */
-.estimator{scroll-margin-top:calc(var(--hdr,82px) + 18px);margin-top:clamp(2.5rem,5vw,4rem);background:var(--white);border:1px solid rgba(188,143,99,.3);border-radius:16px;padding:clamp(1.6rem,3.5vw,2.6rem);display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
+.estimator{scroll-margin-top:calc(var(--hdr,82px) + 18px);margin-top:clamp(2.5rem,5vw,4rem);background:var(--white);border:1px solid rgba(188,143,99,.3);border-radius:16px;padding:clamp(1.6rem,3.5vw,2.6rem);display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(1.5rem,4vw,3.5rem);row-gap:1.6rem;align-items:start}
+.est-head,.est-foot{grid-column:1/-1}
 .estimator h3{font-size:var(--fs-h3);margin:.9rem 0 .4rem}
-.estimator .est-lede{color:var(--espresso-soft);font-size:.95rem;margin-bottom:1.6rem}
+.estimator .est-lede{color:var(--espresso-soft);font-size:.95rem}
+.est-fields .est-field:last-child{margin-bottom:0}
 .est-field{margin-bottom:1.4rem;border:0}
-.est-field legend,.est-field label{display:flex;align-items:center;gap:.6rem;font-size:1rem;font-weight:500;margin-bottom:.7rem}
+.est-field legend,.est-field label{display:flex;align-items:center;gap:.6rem;font-size:1rem;font-weight:500;line-height:1.35;margin-bottom:.7rem}
 .est-num{display:inline-grid;place-items:center;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--greige);color:var(--ember);font-size:.8rem;font-weight:600;flex:none}
 .est-choices{display:flex;flex-wrap:wrap;gap:.6rem}
 .est-choices button{font:inherit;font-size:.95rem;padding:.65rem 1.3rem;border-radius:999px;border:1px solid rgba(59,38,32,.22);background:transparent;color:var(--espresso);cursor:pointer;transition:all .2s ease}
 .est-choices button[aria-pressed="true"]{background:var(--greige);border-color:var(--ember);color:var(--ember-deep);font-weight:500}
 .est-field select{width:100%;font:inherit;font-size:1rem;padding:.75rem 1rem;border-radius:10px;border:1px solid rgba(59,38,32,.22);background:var(--alabaster);color:var(--espresso)}
-.est-result{background:var(--greige);border-radius:14px;padding:clamp(1.4rem,3vw,2rem);min-height:100%;display:flex;flex-direction:column;align-items:flex-start}
+.est-result{background:var(--greige);border-radius:14px;padding:clamp(1.4rem,3vw,2rem);align-self:stretch;display:flex;flex-direction:column;align-items:flex-start}
+.est-result .est-empty{font-family:'Marcellus',serif;font-size:clamp(2.2rem,4.6vw,3rem);line-height:1.1;margin:.35rem 0 .5rem;color:rgba(59,38,32,.25)}
+.estimator.est-done .est-empty{display:none}
 .est-result .est-label{font-size:.95rem;color:var(--espresso-soft)}
 .est-result .est-range{font-family:'Marcellus',serif;font-size:clamp(2.2rem,4.6vw,3rem);line-height:1.1;margin:.35rem 0 .5rem;color:var(--ember)}
 .est-result .est-base{font-size:1rem;color:var(--espresso);margin-bottom:.3rem}
 .est-result .est-base strong{font-weight:600}
 .estimator.est-limited .est-base{display:none}
 .est-answer[hidden]{display:none}
-.est-result .est-sub{color:var(--espresso-soft);font-size:.9rem;margin-bottom:1.4rem}
+.est-result .est-sub{color:var(--espresso-soft);font-size:.9rem}
 .est-extras{margin:1.4rem 0 0;width:100%;border:0;padding:0}
 .est-extras summary{display:inline;font-family:inherit;font-size:.85rem;font-weight:500;color:var(--ember);text-decoration:underline;text-underline-offset:3px}
 .est-extras summary::-webkit-details-marker{display:none}
@@ -739,10 +743,10 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .est-extras p{font-size:.82rem;color:var(--espresso-soft)}
 .est-extras .est-group{margin-top:.9rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--espresso)}
 .est-jump{display:inline-block;font-size:.85rem;font-weight:500;color:var(--ember);border-bottom:1px solid currentColor;padding-bottom:2px}
-.est-result .btn{margin-top:auto}
-.est-result .est-sub + .btn{margin-top:0}
-.est-result .faq-note{margin-top:.6rem;font-size:.8rem}
-@media (max-width:760px){.estimator{grid-template-columns:1fr}.est-result .btn{width:100%;text-align:center;padding-inline:1rem;white-space:nowrap}}
+.est-result .est-extras{margin-top:auto;padding-top:1.2rem}
+.est-foot{border-top:1px solid rgba(59,38,32,.1);padding-top:1.4rem;display:flex;flex-direction:column;align-items:flex-start;gap:1.1rem}
+.est-foot .faq-note{margin:0}
+@media (max-width:760px){.estimator{grid-template-columns:1fr;row-gap:1.3rem}.est-foot .btn{width:100%;text-align:center;padding-inline:1rem}}
 section[id]{scroll-margin-top:var(--hdr,82px)}
 @media (max-width:960px){.state-grid{grid-template-columns:1fr}}
 </style>
@@ -1041,10 +1045,12 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
         </div>
       </div>
       <div class="estimator" id="pay-estimator">
-        <div>
+        <div class="est-head">
           <span class="eyebrow">Pay Estimator</span>
           <h3>Earn up to $160K+ in total compensation</h3>
-          <p class="est-lede">Two quick questions. No sign-up needed.</p>
+          <p class="est-lede">Answer two quick questions to see your estimate. No sign-up needed.</p>
+        </div>
+        <div class="est-fields">
           <div class="est-field">
             <label for="est-state"><span class="est-num">1</span>Where do you live?</label>
             <select id="est-state"><option value="">Choose your state</option></select>
@@ -1059,12 +1065,12 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
         </div>
         <div class="est-result" aria-live="polite">
           <div class="est-label">Your estimate</div>
+          <div class="est-empty" aria-hidden="true">$&mdash;</div>
           <div class="est-answer" hidden>
             <div class="est-range" id="est-total"></div>
             <p class="est-base">including <strong id="est-range"></strong> base pay</p>
           </div>
           <p class="est-sub" id="est-sub">Answer both questions to see what you could earn.</p>
-          <a href="/surrogate-application/" data-route class="btn btn-solid" id="est-cta">Take the 2-Minute Quiz</a>
           <details class="est-extras">
             <summary>See what's included</summary>
             <p class="est-group">Paid to you, on top of base pay</p>
@@ -1084,7 +1090,10 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
               <li><span>Life insurance policy</span><span>$500&ndash;$1,000</span></li>
             </ul>
           </details>
+        </div>
+        <div class="est-foot">
           <p class="faq-note">Estimates only. The total includes insurance and legal costs we pay for you. Your final pay is set in your contract.</p>
+          <a href="/surrogate-application/" data-route class="btn btn-solid" id="est-cta">Take the 2-Min Surrogate Eligibility Quiz</a>
         </div>
       </div>
       </div>
@@ -2120,6 +2129,7 @@ window.addEventListener('ember:navigate', () => {
   function update(){
     const st = sel.value;
     answerEl.hidden = !(st && exp);
+    root.classList.toggle('est-done', !!(st && exp));
     if(!st || !exp){
       subEl.textContent = 'Answer both questions to see what you could earn.';
       return;
