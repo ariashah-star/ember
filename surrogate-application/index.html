@@ -741,21 +741,6 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .est-extras li{display:flex;justify-content:space-between;gap:1rem;font-size:.86rem;color:var(--espresso-soft);padding:.35rem 0;border-bottom:1px dashed rgba(59,38,32,.12)}
 .est-extras li span:last-child{white-space:nowrap;color:var(--espresso)}
 .est-extras p{font-size:.82rem;color:var(--espresso-soft)}
-.est-states table{width:100%;border-collapse:collapse;margin:.6rem 0 .6rem;font-size:.86rem}
-.est-states th,.est-states td{text-align:left;padding:.5rem .6rem .5rem 0;border-bottom:1px dashed rgba(59,38,32,.12);vertical-align:top}
-.est-states thead th{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--espresso)}
-.est-states tbody th{font-weight:400;color:var(--espresso-soft)}
-.est-states td{white-space:nowrap;color:var(--espresso)}
-.est-states td[colspan]{white-space:normal}
-.est-foot .est-states{margin:0}
-@media (max-width:760px){
-  .est-states thead{display:none}
-  .est-states tbody tr{display:grid;grid-template-columns:1fr 1fr;column-gap:1rem;padding:.6rem 0;border-bottom:1px dashed rgba(59,38,32,.12)}
-  .est-states tbody th{grid-column:1/-1;color:var(--espresso);font-weight:500}
-  .est-states tbody td[colspan]{grid-column:1/-1}
-  .est-states tbody th,.est-states tbody td{border:0;padding:.2rem 0}
-  .est-states td[data-label]::before{content:attr(data-label);display:block;font-size:.72rem;color:var(--espresso-soft)}
-}
 .est-extras .est-group{margin-top:.9rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--espresso)}
 .est-jump{display:inline-block;font-size:.85rem;font-weight:500;color:var(--ember);border-bottom:1px solid currentColor;padding-bottom:2px}
 .est-result .est-extras{margin-top:auto;padding-top:1.2rem}
@@ -1062,7 +1047,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <div class="estimator" id="pay-estimator">
         <div class="est-head">
           <span class="eyebrow">Surrogate Pay Calculator</span>
-          <h3>How much do surrogates make? Earn up to $160K+</h3>
+          <h3>Earn up to $160K+ in total compensation</h3>
           <p class="est-lede">Answer two quick questions to estimate your surrogate compensation. No sign-up needed.</p>
         </div>
         <div class="est-fields">
@@ -1107,20 +1092,6 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
           </details>
         </div>
         <div class="est-foot">
-          <details class="est-extras est-states">
-            <summary>Surrogate base pay by state</summary>
-            <!-- Keep in sync with RANGES, FRIENDLY and LIMITED in the pay estimator script. -->
-            <table>
-              <thead><tr><th scope="col">Where you live</th><th scope="col">First-time surrogate</th><th scope="col">Experienced surrogate</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">California</th><td data-label="First-time">$80K&ndash;$90K</td><td data-label="Experienced">$90K&ndash;$100K+</td></tr>
-                <tr><th scope="row">Colorado, Connecticut, Delaware, District of Columbia, Illinois, Maine, Michigan, Nevada, New Hampshire, New Jersey, New York, Oregon, Rhode Island, Vermont, Washington</th><td data-label="First-time">$75K&ndash;$85K</td><td data-label="Experienced">$85K&ndash;$95K</td></tr>
-                <tr><th scope="row">All other states</th><td data-label="First-time">$70K&ndash;$80K</td><td data-label="Experienced">$80K&ndash;$90K</td></tr>
-                <tr><th scope="row">Arizona, Indiana, Louisiana, Nebraska</th><td colspan="2">Depends on how your journey is set up. Let&rsquo;s talk.</td></tr>
-              </tbody>
-            </table>
-            <p>Total compensation adds about $30K&ndash;$65K in payments and covered costs on top of base pay.</p>
-          </details>
           <p class="faq-note">Estimates only. The total includes insurance and legal costs we pay for you. Your final pay is set in your contract.</p>
           <a href="/surrogate-application/" data-route class="btn btn-solid" id="est-cta">Take the 2-Min Surrogate Eligibility Quiz</a>
         </div>
