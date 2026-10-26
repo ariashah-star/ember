@@ -639,11 +639,10 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 }
 @media (max-width:1180px){.deco-sprigs::before,.deco-sprigs::after,.deco-sprig-left::before{display:none}}
 /* "Learn more" link beside the contact form and the eligibility quiz */
-.learn-more{margin-top:1.6rem}
-.learn-more p{font-size:.9rem;color:var(--espresso-soft);margin-bottom:.6rem}
-.btn-learn{display:inline-flex;align-items:center;gap:.6rem;padding:.8rem 1.6rem;border-color:rgba(59,38,32,.45)}
-.btn-learn span[aria-hidden]{font-size:.9rem;letter-spacing:0}
-@media (max-width:860px){.apply-intro .learn-more{margin-top:1rem}}
+.learn-more{margin-top:1.4rem;font-size:.92rem;color:var(--espresso-soft)}
+.learn-more a{color:var(--espresso);text-decoration:underline;text-decoration-color:var(--cashmere);text-underline-offset:3px;text-decoration-thickness:1px}
+.learn-more a:hover,.learn-more a:focus-visible{color:var(--ember);text-decoration-color:currentColor}
+@media (max-width:860px){.apply-intro .learn-more{margin-top:.9rem}}
 .field-hint{font-size:.8rem;color:var(--espresso-soft);margin-top:.6rem}
 .field-hint a{color:var(--ember);text-decoration:underline}
 /* ---------- Surrogate eligibility quiz ---------- */
@@ -1410,10 +1409,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
           <span class="eyebrow">Start Your Journey</span>
           <h2 style="font-size:var(--fs-h2);margin:1.3rem 0 1.5rem">We're here when <em class="lux">you're ready</em></h2>
           <p style="color:var(--espresso-soft);margin-bottom:1.6rem">Fill out the form with any questions or to book a consult. Our team will be in touch within 1-3 business days. We look forward to meeting you.</p>
-          <div class="learn-more" style="margin:0 0 2rem">
-            <p>Have questions first?</p>
-            <a href="/intended-parents/" target="_blank" rel="noopener" class="btn btn-ghost btn-learn">Info for parents <span aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a>
-          </div>
+          <p class="learn-more" style="margin:0 0 2rem">Have questions? <a href="/intended-parents/" target="_blank" rel="noopener">Read more about Ember&rsquo;s IP program&nbsp;<span aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a></p>
           <p style="margin-bottom:.6rem"><strong>Serving</strong><br>Parents in the US and internationally</p>
           <p style="margin-bottom:.6rem"><strong>Partnering with</strong><br>US based surrogates</p>
         </div>
@@ -1469,10 +1465,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
         <span class="eyebrow">For Surrogates</span>
         <h1>See if surrogacy is <em class="lux">right for you.</em></h1>
         <p>A few quick questions to see if you qualify. It takes about 2 minutes, and a real member of our team reviews every answer personally.</p>
-        <div class="learn-more">
-          <p>Have questions first?</p>
-          <a href="/become-a-surrogate/" target="_blank" rel="noopener" class="btn btn-ghost btn-learn">Info for surrogates <span aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a>
-        </div>
+        <p class="learn-more">Have questions? <a href="/become-a-surrogate/" target="_blank" rel="noopener">Read more about Ember&rsquo;s surrogate program&nbsp;<span aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a></p>
       </div>
       <div class="apply-quiz">
         <div class="form-card quiz-card" id="quizCard">
