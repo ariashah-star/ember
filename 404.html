@@ -1410,6 +1410,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
           <form id="contactForm" action="https://api.staticforms.dev/submit" method="POST" novalidate>
             <input type="hidden" name="apiKey" value="sf_3a6157e080d62e9879505751">
             <input type="hidden" name="subject" value="Ember Intended Parent Inquiry">
+            <input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
             <div id="formFields">
               <div class="field">
                 <label for="f-interest">I'm interested in</label>
@@ -2028,6 +2029,31 @@ window.addEventListener('ember:navigate', () => {
   } catch(e){}
 });
 
+/* ---------- Lead sheets (Google Apps Script → Surrogate Leads / IP Leads) ---------- */
+// The web app URL from deploying crm/Code.gs. Empty = sheets are skipped and
+// StaticForms keeps handling email as before.
+const EMBER_LEADS_URL = '';
+window.EmberLeads = {
+  // Fire-and-forget: a sheet hiccup must never block or fail a submission.
+  send(form, fields){
+    if(!EMBER_LEADS_URL) return;
+    let utms = {};
+    try { utms = window.EmberUTMs ? window.EmberUTMs.get() : {}; } catch(e){}
+    const body = Object.assign({
+      form,
+      utm_source: utms.utm_source || '', utm_medium: utms.utm_medium || '', utm_campaign: utms.utm_campaign || '',
+      utm_content: utms.utm_content || '', utm_term: utms.utm_term || '',
+      fbclid: utms.fbclid || '', gclid: utms.gclid || '',
+      landing_page: utms._first_landing || '', referrer: utms._first_referrer || ''
+    }, fields);
+    try {
+      fetch(EMBER_LEADS_URL, { method: 'POST', mode: 'no-cors', keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+        .catch(err => console.warn('[Ember] Lead sheet send failed', err));
+    } catch(err){ console.warn('[Ember] Lead sheet send failed', err); }
+  }
+};
+
 /* ---------- Contact form (Intended Parents → Staticforms) ---------- */
 (function(){
   const form = document.getElementById('contactForm');
@@ -2093,6 +2119,7 @@ window.addEventListener('ember:navigate', () => {
       resetBtn();
       return;
     }
+    window.EmberLeads.send('parent', { name, email, interest, message: msg, company_website: (fd.get('company_website') || '').toString() });
     if(fields)  fields.style.display  = 'none';
     if(success) success.style.display = 'block';
   });
@@ -2368,6 +2395,8 @@ window.addEventListener('ember:navigate', () => {
         e.textContent = 'Something went wrong. Please email info@embersurrogacy.com.';
         return;
       }
+      const { apiKey, subject, replyTo, ...answers } = payload;
+      window.EmberLeads.send('surrogate', answers);
       card.style.display = 'none';
       success.style.display = '';
       window.scrollTo({top:0, behavior:'instant'});
