@@ -21,12 +21,14 @@
 <script>window.EMBER_SITE = "https://embersurrogacy.com"; window.EMBER_ROUTES = {"home":{"path":"/","title":"Ember Surrogacy | A Premium Surrogacy Agency","description":"Ember is a boutique surrogacy agency for intended parents and gestational surrogates, with personal matching, transparent costs, and a dedicated case manager at every step."},"parents":{"path":"/intended-parents/","title":"Surrogacy for Intended Parents | Ember Surrogacy","description":"Grow your family through gestational surrogacy with Ember: thoughtful matching, transparent line-item costs, and one dedicated case manager from consultation to homecoming.","legacyAnchors":{"ip-journey":"parent-journey","ip-costs":"surrogacy-costs","ip-faqs":"parent-faq"}},"surrogates":{"path":"/become-a-surrogate/","title":"Become a Surrogate | Pay Calculator, Requirements & FAQ | Ember","description":"Become a surrogate with Ember. Use our pay calculator to estimate your compensation by state (up to $160K+ total), see the requirements and get answers to FAQs.","legacyAnchors":{"sur-pay":"compensation","sur-requirements":"requirements","sur-journey":"surrogate-journey"}},"apply":{"path":"/surrogate-application/","title":"Surrogate Application & Eligibility Quiz | Ember Surrogacy","description":"See if you qualify to become an Ember surrogate. The private eligibility quiz takes about two minutes, and a real member of our team reviews every answer."},"contact":{"path":"/contact/","title":"Book a Surrogacy Consultation | Contact Ember Surrogacy","description":"Book a private, no-obligation consultation with Ember Surrogacy. Ask about the surrogacy process, costs, and timelines, and hear back within 1-3 business days."},"about":{"path":"/about/","title":"About Ember Surrogacy | Our Story, Values & Team","description":"Ember is a boutique surrogacy agency built on care, candor, and craft, led by a team with healthcare experience and the lived perspective of former surrogates."},"privacy":{"path":"/privacy-policy/","title":"Privacy Policy | Ember Surrogacy","description":"How Ember Families LLC collects, uses, and protects the information you share through our website, forms, and eligibility quiz."},"health-data":{"path":"/health-data-privacy/","title":"Consumer Health Data Privacy Policy | Ember Surrogacy","description":"How Ember Surrogacy handles consumer health data shared in our surrogate eligibility quiz, under laws such as Washington's My Health My Data Act."},"terms":{"path":"/terms-of-service/","title":"Terms of Service | Ember Surrogacy","description":"The terms that apply when you use the Ember Surrogacy website, forms, and eligibility quiz."}};</script>
 <!-- page-meta:end -->
 
-<!-- Google tag (gtag.js) - GA4 with SPA support -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BVRBX1FZB1"></script>
+<!-- Google tag (gtag.js) - GA4 with SPA support. Loads only after the visitor clicks Accept on the cookie banner. -->
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  // Until the visitor accepts, gtag() calls are dropped rather than queued, so nothing from before
+  // consent is ever sent and gtag.js is never requested. Any new tracker (Meta Pixel, ads tags)
+  // must also load only from emberLoadAnalytics below.
+  window.emberAnalyticsOn = false;
+  function gtag(){ if(window.emberAnalyticsOn) dataLayer.push(arguments); }
   // No analytics on the surrogate quiz or health data pages: visits there can reveal health information.
   window.EMBER_NO_ANALYTICS_PAGES = ['apply', 'health-data'];
   // Which page a URL shows: clean paths like /become-a-surrogate/, plus old #/surrogates links.
@@ -41,9 +43,47 @@
     return 'home';
   };
   // Google's official opt-out flag: while it is true, gtag sends nothing at all (no page views,
-  // scroll/click/form events or engagement pings). The router sets it before every page change;
-  // this listener is registered before gtag.js loads, so it also runs first on Back/Forward.
-  window.emberSyncGaDisable = function(page){ window['ga-disable-G-BVRBX1FZB1'] = window.EMBER_NO_ANALYTICS_PAGES.includes(page || window.emberPageFor()); };
+  // scroll/click/form events or engagement pings). It is on without consent and on the pages above.
+  // The router sets it before every page change; this listener is registered before gtag.js loads,
+  // so it also runs first on Back/Forward.
+  window.emberSyncGaDisable = function(page){ window['ga-disable-G-BVRBX1FZB1'] = !window.emberAnalyticsOn || window.EMBER_NO_ANALYTICS_PAGES.includes(page || window.emberPageFor()); };
+  // The visitor's cookie choice, saved in this browser: {analytics: true|false, date}. No saved
+  // choice means declined. Saving the choice itself is strictly necessary and needs no consent.
+  window.EmberConsent = {
+    KEY: 'ember_cookie_consent',
+    get(){
+      try {
+        const v = JSON.parse(localStorage.getItem(this.KEY) || 'null');
+        return v && typeof v.analytics === 'boolean' ? v : null;
+      } catch(e){ return null; }
+    },
+    set(analytics){
+      try { localStorage.setItem(this.KEY, JSON.stringify({ analytics: analytics, date: new Date().toISOString() })); } catch(e){}
+      if(analytics){ window.emberLoadAnalytics(); return; }
+      // Withdrawn: stop all sending and remove the Google Analytics cookies already set.
+      window.emberAnalyticsOn = false;
+      window.emberSyncGaDisable();
+      const host = location.hostname.replace(/^www\./, '');
+      document.cookie.split(';').forEach(function(c){
+        const name = c.split('=')[0].trim();
+        if(!/^_ga/.test(name)) return;
+        ['', '; domain=' + host, '; domain=.' + host].forEach(function(d){ document.cookie = name + '=; Max-Age=0; path=/' + d; });
+      });
+    }
+  };
+  window.emberLoadAnalytics = function(){
+    if(window.emberAnalyticsOn) return;
+    window.emberAnalyticsOn = true;
+    window.emberSyncGaDisable();
+    gtag('js', new Date());
+    gtag('config', 'G-BVRBX1FZB1', { send_page_view: !window.EMBER_NO_ANALYTICS_PAGES.includes(window.emberPageFor()) });
+    if(document.getElementById('ember-gtag')) return;
+    const tag = document.createElement('script');
+    tag.id = 'ember-gtag';
+    tag.async = true;
+    tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-BVRBX1FZB1';
+    document.head.appendChild(tag);
+  };
   // Old #/page links (ads, QR codes, bookmarks) move to the page's clean URL, keeping their
   // UTM parameters, before Google Analytics records the visit.
   (function(){
@@ -60,7 +100,7 @@
   })();
   window.emberSyncGaDisable();
   window.addEventListener('popstate', function(){ window.emberSyncGaDisable(); });
-  gtag('config', 'G-BVRBX1FZB1', { send_page_view: !window.EMBER_NO_ANALYTICS_PAGES.includes(window.emberPageFor()) });
+  if((window.EmberConsent.get() || {}).analytics === true) window.emberLoadAnalytics();
 </script>
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" sizes="any">
@@ -70,10 +110,17 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png?v=2">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@1,500&family=Albert+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/marcellus-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* ---------- Fonts: served from this site, so no visitor data goes to Google Fonts ---------- */
+@font-face{font-family:'Albert Sans';font-style:normal;font-weight:300 600;font-display:swap;src:url(/fonts/albert-sans-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Albert Sans';font-style:normal;font-weight:300 600;font-display:swap;src:url(/fonts/albert-sans-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-display:swap;src:url(/fonts/cormorant-garamond-500-italic-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-display:swap;src:url(/fonts/cormorant-garamond-500-italic-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Marcellus';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/marcellus-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Marcellus';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/marcellus-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+
 :root{
   --espresso:#3B2620;       /* warm mahogany — primary ink */
   --espresso-soft:#5C443A;
@@ -565,6 +612,33 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
   font-size:.74rem;color:rgba(250,243,234,.48);
 }
 .foot-legal a:hover{color:var(--alabaster)}
+.foot-link-btn{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.foot-link-btn:hover{color:var(--alabaster)}
+
+/* ---------- Cookie banner: a slim strip in the footer's colors ---------- */
+.cookie-banner{
+  position:fixed;left:0;right:0;bottom:0;z-index:200;
+  background:#2A1B15;color:rgba(250,243,234,.78);border-top:1px solid rgba(188,143,99,.35);
+  padding:.7rem clamp(16px,4vw,2.5rem);
+  display:flex;align-items:center;justify-content:center;gap:.55rem 1.6rem;flex-wrap:wrap;
+}
+.cookie-banner[hidden]{display:none}
+.cookie-banner p{font-size:.8rem;line-height:1.5}
+.cookie-banner p a{color:var(--alabaster);border-bottom:1px solid var(--cashmere);white-space:nowrap}
+.cookie-banner p a:hover{color:var(--cashmere)}
+.cookie-actions{display:flex;gap:.5rem;flex:0 0 auto}
+.cookie-btn{
+  padding:.48rem 1.2rem;border-radius:999px;border:1px solid rgba(250,243,234,.45);
+  background:transparent;color:var(--alabaster);cursor:pointer;
+  font-family:'Albert Sans',sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  transition:background .25s ease,color .25s ease,border-color .25s ease;
+}
+.cookie-btn:hover,.cookie-btn:focus-visible{background:var(--alabaster);border-color:var(--alabaster);color:var(--espresso)}
+@media (max-width:600px){
+  .cookie-banner{padding:.6rem 16px}
+  .cookie-banner p{flex:1 1 100%;text-align:center;font-size:.76rem}
+  .cookie-more{display:none}
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width:960px){
@@ -1517,8 +1591,8 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <h3>How we protect your information</h3>
       <p>We use a range of administrative, technical, and physical safeguards designed to protect your personal information when you provide, submit, or access it. No method of transmission or storage is completely secure, so while we work to protect your information, we cannot guarantee absolute security. Where you are given or choose a password for any part of our site, you are responsible for keeping it confidential.</p>
 
-      <h3>Cookies</h3>
-      <p>We use cookies and similar technologies to operate the site, remember preferences, understand site traffic and interaction, and improve our offerings. You can control cookies through your browser settings; disabling them may affect some features.</p>
+      <h3 id="cookies">Cookies</h3>
+      <p>We use a small amount of browser storage that the site needs to work, such as remembering your cookie choice and which link or ad brought you to our site, which we include with any form you submit so we can follow up. With your permission, we also use Google Analytics cookies to understand site traffic and improve our site. Google Analytics does not load until you click Accept on our cookie banner, never runs on our eligibility quiz or Consumer Health Data Privacy pages, and is treated as declined if your browser sends a Global Privacy Control signal. You can change your choice at any time with the Cookie Settings link at the bottom of every page. Our fonts and images are served from our own site, not from third parties.</p>
 
       <p>For details on how we handle health information shared in our surrogate eligibility quiz, see our <a href="/health-data-privacy/" data-route>Consumer Health Data Privacy Policy</a>.</p>
 
@@ -1732,6 +1806,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
           <li><a href="/privacy-policy/" data-route>Privacy Policy</a></li>
           <li><a href="/health-data-privacy/" data-route>Health Data Privacy</a></li>
           <li><a href="/terms-of-service/" data-route>Terms of Service</a></li>
+          <li><button type="button" class="foot-link-btn" data-cookie-settings>Cookie Settings</button></li>
         </ul>
       </nav>
     </div>
@@ -1759,6 +1834,14 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
     </div>
   </div>
 </footer>
+
+<div class="cookie-banner" id="cookieBanner" role="region" aria-label="Cookie preferences" hidden>
+  <p>May we use analytics cookies<span class="cookie-more"> to improve our site</span>?<span class="cookie-more"> They never run on our quiz or health data pages.</span> <a href="/privacy-policy/#cookies" data-route>Learn more</a></p>
+  <div class="cookie-actions">
+    <button type="button" class="cookie-btn" data-consent="decline">Decline</button>
+    <button type="button" class="cookie-btn" data-consent="accept">Accept</button>
+  </div>
+</div>
 
 <script>
 /* ---------- Promo bar: dismissible until the next page load; header height feeds the mobile menu and anchor offsets ---------- */
@@ -2020,9 +2103,37 @@ toggle.addEventListener('click', () => {
   }
 })();
 
+/* ---------- Cookie banner: Google Analytics loads only after Accept ---------- */
+(function(){
+  const banner = document.getElementById('cookieBanner');
+  if(!banner) return;
+  let reopened = false;
+  // Shown until the visitor chooses. Not shown on the quiz and health data pages (no analytics
+  // there either way), or when the browser sends Global Privacy Control, which counts as Decline.
+  function update(){
+    const quiet = window.EMBER_NO_ANALYTICS_PAGES.includes(window.emberPageFor()) || navigator.globalPrivacyControl === true;
+    banner.hidden = !(reopened || (!window.EmberConsent.get() && !quiet));
+  }
+  banner.addEventListener('click', e => {
+    const btn = e.target.closest('[data-consent]');
+    if(!btn) return;
+    window.EmberConsent.set(btn.dataset.consent === 'accept');
+    reopened = false;
+    update();
+  });
+  document.addEventListener('click', e => {
+    if(!e.target.closest('[data-cookie-settings]')) return;
+    reopened = true;
+    update();
+    banner.querySelector('[data-consent="accept"]').focus();
+  });
+  window.addEventListener('ember:navigate', update);
+  update();
+})();
+
 /* ---------- GA4 SPA: manual page_view on in-site navigation (first load auto-sent by gtag config) ---------- */
 window.addEventListener('ember:navigate', () => {
-  if(!window.gtag) return;
+  if(!window.emberAnalyticsOn) return;
   try {
     if((window.EMBER_NO_ANALYTICS_PAGES || []).includes(window.emberPageFor())) return;
     const utms = window.EmberUTMs ? window.EmberUTMs.get() : {};
