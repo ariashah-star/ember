@@ -2038,9 +2038,9 @@ window.addEventListener('ember:navigate', () => {
 });
 
 /* ---------- Lead sheets (Google Apps Script → Surrogate Leads / IP Leads) ---------- */
-// The web app URL from deploying crm/Code.gs. Empty = sheets are skipped and
+// The web app URL from deploying crm/Code.gs (info@ account). Empty = sheets are skipped and
 // StaticForms keeps handling email as before.
-const EMBER_LEADS_URL = '';
+const EMBER_LEADS_URL = 'https://script.google.com/macros/s/AKfycby9hL-bAnvPq10p8eo86RHD2NvKGNSoIO5ppWyZBzEvPcZPmrP6Qg9JT93i2lsz5x73wQ/exec';
 window.EmberLeads = {
   // Fire-and-forget: a sheet hiccup must never block or fail a submission.
   send(form, fields){
