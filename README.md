@@ -40,6 +40,13 @@ This is the complete list of UTM parameters that are tracked:
 ### GA4 (Google Analytics)
 In the info@embersurrogacy.com gmail account.
 
+### Cookie consent
+Nothing from Google or any other third party loads until the visitor clicks **Accept** on the cookie banner. Before that, `gtag()` calls are dropped and `gtag.js` is never requested. The choice is saved in the browser (`ember_cookie_consent` in localStorage), and the **Cookie Settings** link in the footer reopens the banner. Declining after accepting turns GA4 off and deletes its cookies. Browsers that send Global Privacy Control count as declined and don't see the banner. The quiz and health data pages never run analytics and don't show the banner.
+
+Any new tracker (Meta Pixel, ad tags, chat widgets) must load only from `emberLoadAnalytics` in `index.html`, never with a plain `<script src>` tag.
+
+Fonts are self-hosted in `fonts/` (SIL Open Font License), so pages make no requests to Google Fonts.
+
 ### UTM Parameter Inclusion in Form Submission Email
 The UTM parameters are included in the form submissions (both parent form and surrogate form). This allows us to know where the lead came from in the form submission email that info@embersurrogacy.com receives from StaticForms.
 
