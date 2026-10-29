@@ -1489,9 +1489,8 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
           <p style="margin-bottom:.6rem"><strong>Partnering with</strong><br>US based surrogates</p>
         </div>
         <div class="form-card">
-          <form id="contactForm" action="https://api.staticforms.dev/submit" method="POST" novalidate>
-            <input type="hidden" name="apiKey" value="sf_3a6157e080d62e9879505751">
-            <input type="hidden" name="subject" value="Ember Intended Parent Inquiry">
+          <form id="contactForm" action="https://script.google.com/macros/s/AKfycby9hL-bAnvPq10p8eo86RHD2NvKGNSoIO5ppWyZBzEvPcZPmrP6Qg9JT93i2lsz5x73wQ/exec" method="POST" novalidate>
+            <input type="hidden" name="form" value="parent">
             <input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
             <div id="formFields">
               <div class="field">
@@ -1939,7 +1938,7 @@ toggle.addEventListener('click', () => {
   toggle.setAttribute('aria-expanded', open);
 });
 
-/* ---------- Debug helper for Staticforms ---------- */
+/* ---------- Debug helper for form submissions ---------- */
 (function(){
   const isDebug = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.search.includes('debug=1') || location.hash.includes('debug');
   function ensureDebugBox(){
@@ -1965,7 +1964,7 @@ toggle.addEventListener('click', () => {
 (function(){
   const UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','fbclid','msclkid','gbraid','wbraid','fbadid'];
   const STORAGE_KEY = 'ember_utms_v1';
-  // In-memory fallback so captured UTMs still reach Staticforms even when
+  // In-memory fallback so captured UTMs still reach the lead sheets even when
   // sessionStorage/localStorage is unavailable (file:// URLs, private mode, blocked storage).
   let memoryStore = {};
 
@@ -2149,14 +2148,13 @@ window.addEventListener('ember:navigate', () => {
   } catch(e){}
 });
 
-/* ---------- Lead sheets (Google Apps Script → Surrogate Leads / IP Leads) ---------- */
-// The web app URL from deploying crm/Code.gs (info@ account). Empty = sheets are skipped and
-// StaticForms keeps handling email as before.
+/* ---------- Lead intake (Google Apps Script → Surrogate Leads / IP Leads) ---------- */
+// The "Ember Leads" web app (crm/Code.gs, info@ account). It files the lead in the
+// right sheet, emails the team, and sends the applicant their instant reply.
 const EMBER_LEADS_URL = 'https://script.google.com/macros/s/AKfycby9hL-bAnvPq10p8eo86RHD2NvKGNSoIO5ppWyZBzEvPcZPmrP6Qg9JT93i2lsz5x73wQ/exec';
 window.EmberLeads = {
-  // Fire-and-forget: a sheet hiccup must never block or fail a submission.
-  send(form, fields){
-    if(!EMBER_LEADS_URL) return;
+  // Resolves true only once the script confirms the lead was received.
+  async submit(form, fields){
     let utms = {};
     try { utms = window.EmberUTMs ? window.EmberUTMs.get() : {}; } catch(e){}
     const body = Object.assign({
@@ -2166,15 +2164,22 @@ window.EmberLeads = {
       fbclid: utms.fbclid || '', gclid: utms.gclid || '',
       landing_page: utms._first_landing || '', referrer: utms._first_referrer || ''
     }, fields);
+    window.EmberLog && window.EmberLog('Lead submitting', body);
     try {
-      fetch(EMBER_LEADS_URL, { method: 'POST', mode: 'no-cors', keepalive: true,
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
-        .catch(err => console.warn('[Ember] Lead sheet send failed', err));
-    } catch(err){ console.warn('[Ember] Lead sheet send failed', err); }
+      // text/plain keeps this a "simple" request, which Apps Script accepts cross-origin.
+      const res = await fetch(EMBER_LEADS_URL, { method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) });
+      const data = await res.json();
+      window.EmberLog && window.EmberLog('Lead response', { status: res.status, data });
+      return !!(data && data.ok);
+    } catch(err){
+      console.error('[Ember] Lead submit failed', err);
+      return false;
+    }
   }
 };
 
-/* ---------- Contact form (Intended Parents → Staticforms) ---------- */
+/* ---------- Contact form (Intended Parents → lead intake) ---------- */
 (function(){
   const form = document.getElementById('contactForm');
   if(!form){ console.warn('[Ember] contactForm not found'); return; }
@@ -2185,6 +2190,9 @@ window.EmberLeads = {
   const emailRe = /^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/;
 
   const resetBtn = () => { if(btn){ btn.disabled = false; btn.textContent = 'Send Message'; } };
+  // When they started filling it in; bots submit faster than people can type.
+  let startedAt = 0;
+  form.addEventListener('focusin', () => { if(!startedAt) startedAt = Date.now(); });
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -2203,44 +2211,16 @@ window.EmberLeads = {
 
     if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
 
-    let utmText = '';
-    try {
-      const utms = window.EmberUTMs ? window.EmberUTMs.get() : {};
-      if(Object.keys(utms).length){
-        utmText = '\n\n----------------------------------------\nMARKETING ATTRIBUTION\n----------------------------------------\n' + window.EmberUTMs.formatForMessage(utms);
-      }
-    } catch(e){}
-
-    const composed = 'Intended Parent Inquiry\n\n' +
-      'Name: ' + name + '\n' +
-      'Email: ' + email + '\n' +
-      'Interest: ' + (interest || '—') + '\n\n' +
-      'Message:\n' + (msg || '—') + utmText;
-
-    const payload = { apiKey: fd.get('apiKey'), subject: fd.get('subject'), name, email, replyTo: email, message: composed };
-    window.EmberLog && window.EmberLog('Contact form submitting', { action: form.action, payload });
-
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const text = await res.text();
-      let data; try { data = JSON.parse(text); } catch(e){ data = text; }
-      window.EmberLog && window.EmberLog('Staticforms response', { status: res.status, ok: res.ok, data });
-      if(!res.ok){
-        if(errEl) errEl.textContent = 'Something went wrong. Please email info@embersurrogacy.com.';
-        resetBtn();
-        return;
-      }
-    } catch(err) {
-      console.error('[Ember] Staticforms submit failed — check domain whitelist & API key.', err);
-      if(errEl) errEl.textContent = 'Network error. Please try again or email info@embersurrogacy.com.';
+    const ok = await window.EmberLeads.submit('parent', {
+      name, email, interest, message: msg,
+      company_website: (fd.get('company_website') || '').toString(),
+      elapsed_ms: startedAt ? Date.now() - startedAt : ''
+    });
+    if(!ok){
+      if(errEl) errEl.textContent = 'Something went wrong. Please try again or email info@embersurrogacy.com.';
       resetBtn();
       return;
     }
-    window.EmberLeads.send('parent', { name, email, interest, message: msg, company_website: (fd.get('company_website') || '').toString() });
     if(fields)  fields.style.display  = 'none';
     if(success) success.style.display = 'block';
   });
@@ -2338,7 +2318,7 @@ window.EmberLeads = {
   const count = document.getElementById('quizCount');
   const card = document.getElementById('quizCard');
   const success = document.getElementById('quizSuccess');
-  const state = {i:0, answers:{}};
+  const state = {i:0, answers:{}, started:0};
   const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   // Date of birth arrives as YYYY-MM-DD; parse as a local date so it never shifts a day.
   const parseDob = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v||''); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; };
@@ -2360,6 +2340,7 @@ window.EmberLeads = {
     count.textContent = 'Step '+Math.min(state.i+1,total)+' of '+total;
   }
   function render(){
+    if(!state.started) state.started = Date.now();
     // Carry the state picked in the pay estimator into the quiz.
     if(!state.answers.state){ try { const est = sessionStorage.getItem('ember_estimator_state'); if(est && STATES.includes(est)) state.answers.state = est; } catch(e){} }
     setProgress();
@@ -2479,11 +2460,7 @@ window.EmberLeads = {
       let utms = {};
       try { utms = window.EmberUTMs ? window.EmberUTMs.get() : {}; } catch(e){}
       // Each answer is its own field so it lands in its own Google Sheets column.
-      // Key order sets the column order on the first submission; keep keys stable.
       const payload = {
-        apiKey: 'sf_ec42af1d9b760335558da878',
-        subject: 'Ember Surrogate Application',
-        replyTo: a.email || '',
         name: [a.first_name, a.last_name].filter(Boolean).join(' '),
         first_name: a.first_name || '',
         last_name: a.last_name || '',
@@ -2516,34 +2493,23 @@ window.EmberLeads = {
         utm_content: utms.utm_content || '',
         utm_term: utms.utm_term || '',
         fbclid: utms.fbclid || '',
-        gclid: utms.gclid || ''
+        gclid: utms.gclid || '',
+        elapsed_ms: state.started ? Date.now() - state.started : ''
       };
-      window.EmberLog && window.EmberLog('Quiz submitting', payload);
-      try {
-        const res = await fetch('https://api.staticforms.dev/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        window.EmberLog && window.EmberLog('Quiz staticforms response', { status: res.status, ok: res.ok });
-        if(!res.ok) throw new Error('status ' + res.status);
-      } catch(err) {
-        console.error('[Ember] Quiz submit failed', err);
+      if(!(await window.EmberLeads.submit('surrogate', payload))) {
         submit.disabled = false; submit.textContent = 'Submit application';
         let e = document.getElementById('quizErr');
         if(!e){ e = document.createElement('p'); e.id='quizErr'; e.style.cssText='margin-top:.8rem;color:var(--ember);font-size:.85rem'; submit.parentNode.insertBefore(e, submit.nextSibling); }
         e.textContent = 'Something went wrong. Please email info@embersurrogacy.com.';
         return;
       }
-      const { apiKey, subject, replyTo, ...answers } = payload;
-      window.EmberLeads.send('surrogate', answers);
       card.style.display = 'none';
       success.style.display = '';
       window.scrollTo({top:0, behavior:'instant'});
     };
   }
   window.resetQuiz = function(){
-    state.i = 0; state.answers = {};
+    state.i = 0; state.answers = {}; state.started = 0;
     card.style.display = '';
     success.style.display = 'none';
     render();
