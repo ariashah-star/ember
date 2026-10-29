@@ -47,7 +47,7 @@ Nothing from Google or any other third party loads until the visitor clicks **Ac
 
 Any new tracker (Meta Pixel, ad tags, chat widgets) must load only from `emberLoadAnalytics` in `index.html`, never with a plain `<script src>` tag.
 
-The one exception is Cloudflare Turnstile, the spam check on the two forms. It is a strictly necessary security tool, not a tracker, so it loads without consent, and only once a visitor starts a form. It is off while `TURNSTILE_SITE_KEY` in `index.html` is empty.
+The one exception is Cloudflare Turnstile, the spam check on the two forms. It is a strictly necessary security tool, not a tracker, so it loads without consent, and only once a visitor starts a form. It is off while `TURNSTILE_SITE_KEY` in `index.html` is empty. When turning it on, also add a sentence to the Privacy Policy's Cookies section saying the forms use Cloudflare Turnstile to block spam and that it does not receive form answers.
 
 Fonts are self-hosted in `fonts/` (SIL Open Font License), so pages make no requests to Google Fonts.
 
