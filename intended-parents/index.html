@@ -2086,7 +2086,8 @@ window.EmberLeads = {
     const interest = (fd.get('interest') || '').toString().trim();
     const msg      = (fd.get('message')  || '').toString().trim();
 
-    if(!name){ if(errEl) errEl.textContent = 'Please enter your name.'; return; }
+    if(!interest){ if(errEl) errEl.textContent = 'Please choose what you\'re interested in.'; return; }
+    if(!/\p{L}.*\p{L}/u.test(name)){ if(errEl) errEl.textContent = 'Please enter your name.'; return; }
     if(!emailRe.test(email)){ if(errEl) errEl.textContent = 'Please enter a valid email.'; return; }
 
     if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
@@ -2334,7 +2335,8 @@ window.EmberLeads = {
           if(d.length !== 10 || /^[01]/.test(d)){ fail('Please enter a 10-digit U.S. phone number.'); return; }
           v = fmtPhone(d);
         }
-        if(s.input==='date'){ const d = parseDob(v); const age = d && ageFrom(d); if(!d || age < 18 || age > 100){ input.style.borderColor = 'var(--ember)'; return; } }
+        if(s.input==='date'){ const d = parseDob(v); const age = d && ageFrom(d); if(!d || age < 18 || age > 100){ fail(!d ? 'Please enter your full date of birth.' : age < 18 ? 'You need to be at least 18 to apply.' : 'Please check the year of your date of birth.'); return; } }
+        if(s.input==='text' && !/\p{L}.*\p{L}/u.test(v)){ fail('Please enter your name.'); return; }
         state.answers[s.key] = v; next();
       };
       cont.onclick = go;
