@@ -2069,7 +2069,7 @@ window.EmberLeads = {
   const success = document.getElementById('formSuccess');
   const errEl   = document.getElementById('contactErr');
   const btn     = document.getElementById('formSubmit');
-  const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  const emailRe = /^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/;
 
   const resetBtn = () => { if(btn){ btn.disabled = false; btn.textContent = 'Send Message'; } };
 
@@ -2084,7 +2084,8 @@ window.EmberLeads = {
     const interest = (fd.get('interest') || '').toString().trim();
     const msg      = (fd.get('message')  || '').toString().trim();
 
-    if(!name){ if(errEl) errEl.textContent = 'Please enter your name.'; return; }
+    if(!interest){ if(errEl) errEl.textContent = 'Please choose what you\'re interested in.'; return; }
+    if(!/\p{L}.*\p{L}/u.test(name)){ if(errEl) errEl.textContent = 'Please enter your name.'; return; }
     if(!emailRe.test(email)){ if(errEl) errEl.textContent = 'Please enter a valid email.'; return; }
 
     if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
@@ -2232,6 +2233,9 @@ window.EmberLeads = {
   const shown = i => !steps[i].when || steps[i].when(state.answers);
   const next = () => { do { state.i++; } while(state.i < steps.length && !shown(state.i)); render(); };
   const prev = () => { do { state.i--; } while(state.i > 0 && !shown(state.i)); render(); };
+  // U.S. numbers only: drop a leading country code 1 (no area code starts with 1), keep at most 10 digits.
+  const phoneDigits = v => String(v).replace(/\D/g, '').replace(/^1/, '').slice(0, 10);
+  const fmtPhone = v => { const d = phoneDigits(v); if(d.length < 4) return d.length ? '(' + d : ''; if(d.length < 7) return '(' + d.slice(0,3) + ') ' + d.slice(3); return '(' + d.slice(0,3) + ') ' + d.slice(3,6) + '-' + d.slice(6); };
   const bmiOf = a => { const h = (+a.height_ft)*12 + (+a.height_in); return h && +a.weight ? (703 * +a.weight / (h*h)).toFixed(1) : ''; };
   const fmtDob = v => { const d = parseDob(v); return d ? d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : v; };
 
@@ -2272,7 +2276,9 @@ window.EmberLeads = {
       html += '<button type="button" class="btn btn-ember" id="quizContinue" style="width:100%">Continue</button>';
     } else {
       const val = state.answers[s.key] ? ' value="'+esc(state.answers[s.key])+'"' : '';
-      html += '<div class="field"><input id="quizInput" type="'+s.input+'" autocomplete="'+s.auto+'" placeholder="'+esc(s.placeholder)+'"'+val+'></div>';
+      const extra = s.input==='tel' ? ' inputmode="tel"' : s.input==='email' ? ' inputmode="email" autocapitalize="off" spellcheck="false"' : '';
+      html += '<div class="field"><input id="quizInput" type="'+s.input+'" autocomplete="'+s.auto+'" placeholder="'+esc(s.placeholder)+'"'+val+extra+'>';
+      html += '<p id="quizFieldErr" aria-live="polite" style="margin-top:.5rem;color:var(--ember);font-size:.85rem"></p></div>';
       html += '<button type="button" class="btn btn-ember" id="quizContinue" style="width:100%">Continue</button>';
     }
     html += navHtml();
@@ -2310,11 +2316,25 @@ window.EmberLeads = {
       const input = document.getElementById('quizInput');
       const cont = document.getElementById('quizContinue');
       setTimeout(() => input.focus(), 30);
+      const errEl = document.getElementById('quizFieldErr');
+      const fail = msg => { input.style.borderColor = 'var(--ember)'; if(errEl) errEl.textContent = msg; input.focus(); };
+      // Phone: format as (555) 555-5555 while typing.
+      if(s.input==='tel'){
+        const fmt = () => { input.value = fmtPhone(input.value); };
+        input.addEventListener('input', fmt);
+        fmt();
+      }
       const go = () => {
-        const v = input.value.trim();
+        let v = input.value.trim();
         if(!v){ input.focus(); return; }
-        if(s.input==='email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ input.style.borderColor = 'var(--ember)'; return; }
-        if(s.input==='date'){ const d = parseDob(v); const age = d && ageFrom(d); if(!d || age < 18 || age > 100){ input.style.borderColor = 'var(--ember)'; return; } }
+        if(s.input==='email' && !/^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/.test(v)){ fail('Please enter a valid email, like name@example.com.'); return; }
+        if(s.input==='tel'){
+          const d = phoneDigits(v);
+          if(d.length !== 10 || /^[01]/.test(d)){ fail('Please enter a 10-digit U.S. phone number.'); return; }
+          v = fmtPhone(d);
+        }
+        if(s.input==='date'){ const d = parseDob(v); const age = d && ageFrom(d); if(!d || age < 18 || age > 100){ fail(!d ? 'Please enter your full date of birth.' : age < 18 ? 'You need to be at least 18 to apply.' : 'Please check the year of your date of birth.'); return; } }
+        if(s.input==='text' && !/\p{L}.*\p{L}/u.test(v)){ fail('Please enter your name.'); return; }
         state.answers[s.key] = v; next();
       };
       cont.onclick = go;
