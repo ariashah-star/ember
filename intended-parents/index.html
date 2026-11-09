@@ -1489,9 +1489,8 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
           <p style="margin-bottom:.6rem"><strong>Partnering with</strong><br>US based surrogates</p>
         </div>
         <div class="form-card">
-          <form id="contactForm" action="https://api.staticforms.dev/submit" method="POST" novalidate>
-            <input type="hidden" name="apiKey" value="sf_3a6157e080d62e9879505751">
-            <input type="hidden" name="subject" value="Ember Intended Parent Inquiry">
+          <form id="contactForm" action="https://script.google.com/macros/s/AKfycby9hL-bAnvPq10p8eo86RHD2NvKGNSoIO5ppWyZBzEvPcZPmrP6Qg9JT93i2lsz5x73wQ/exec" method="POST" novalidate>
+            <input type="hidden" name="form" value="parent">
             <input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
             <div id="formFields">
               <div class="field">
@@ -1515,6 +1514,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <label for="f-message">Anything you'd like us to know? <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
                 <textarea id="f-message" name="message" rows="3" placeholder="Share as much or as little as you like"></textarea>
               </div>
+              <div id="contactHuman" style="margin-bottom:.8rem"></div>
               <button type="submit" class="btn btn-ember" id="formSubmit" style="width:100%">Send Message</button>
               <p id="contactErr" aria-live="polite" style="margin-top:.8rem;color:var(--ember);font-size:.85rem"></p>
               <p class="form-note">Your information is kept strictly confidential and never shared. This form is for general informational purposes and does not constitute medical or legal advice. By submitting, you agree to our <a href="/privacy-policy/" data-route>Privacy Policy</a>.</p>
@@ -1588,7 +1588,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <p>You may browse the public areas of our site without providing personal information. We also automatically collect limited technical data, such as browser type, device information, and pages visited, to operate and improve the site.</p>
 
       <h3>How we use your information</h3>
-      <p>We use the information we collect to respond to your inquiries and requests; to personalize and improve your experience and our website; to provide customer support; to send you relevant information and periodic emails you have requested; to verify your identity and evaluate your eligibility for our program; and to provide, coordinate, and facilitate the services you engage us for. We also use it to operate, secure, and improve our site and to meet our legal and regulatory obligations.</p>
+      <p>We use the information we collect to respond to your inquiries and requests; to personalize and improve your experience and our website; to provide customer support; to send you relevant information and periodic emails you have requested, including a confirmation and a short series of follow-up emails after you submit a form, which stop as soon as you reply or book a call and which you can stop at any time by replying &ldquo;stop&rdquo;; to verify your identity and evaluate your eligibility for our program; and to provide, coordinate, and facilitate the services you engage us for. We also use it to operate, secure, and improve our site and to meet our legal and regulatory obligations.</p>
 
       <h3>How we protect your information</h3>
       <p>We use a range of administrative, technical, and physical safeguards designed to protect your personal information when you provide, submit, or access it. No method of transmission or storage is completely secure, so while we work to protect your information, we cannot guarantee absolute security. Where you are given or choose a password for any part of our site, you are responsible for keeping it confidential.</p>
@@ -1654,13 +1654,13 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <p>We collect this information only from you, directly, when you submit the quiz.</p>
 
       <h3>Why we collect and use it</h3>
-      <p>We use it only to evaluate whether you may be eligible to become a surrogate with Ember and to contact you about your application. We do not use it for advertising, and we do not sell it.</p>
+      <p>We use it only to evaluate whether you may be eligible to become a surrogate with Ember and to contact you about your application. When you submit the quiz, our system compares your answers with our published requirements to give a first-pass indication, which decides which confirmation email you receive. A member of our team personally reviews every application before any decision is made. We do not use your health data for advertising, and we do not sell it. The emails we send you never repeat your health answers.</p>
 
       <h3>Your consent</h3>
       <p>We collect this information only after you give separate consent on the quiz. You can withdraw your consent at any time by emailing <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>.</p>
 
       <h3>Who we share it with</h3>
-      <p>We share it only with service providers that process it on our behalf to receive and store your application: our form-processing provider and our email and cloud storage provider. They may not use it for their own purposes. We do not share it with affiliates or any other third parties without your separate consent, unless required by law.</p>
+      <p>We share it only with service providers that process it on our behalf to receive and store your application: our email and cloud storage provider, Google Workspace, where your application is kept in an access-restricted account. They may not use it for their own purposes. We do not share it with affiliates or any other third parties without your separate consent, unless required by law.</p>
 
       <h3>How long we keep it</h3>
       <p>We keep your quiz answers only for as long as we need them to evaluate your application, support your journey if we work together, and meet our legal obligations, as described in our <a href="/privacy-policy/" data-route>Privacy Policy</a>.</p>
@@ -1939,7 +1939,7 @@ toggle.addEventListener('click', () => {
   toggle.setAttribute('aria-expanded', open);
 });
 
-/* ---------- Debug helper for Staticforms ---------- */
+/* ---------- Debug helper for form submissions ---------- */
 (function(){
   const isDebug = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.search.includes('debug=1') || location.hash.includes('debug');
   function ensureDebugBox(){
@@ -1965,7 +1965,7 @@ toggle.addEventListener('click', () => {
 (function(){
   const UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','fbclid','msclkid','gbraid','wbraid','fbadid'];
   const STORAGE_KEY = 'ember_utms_v1';
-  // In-memory fallback so captured UTMs still reach Staticforms even when
+  // In-memory fallback so captured UTMs still reach the lead sheets even when
   // sessionStorage/localStorage is unavailable (file:// URLs, private mode, blocked storage).
   let memoryStore = {};
 
@@ -2149,14 +2149,52 @@ window.addEventListener('ember:navigate', () => {
   } catch(e){}
 });
 
-/* ---------- Lead sheets (Google Apps Script → Surrogate Leads / IP Leads) ---------- */
-// The web app URL from deploying crm/Code.gs (info@ account). Empty = sheets are skipped and
-// StaticForms keeps handling email as before.
+/* ---------- Lead intake (Google Apps Script → Surrogate Leads / IP Leads) ---------- */
+// The "Ember Leads" web app (crm/Code.gs, info@ account). It files the lead in the
+// right sheet, emails the team, and sends the applicant their instant reply.
 const EMBER_LEADS_URL = 'https://script.google.com/macros/s/AKfycby9hL-bAnvPq10p8eo86RHD2NvKGNSoIO5ppWyZBzEvPcZPmrP6Qg9JT93i2lsz5x73wQ/exec';
+// Cloudflare Turnstile ("are you human" check). Security, not tracking: it never sees
+// form answers. Empty key = no check, and the script skips verification.
+const TURNSTILE_SITE_KEY = '';
+window.EmberHuman = {
+  _ready: null,
+  _load(){
+    if(!this._ready) this._ready = new Promise((resolve, reject) => {
+      window.emberTurnstileReady = () => resolve(window.turnstile);
+      const sc = document.createElement('script');
+      sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=emberTurnstileReady';
+      sc.async = true; sc.onerror = reject;
+      document.head.appendChild(sc);
+    });
+    return this._ready;
+  },
+  // Renders the check into the element once; returns a widget id (or null when off).
+  async mount(el){
+    if(!TURNSTILE_SITE_KEY || !el) return null;
+    if(el.dataset.widget) return el.dataset.widget;
+    try {
+      const ts = await this._load();
+      el.dataset.widget = ts.render(el, { sitekey: TURNSTILE_SITE_KEY, theme: 'light', 'refresh-expired': 'auto' });
+      return el.dataset.widget;
+    } catch(e){ console.warn('[Ember] Verification failed to load', e); return null; }
+  },
+  // The token to send with the form, waiting a few seconds for the check to finish.
+  async token(el){
+    if(!TURNSTILE_SITE_KEY) return '';
+    const id = await this.mount(el);
+    for(let i = 0; i < 40 && id; i++){
+      const t = window.turnstile.getResponse(id);
+      if(t) return t;
+      await new Promise(r => setTimeout(r, 200));
+    }
+    return '';
+  },
+  reset(el){ if(TURNSTILE_SITE_KEY && el && el.dataset.widget && window.turnstile) window.turnstile.reset(el.dataset.widget); }
+};
+
 window.EmberLeads = {
-  // Fire-and-forget: a sheet hiccup must never block or fail a submission.
-  send(form, fields){
-    if(!EMBER_LEADS_URL) return;
+  // Resolves true only once the script confirms the lead was received.
+  async submit(form, fields){
     let utms = {};
     try { utms = window.EmberUTMs ? window.EmberUTMs.get() : {}; } catch(e){}
     const body = Object.assign({
@@ -2166,15 +2204,22 @@ window.EmberLeads = {
       fbclid: utms.fbclid || '', gclid: utms.gclid || '',
       landing_page: utms._first_landing || '', referrer: utms._first_referrer || ''
     }, fields);
+    window.EmberLog && window.EmberLog('Lead submitting', body);
     try {
-      fetch(EMBER_LEADS_URL, { method: 'POST', mode: 'no-cors', keepalive: true,
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
-        .catch(err => console.warn('[Ember] Lead sheet send failed', err));
-    } catch(err){ console.warn('[Ember] Lead sheet send failed', err); }
+      // text/plain keeps this a "simple" request, which Apps Script accepts cross-origin.
+      const res = await fetch(EMBER_LEADS_URL, { method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) });
+      const data = await res.json();
+      window.EmberLog && window.EmberLog('Lead response', { status: res.status, data });
+      return !!(data && data.ok);
+    } catch(err){
+      console.error('[Ember] Lead submit failed', err);
+      return false;
+    }
   }
 };
 
-/* ---------- Contact form (Intended Parents → Staticforms) ---------- */
+/* ---------- Contact form (Intended Parents → lead intake) ---------- */
 (function(){
   const form = document.getElementById('contactForm');
   if(!form){ console.warn('[Ember] contactForm not found'); return; }
@@ -2185,6 +2230,10 @@ window.EmberLeads = {
   const emailRe = /^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/;
 
   const resetBtn = () => { if(btn){ btn.disabled = false; btn.textContent = 'Send Message'; } };
+  // When they started filling it in; bots submit faster than people can type.
+  let startedAt = 0;
+  const human = document.getElementById('contactHuman');
+  form.addEventListener('focusin', () => { if(!startedAt){ startedAt = Date.now(); window.EmberHuman.mount(human); } });
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -2203,44 +2252,18 @@ window.EmberLeads = {
 
     if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
 
-    let utmText = '';
-    try {
-      const utms = window.EmberUTMs ? window.EmberUTMs.get() : {};
-      if(Object.keys(utms).length){
-        utmText = '\n\n----------------------------------------\nMARKETING ATTRIBUTION\n----------------------------------------\n' + window.EmberUTMs.formatForMessage(utms);
-      }
-    } catch(e){}
-
-    const composed = 'Intended Parent Inquiry\n\n' +
-      'Name: ' + name + '\n' +
-      'Email: ' + email + '\n' +
-      'Interest: ' + (interest || '—') + '\n\n' +
-      'Message:\n' + (msg || '—') + utmText;
-
-    const payload = { apiKey: fd.get('apiKey'), subject: fd.get('subject'), name, email, replyTo: email, message: composed };
-    window.EmberLog && window.EmberLog('Contact form submitting', { action: form.action, payload });
-
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const text = await res.text();
-      let data; try { data = JSON.parse(text); } catch(e){ data = text; }
-      window.EmberLog && window.EmberLog('Staticforms response', { status: res.status, ok: res.ok, data });
-      if(!res.ok){
-        if(errEl) errEl.textContent = 'Something went wrong. Please email info@embersurrogacy.com.';
-        resetBtn();
-        return;
-      }
-    } catch(err) {
-      console.error('[Ember] Staticforms submit failed — check domain whitelist & API key.', err);
-      if(errEl) errEl.textContent = 'Network error. Please try again or email info@embersurrogacy.com.';
+    const ok = await window.EmberLeads.submit('parent', {
+      name, email, interest, message: msg,
+      turnstile_token: await window.EmberHuman.token(human),
+      company_website: (fd.get('company_website') || '').toString(),
+      elapsed_ms: startedAt ? Date.now() - startedAt : ''
+    });
+    if(!ok){
+      if(errEl) errEl.textContent = 'Something went wrong. Please try again or email info@embersurrogacy.com.';
+      window.EmberHuman.reset(human);
       resetBtn();
       return;
     }
-    window.EmberLeads.send('parent', { name, email, interest, message: msg, company_website: (fd.get('company_website') || '').toString() });
     if(fields)  fields.style.display  = 'none';
     if(success) success.style.display = 'block';
   });
@@ -2338,7 +2361,7 @@ window.EmberLeads = {
   const count = document.getElementById('quizCount');
   const card = document.getElementById('quizCard');
   const success = document.getElementById('quizSuccess');
-  const state = {i:0, answers:{}};
+  const state = {i:0, answers:{}, started:0};
   const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   // Date of birth arrives as YYYY-MM-DD; parse as a local date so it never shifts a day.
   const parseDob = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v||''); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; };
@@ -2360,6 +2383,7 @@ window.EmberLeads = {
     count.textContent = 'Step '+Math.min(state.i+1,total)+' of '+total;
   }
   function render(){
+    if(!state.started) state.started = Date.now();
     // Carry the state picked in the pay estimator into the quiz.
     if(!state.answers.state){ try { const est = sessionStorage.getItem('ember_estimator_state'); if(est && STATES.includes(est)) state.answers.state = est; } catch(e){} }
     setProgress();
@@ -2463,6 +2487,7 @@ window.EmberLeads = {
     html += '<ul class="quiz-review-list">'+rows+'</ul>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizConsent"><label for="quizConsent">I consent to Ember collecting and using the information I\u2019ve provided to evaluate my eligibility for the surrogacy program and to contact me, as described in the <a href="/privacy-policy/" data-route>Privacy Policy</a>. I understand this quiz is not medical or legal advice.</label></div>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizHealthConsent"><label for="quizHealthConsent">I also specifically consent to Ember collecting my health information (my pregnancy and birth history, height and weight, health history, and smoking and substance use) only to evaluate my eligibility, as described in the <a href="/health-data-privacy/" data-route>Health Data Privacy Policy</a>. I can withdraw this consent at any time.</label></div>';
+    html += '<div id="quizHuman" style="margin-bottom:.8rem"></div>';
     html += '<button type="button" class="btn btn-ember" id="quizSubmit" style="width:100%" disabled>Submit application</button>';
     html += navHtml();
     body.innerHTML = html;
@@ -2470,6 +2495,8 @@ window.EmberLeads = {
     const consent = document.getElementById('quizConsent');
     const healthConsent = document.getElementById('quizHealthConsent');
     const submit = document.getElementById('quizSubmit');
+    const human = document.getElementById('quizHuman');
+    window.EmberHuman.mount(human);
     const bothChecked = () => consent.checked && healthConsent.checked;
     consent.onchange = healthConsent.onchange = () => { submit.disabled = !bothChecked(); };
     submit.onclick = async () => {
@@ -2479,11 +2506,7 @@ window.EmberLeads = {
       let utms = {};
       try { utms = window.EmberUTMs ? window.EmberUTMs.get() : {}; } catch(e){}
       // Each answer is its own field so it lands in its own Google Sheets column.
-      // Key order sets the column order on the first submission; keep keys stable.
       const payload = {
-        apiKey: 'sf_ec42af1d9b760335558da878',
-        subject: 'Ember Surrogate Application',
-        replyTo: a.email || '',
         name: [a.first_name, a.last_name].filter(Boolean).join(' '),
         first_name: a.first_name || '',
         last_name: a.last_name || '',
@@ -2516,34 +2539,25 @@ window.EmberLeads = {
         utm_content: utms.utm_content || '',
         utm_term: utms.utm_term || '',
         fbclid: utms.fbclid || '',
-        gclid: utms.gclid || ''
+        gclid: utms.gclid || '',
+        elapsed_ms: state.started ? Date.now() - state.started : '',
+        turnstile_token: await window.EmberHuman.token(human)
       };
-      window.EmberLog && window.EmberLog('Quiz submitting', payload);
-      try {
-        const res = await fetch('https://api.staticforms.dev/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        window.EmberLog && window.EmberLog('Quiz staticforms response', { status: res.status, ok: res.ok });
-        if(!res.ok) throw new Error('status ' + res.status);
-      } catch(err) {
-        console.error('[Ember] Quiz submit failed', err);
+      if(!(await window.EmberLeads.submit('surrogate', payload))) {
+        window.EmberHuman.reset(human);
         submit.disabled = false; submit.textContent = 'Submit application';
         let e = document.getElementById('quizErr');
         if(!e){ e = document.createElement('p'); e.id='quizErr'; e.style.cssText='margin-top:.8rem;color:var(--ember);font-size:.85rem'; submit.parentNode.insertBefore(e, submit.nextSibling); }
         e.textContent = 'Something went wrong. Please email info@embersurrogacy.com.';
         return;
       }
-      const { apiKey, subject, replyTo, ...answers } = payload;
-      window.EmberLeads.send('surrogate', answers);
       card.style.display = 'none';
       success.style.display = '';
       window.scrollTo({top:0, behavior:'instant'});
     };
   }
   window.resetQuiz = function(){
-    state.i = 0; state.answers = {};
+    state.i = 0; state.answers = {}; state.started = 0;
     card.style.display = '';
     success.style.display = 'none';
     render();

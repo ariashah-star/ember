@@ -15,18 +15,20 @@ Old `#/page` links (ads, QR codes, bookmarks) still work: they redirect to the n
 To preview locally: `python3 -m http.server 3000`, then open http://localhost:3000/.
 
 # Testing + Health Monitoring
+# Lead intake
+Both forms post to the **Ember Leads** Google Apps Script web app (`EMBER_LEADS_URL` in `index.html`), which runs in the info@embersurrogacy.com account. It files each lead into the **Surrogate Leads** or **IP Leads** Google Sheet, emails a new-lead alert, sends the applicant's instant reply and later follow-ups, and filters spam. The thank-you screen only shows once the script confirms the lead was saved. The script's source and setup steps live outside this repo, in the project files (`crm/Code.gs`, `crm/SETUP.md`); after changing it, publish a new version under Deploy → Manage deployments so the URL stays the same.
+
 ### E2E Testing
-1. Test that the form submission results in StaticForms submission
-2. Test that the UTM parameters are included in the form submission email
-3. Test that the Meta Pixel fires on form submission
+1. Submit each form and check the lead lands in its sheet, with UTM columns filled when the link had UTMs
+2. Check the new-lead alert reaches info@ and the instant reply reaches the applicant (or the test address while the sheet's Settings tab has Test mode On)
 
 
 ### Monitoring
 1. View Google Analytics dashboards for traffic
-2. Check that Static Forms is not categorizing things into Spam
+2. Check the Ember Leads script's Executions page for failed runs
 
 # UTM Parameters for Tracking Lead Source
-UTM parameters are tracked across page navigation and included in Staticforms email submissions for lead attribution, and also for analytics using GA4.
+UTM parameters are tracked across page navigation and saved with each lead in the lead sheets for attribution, and also for analytics using GA4.
 
 ### UTM Parameter List
 This is the complete list of UTM parameters that are tracked:
@@ -45,10 +47,12 @@ Nothing from Google or any other third party loads until the visitor clicks **Ac
 
 Any new tracker (Meta Pixel, ad tags, chat widgets) must load only from `emberLoadAnalytics` in `index.html`, never with a plain `<script src>` tag.
 
+The one exception is Cloudflare Turnstile, the spam check on the two forms. It is a strictly necessary security tool, not a tracker, so it loads without consent, and only once a visitor starts a form. It is off while `TURNSTILE_SITE_KEY` in `index.html` is empty. When turning it on, also add a sentence to the Privacy Policy's Cookies section saying the forms use Cloudflare Turnstile to block spam and that it does not receive form answers.
+
 Fonts are self-hosted in `fonts/` (SIL Open Font License), so pages make no requests to Google Fonts.
 
 ### UTM Parameter Inclusion in Form Submission Email
-The UTM parameters are included in the form submissions (both parent form and surrogate form). This allows us to know where the lead came from in the form submission email that info@embersurrogacy.com receives from StaticForms.
+The UTM parameters are included in the form submissions (both parent form and surrogate form). Each lead's row in its sheet has UTM source, medium, campaign, content and term columns, plus the click ID, landing page and referrer. (Before the move to the lead sheets, StaticForms put them in the notification email as below.)
 
 This is a sample of the marketing attribution section of the email:
 ```
