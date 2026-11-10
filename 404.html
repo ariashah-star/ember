@@ -535,6 +535,9 @@ details p{padding-top:1rem;color:var(--espresso-soft);font-size:.95rem;max-width
 .careers-opt{color:var(--cashmere)}
 .careers-card .field textarea{resize:vertical}
 .careers-card .field input[type="file"]{padding:.6rem .8rem;cursor:pointer}
+.careers-holistic{background:var(--greige);border-radius:10px;padding:1rem 1.1rem;margin:.4rem 0 1.1rem;font-size:.88rem;color:var(--espresso-soft);line-height:1.55}
+.careers-holistic p{margin:0}
+.careers-holistic strong{color:var(--espresso)}
 
 /* ---------- Contact form ---------- */
 .contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:5vw;align-items:start}
@@ -1707,8 +1710,9 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <textarea id="c-journey" name="journey" rows="4"></textarea>
               </div>
               <div class="field">
-                <label for="c-social">Links to social accounts you&rsquo;re comfortable sharing, or a post you&rsquo;re proud of <span class="careers-opt">(optional)</span></label>
+                <label for="c-social">Links to at least one social account you&rsquo;re comfortable sharing, or a post you&rsquo;re proud of</label>
                 <textarea id="c-social" name="social_links" rows="2" placeholder="Instagram, TikTok, Facebook…"></textarea>
+                <p class="field-hint">It doesn&rsquo;t need to be about surrogacy. We just want to see how you show up online.</p>
               </div>
               <div class="field">
                 <label for="c-comment">A potential surrogate candidate comments &ldquo;I&rsquo;ve always wondered about being a surrogate&rdquo; on our post. Write the reply you&rsquo;d post.</label>
@@ -1730,12 +1734,15 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <label for="c-idea">Give us one content idea to reach potential surrogates. Who is it for, and what&rsquo;s the hook?</label>
                 <textarea id="c-idea" name="content_idea" rows="3"></textarea>
               </div>
+              <div class="careers-holistic">
+                <p><strong>Resume or LinkedIn:</strong> please share one or the other. We review every application holistically and weigh many factors, including your surrogacy experience, how you communicate and your answers above. A traditional work history isn&rsquo;t required, so if your resume is short or you&rsquo;ve spent time at home with your family, send what you have.</p>
+              </div>
               <div class="field">
-                <label for="c-resume-file">Attach your resume <span class="careers-opt">(PDF or Word, up to 5 MB, optional)</span></label>
+                <label for="c-resume-file">Attach your resume <span class="careers-opt">(PDF or Word, up to 5 MB)</span></label>
                 <input id="c-resume-file" name="resume_file" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
               </div>
               <div class="field">
-                <label for="c-resume">LinkedIn or online resume link <span class="careers-opt">(optional)</span></label>
+                <label for="c-resume">Or share your LinkedIn or an online resume link</label>
                 <input id="c-resume" name="resume_link" type="url" placeholder="https://">
               </div>
               <div id="careersHuman" style="margin-bottom:.8rem"></div>
@@ -2484,7 +2491,9 @@ window.EmberLeads = {
     if(!emailRe.test(v('email'))){ errEl.textContent = 'Please enter a valid email.'; return; }
     if(!v('former_surrogate')){ errEl.textContent = 'Please tell us whether you\'ve been a surrogate.'; return; }
     if(!v('journey')){ errEl.textContent = 'Please tell us a little about your surrogacy journey.'; return; }
+    if(!v('social_links')){ errEl.textContent = 'Please share at least one social account or post.'; return; }
     const file = form.querySelector('#c-resume-file').files[0];
+    if(!file && !v('resume_link')){ errEl.textContent = 'Please attach your resume or share a LinkedIn or resume link.'; return; }
     if(file){
       if(!/\.(pdf|docx?)$/i.test(file.name)){ errEl.textContent = 'Please attach your resume as a PDF or Word file.'; return; }
       if(file.size > 5 * 1024 * 1024){ errEl.textContent = 'Your resume file is over 5 MB. Please attach a smaller file.'; return; }
