@@ -1678,7 +1678,34 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 </select>
               </div>
               <div class="field">
-                <label for="c-journey">Tell us about your surrogacy journey. What do you wish someone had told you at the start?</label>
+                <label for="c-hours">Hours per week you can give this role</label>
+                <select id="c-hours" name="hours_per_week">
+                  <option value="" disabled selected>Select one…</option>
+                  <option>Under 10</option>
+                  <option>10 to 20</option>
+                  <option>20 to 30</option>
+                  <option>30 or more</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="c-evenings">Are you available some evenings and weekends?</label>
+                <select id="c-evenings" name="evenings_weekends">
+                  <option value="" disabled selected>Select one…</option>
+                  <option>Yes</option>
+                  <option>Sometimes</option>
+                  <option>No</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="c-agency">Do you currently work with another surrogacy agency (as a surrogate, ambassador or recruiter)?</label>
+                <select id="c-agency" name="other_agency">
+                  <option value="" disabled selected>Select one…</option>
+                  <option>No</option>
+                  <option>Yes</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="c-journey">Tell us about your surrogacy journey. What did your agency do well, and what do you wish had been different?</label>
                 <textarea id="c-journey" name="journey" rows="4"></textarea>
               </div>
               <div class="field">
@@ -1686,20 +1713,24 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <textarea id="c-social" name="social_links" rows="2" placeholder="Instagram, TikTok, Facebook…"></textarea>
               </div>
               <div class="field">
-                <label for="c-comment">A woman comments &ldquo;I&rsquo;ve always wondered about being a surrogate&rdquo; on our post. What do you say?</label>
+                <label for="c-comment">A potential surrogate candidate comments &ldquo;I&rsquo;ve always wondered about being a surrogate&rdquo; on our post. Write the reply you&rsquo;d post.</label>
                 <textarea id="c-comment" name="comment_reply" rows="3"></textarea>
               </div>
               <div class="field">
-                <label for="c-support">Someone tells you, &ldquo;I&rsquo;m nervous my husband won&rsquo;t support this.&rdquo; How do you respond?</label>
+                <label for="c-decline">A potential surrogate candidate is excited to apply, but on your call you learn she doesn&rsquo;t meet one of our requirements. What do you say?</label>
+                <textarea id="c-decline" name="decline_reply" rows="3"></textarea>
+              </div>
+              <div class="field">
+                <label for="c-followup">A potential surrogate candidate had a great intro call, then stopped responding for a week. Write the text you&rsquo;d send her.</label>
+                <textarea id="c-followup" name="followup_text" rows="3"></textarea>
+              </div>
+              <div class="field">
+                <label for="c-support">A potential surrogate candidate tells you, &ldquo;My partner isn&rsquo;t sure about this.&rdquo; How do you respond?</label>
                 <textarea id="c-support" name="support_reply" rows="3"></textarea>
               </div>
               <div class="field">
                 <label for="c-idea">Give us one content idea to reach potential surrogates. Who is it for, and what&rsquo;s the hook?</label>
                 <textarea id="c-idea" name="content_idea" rows="3"></textarea>
-              </div>
-              <div class="field">
-                <label for="c-schedule">What does a consistent weekly schedule look like for you, including evenings or weekends?</label>
-                <textarea id="c-schedule" name="schedule" rows="2"></textarea>
               </div>
               <div class="field">
                 <label for="c-resume-file">Attach your resume <span class="careers-opt">(PDF or Word, up to 5 MB, optional)</span></label>
@@ -2463,7 +2494,7 @@ window.EmberLeads = {
 
     btn.disabled = true; btn.textContent = 'Sending…';
     const payload = {};
-    ['name','email','phone','state','former_surrogate','journey','social_links','comment_reply','support_reply','content_idea','schedule','resume_link'].forEach(k => payload[k] = v(k));
+    ['name','email','phone','state','former_surrogate','hours_per_week','evenings_weekends','other_agency','journey','social_links','comment_reply','decline_reply','followup_text','support_reply','content_idea','resume_link'].forEach(k => payload[k] = v(k));
     if(file){
       try {
         payload._resume_data = await new Promise((res, rej) => {
