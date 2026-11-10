@@ -532,6 +532,8 @@ details p{padding-top:1rem;color:var(--espresso-soft);font-size:.95rem;max-width
 .careers-comp p{margin:0}
 .careers-comp p+p{margin-top:.7rem}
 .careers-comp strong{color:var(--espresso)}
+.careers-visual{margin-top:1.6rem;border-radius:18px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 34px 64px -30px rgba(59,38,32,.42)}
+.careers-visual svg{display:block;width:100%;height:100%}
 .careers-milestones{margin:.8rem 0 .9rem 1.3rem;padding:0;color:var(--espresso-soft)}
 .careers-milestones li{padding:.15rem 0}
 .careers-form-title{font-size:2.1rem;color:var(--ember);margin-bottom:.9rem;position:relative;padding-bottom:.9rem}
@@ -715,6 +717,7 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
   .page-hero{padding-bottom:2.5rem}
   [data-page="about"] .page-hero .photo-block img{object-position:50% 40%}
   [data-page="surrogates"] .page-hero .photo-block img{object-position:50% 34%}
+  [data-page="careers"] .page-hero .photo-block img{object-position:50% 45%}
   .process .sticky{position:static;margin-bottom:2.5rem}
 }
 @media (max-width:760px){
@@ -1601,10 +1604,15 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
 <main class="page active" data-page="careers">
 
   <div class="page-hero">
-    <div class="wrap">
-      <span class="eyebrow">Careers at Ember</span>
-      <h1>Surrogate Recruiter &amp; <em class="lux">Community Lead</em></h1>
-      <p>You&rsquo;ve carried a baby for another family. Now we&rsquo;d love for you to be the trusted voice for the women who come next.</p>
+    <div class="wrap page-hero-grid">
+      <div>
+        <span class="eyebrow">Careers at Ember</span>
+        <h1>Surrogate Recruiter &amp; <em class="lux">Community Lead</em></h1>
+        <p>You&rsquo;ve carried a baby for another family. Now we&rsquo;d love for you to be the trusted voice for the women who come next.</p>
+      </div>
+      <div class="photo-block">
+        <img src="/images/careers-baby-feet-white-blanket.jpg" alt="A newborn's tiny feet peeking out from a soft white blanket" loading="eager">
+      </div>
     </div>
   </div>
 
@@ -1643,6 +1651,53 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
             <p><strong>First 6 to 12 months:</strong> a contract role with a fixed payment at three milestones for each surrogate you bring in: medical clearance, match and birth.</p>
             <p><strong>After that:</strong> the option to join full time at <strong>$75,000 to $100,000 total annual compensation</strong>, including salary and bonuses.</p>
           </div>
+          <figure class="careers-visual" aria-hidden="true">
+            <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <defs>
+                <linearGradient id="cvBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F1E3D2"/><stop offset=".6" stop-color="#E2C9AC"/><stop offset="1" stop-color="#C9A684"/></linearGradient>
+                <radialGradient id="cvGlow" cx=".78" cy=".12" r=".7"><stop offset="0" stop-color="#FDF8F1" stop-opacity=".85"/><stop offset="1" stop-color="#FDF8F1" stop-opacity="0"/></radialGradient>
+                <linearGradient id="cvLeather" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B0603F"/><stop offset=".55" stop-color="#9E4531"/><stop offset="1" stop-color="#7A3324"/></linearGradient>
+                <linearGradient id="cvFlap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BE6E4B"/><stop offset="1" stop-color="#9A4631"/></linearGradient>
+                <linearGradient id="cvBrass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E7C79A"/><stop offset=".5" stop-color="#BC8F63"/><stop offset="1" stop-color="#8E6A45"/></linearGradient>
+                <linearGradient id="cvTable" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A6A55"/><stop offset="1" stop-color="#5E4334"/></linearGradient>
+              </defs>
+              <rect width="640" height="360" fill="url(#cvBg)"/>
+              <rect width="640" height="360" fill="url(#cvGlow)"/>
+              <path d="M-20 120 Q 40 60 90 110 T 170 90" fill="none" stroke="#9E4531" stroke-opacity=".18" stroke-width="2"/>
+              <g fill="#7E8A5E" fill-opacity=".55">
+                <path d="M548 250 C 540 200 552 150 576 110" fill="none" stroke="#6F7A52" stroke-width="2.5"/>
+                <ellipse cx="560" cy="200" rx="9" ry="20" transform="rotate(-35 560 200)"/>
+                <ellipse cx="572" cy="168" rx="8" ry="18" transform="rotate(30 572 168)"/>
+                <ellipse cx="566" cy="140" rx="7" ry="16" transform="rotate(-30 566 140)"/>
+                <ellipse cx="580" cy="118" rx="6" ry="14" transform="rotate(25 580 118)"/>
+              </g>
+              <rect x="526" y="238" width="48" height="58" rx="6" fill="#FDF8F1" fill-opacity=".9"/>
+              <rect x="0" y="292" width="640" height="68" fill="url(#cvTable)"/>
+              <rect x="0" y="292" width="640" height="5" fill="#A88670"/>
+              <ellipse cx="300" cy="298" rx="190" ry="12" fill="#3B2620" fill-opacity=".35"/>
+              <path d="M262 132 v-26 a18 18 0 0 1 18 -18 h40 a18 18 0 0 1 18 18 v26" fill="none" stroke="#6B2C1F" stroke-width="12" stroke-linecap="round"/>
+              <path d="M262 132 v-26 a18 18 0 0 1 18 -18 h40 a18 18 0 0 1 18 18 v26" fill="none" stroke="#A8573A" stroke-width="5" stroke-linecap="round"/>
+              <rect x="250" y="122" width="22" height="16" rx="3" fill="url(#cvBrass)"/>
+              <rect x="328" y="122" width="22" height="16" rx="3" fill="url(#cvBrass)"/>
+              <rect x="128" y="134" width="344" height="162" rx="16" fill="url(#cvLeather)"/>
+              <rect x="136" y="142" width="328" height="146" rx="12" fill="none" stroke="#E7C79A" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="5 5"/>
+              <path d="M128 150 a16 16 0 0 1 16 -16 h312 a16 16 0 0 1 16 16 v40 q -172 22 -344 0 z" fill="url(#cvFlap)"/>
+              <path d="M136 188 q 164 20 328 0" fill="none" stroke="#E7C79A" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="5 5"/>
+              <rect x="186" y="186" width="26" height="40" rx="5" fill="#6B2C1F" fill-opacity=".5"/>
+              <rect x="388" y="186" width="26" height="40" rx="5" fill="#6B2C1F" fill-opacity=".5"/>
+              <rect x="184" y="182" width="30" height="30" rx="5" fill="url(#cvBrass)"/>
+              <rect x="386" y="182" width="30" height="30" rx="5" fill="url(#cvBrass)"/>
+              <rect x="192" y="192" width="14" height="10" rx="2" fill="#8E6A45"/>
+              <rect x="394" y="192" width="14" height="10" rx="2" fill="#8E6A45"/>
+              <path d="M140 146 q 20 -6 60 -6" fill="none" stroke="#FDF8F1" stroke-opacity=".3" stroke-width="3" stroke-linecap="round"/>
+              <g transform="translate(486 248) rotate(-8)">
+                <rect width="74" height="44" rx="3" fill="#FDF8F1"/>
+                <rect x="10" y="10" width="40" height="3" rx="1.5" fill="#BC8F63"/>
+                <rect x="10" y="19" width="54" height="3" rx="1.5" fill="#BC8F63" fill-opacity=".6"/>
+                <rect x="10" y="28" width="30" height="3" rx="1.5" fill="#BC8F63" fill-opacity=".6"/>
+              </g>
+            </svg>
+          </figure>
         </div>
 
         <div class="form-card careers-card">
