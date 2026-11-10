@@ -519,9 +519,9 @@ details p{padding-top:1rem;color:var(--espresso-soft);font-size:.95rem;max-width
 .careers-list li{position:relative;padding:0 0 .7rem 1.4rem;color:var(--espresso-soft)}
 .careers-list li:before{content:'';position:absolute;left:0;top:.6em;width:7px;height:7px;border-radius:50%;background:var(--cashmere)}
 .careers-reqs{list-style:none;padding:0;margin:0;counter-reset:req}
-.careers-reqs li{counter-increment:req;position:relative;padding:0 0 1rem 3rem;min-height:2.2rem;color:var(--espresso-soft)}
+.careers-reqs li{counter-increment:req;position:relative;padding:0 0 1rem 2.4rem;min-height:1.6rem;color:var(--espresso-soft)}
 .careers-reqs li strong{color:var(--espresso)}
-.careers-reqs li:before{content:counter(req);position:absolute;left:0;top:-.1rem;width:2.1rem;height:2.1rem;border-radius:50%;background:var(--ember);color:var(--white);font-weight:600;display:flex;align-items:center;justify-content:center}
+.careers-reqs li:before{content:counter(req);position:absolute;left:0;top:.15rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--ember);color:var(--white);font-size:.8rem;font-weight:600;display:flex;align-items:center;justify-content:center}
 .careers-plus{font-size:.95rem}
 .careers-comp{background:var(--greige);border-radius:12px;padding:1.3rem 1.5rem}
 .careers-comp p{margin:0}
@@ -534,6 +534,7 @@ details p{padding-top:1rem;color:var(--espresso-soft);font-size:.95rem;max-width
 .careers-card .field label{text-transform:none;letter-spacing:0;font-size:.9rem;line-height:1.4}
 .careers-opt{color:var(--cashmere)}
 .careers-card .field textarea{resize:vertical}
+.careers-card .field input[type="file"]{padding:.6rem .8rem;cursor:pointer}
 
 /* ---------- Contact form ---------- */
 .contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:5vw;align-items:start}
@@ -1699,7 +1700,11 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <textarea id="c-schedule" name="schedule" rows="2"></textarea>
               </div>
               <div class="field">
-                <label for="c-resume">Link to your resume or LinkedIn <span class="careers-opt">(optional)</span></label>
+                <label for="c-resume-file">Attach your resume <span class="careers-opt">(PDF or Word, up to 5 MB, optional)</span></label>
+                <input id="c-resume-file" name="resume_file" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+              </div>
+              <div class="field">
+                <label for="c-resume">LinkedIn or online resume link <span class="careers-opt">(optional)</span></label>
                 <input id="c-resume" name="resume_link" type="url" placeholder="https://">
               </div>
               <div id="careersHuman" style="margin-bottom:.8rem"></div>
@@ -2448,10 +2453,31 @@ window.EmberLeads = {
     if(!emailRe.test(v('email'))){ errEl.textContent = 'Please enter a valid email.'; return; }
     if(!v('former_surrogate')){ errEl.textContent = 'Please tell us whether you\'ve been a surrogate.'; return; }
     if(!v('journey')){ errEl.textContent = 'Please tell us a little about your surrogacy journey.'; return; }
+    const file = form.querySelector('#c-resume-file').files[0];
+    if(file){
+      if(!/\.(pdf|docx?)$/i.test(file.name)){ errEl.textContent = 'Please attach your resume as a PDF or Word file.'; return; }
+      if(file.size > 5 * 1024 * 1024){ errEl.textContent = 'Your resume file is over 5 MB. Please attach a smaller file.'; return; }
+    }
 
     btn.disabled = true; btn.textContent = 'Sending…';
     const payload = {};
     ['name','email','phone','state','former_surrogate','journey','social_links','comment_reply','support_reply','content_idea','schedule','resume_link'].forEach(k => payload[k] = v(k));
+    if(file){
+      try {
+        payload._resume_data = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(String(r.result).split(',')[1] || '');
+          r.onerror = rej;
+          r.readAsDataURL(file);
+        });
+        payload._resume_name = file.name;
+        payload._resume_type = file.type || '';
+      } catch(err){
+        errEl.textContent = 'We couldn\'t read that file. Please try another, or paste a link instead.';
+        btn.disabled = false; btn.textContent = 'Submit Application';
+        return;
+      }
+    }
     const ok = await window.EmberLeads.submit('careers', Object.assign(payload, {
       turnstile_token: await window.EmberHuman.token(human),
       company_website: v('company_website'),
