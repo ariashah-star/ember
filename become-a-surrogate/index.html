@@ -1656,7 +1656,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
               </div>
               <div class="field">
                 <label for="c-email">Email</label>
-                <input id="c-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+                <input id="c-email" name="email" type="email" required autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="you@example.com">
               </div>
               <div class="field">
                 <label for="c-phone">Phone</label>
@@ -2490,7 +2490,9 @@ window.EmberLeads = {
     const fd = new FormData(form);
     const v = k => (fd.get(k) || '').toString().trim();
     if(!/\p{L}.*\p{L}/u.test(v('name'))){ errEl.textContent = 'Please enter your name.'; return; }
-    if(!emailRe.test(v('email'))){ errEl.textContent = 'Please enter a valid email.'; return; }
+    const emailEl = document.getElementById('c-email');
+    emailEl.value = emailEl.value.trim().toLowerCase();
+    if(!emailRe.test(emailEl.value)){ errEl.textContent = 'Please enter a valid email, like name@example.com.'; emailEl.focus(); return; }
     if(v('phone')){
       const d = phoneDigits(v('phone'));
       if(d.length !== 10 || /^[01]/.test(d)){ errEl.textContent = 'Please enter a 10-digit U.S. phone number.'; phoneEl.focus(); return; }
@@ -2509,6 +2511,7 @@ window.EmberLeads = {
     btn.disabled = true; btn.textContent = 'Sending…';
     const payload = {};
     ['name','email','phone','state','former_surrogate','hours_per_week','evenings_weekends','other_agency','journey','social_links','comment_reply','decline_reply','followup_text','support_reply','content_idea','resume_link'].forEach(k => payload[k] = v(k));
+    payload.email = document.getElementById('c-email').value;
     if(file){
       try {
         payload._resume_data = await new Promise((res, rej) => {
