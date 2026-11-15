@@ -16,7 +16,7 @@ To preview locally: `python3 -m http.server 3000`, then open http://localhost:30
 
 # Testing + Health Monitoring
 # Lead intake
-Both forms post to the **Ember Leads** Google Apps Script web app (`EMBER_LEADS_URL` in `index.html`), which runs in the info@embersurrogacy.com account. It files each lead into the **Surrogate Leads** or **IP Leads** Google Sheet, emails a new-lead alert, sends the applicant's instant reply and later follow-ups, and filters spam. The thank-you screen only shows once the script confirms the lead was saved. The script's source and setup steps live outside this repo, in the project files (`crm/Code.gs`, `crm/SETUP.md`); after changing it, publish a new version under Deploy → Manage deployments so the URL stays the same.
+Both forms post to the **Ember Leads** Google Apps Script web app (`EMBER_LEADS_URL` in `index.html`), which runs in the info@embersurrogacy.com account. It files each lead into the **Surrogate Leads** or **IP Leads** Google Sheet, emails a new-lead alert, sends the applicant's instant reply and later follow-ups, and filters spam. The thank-you screen only shows once the script confirms the lead was saved. The script's source lives in the separate **ariashah-star/ember-leads-script** repo (`apps-script/Code.js`). Merging a change there deploys it automatically and keeps the same URL, so never edit or paste code in the Apps Script editor.
 
 ### E2E Testing
 1. Submit each form and check the lead lands in its sheet, with UTM columns filled when the link had UTMs
