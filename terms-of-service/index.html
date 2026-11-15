@@ -1593,8 +1593,14 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
         <div class="form-card quiz-card" id="quizSuccess" style="display:none;text-align:center">
           <div class="quiz-check" aria-hidden="true">&#10003;</div>
           <h3 style="font-size:1.5rem;margin-bottom:.8rem">Thank you.</h3>
-          <p style="color:var(--espresso-soft)">A member of our team will reach out within 1-3 business days. We look forward to meeting you.</p>
-          <p class="spam-note">We&rsquo;ve also just sent you a confirmation email. Don&rsquo;t see it within 5 minutes? Please check your spam or junk folder and search for an email from <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>.</p>
+          <div id="quizSuccessReview">
+            <p style="color:var(--espresso-soft)">A member of our team will reach out within 1-3 business days. We look forward to meeting you.</p>
+            <p class="spam-note">We&rsquo;ve also just sent you a confirmation email. Don&rsquo;t see it within 5 minutes? Please check your spam or junk folder and search for an email from <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>.</p>
+          </div>
+          <div id="quizSuccessBooking" style="display:none">
+            <p style="color:var(--espresso-soft)">Check your inbox, we&rsquo;ve just emailed you a link to pick a time for a call with our team. We look forward to meeting you.</p>
+            <p class="spam-note">Don&rsquo;t see it within 5 minutes? Please check your spam or junk folder and search for an email from <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>.</p>
+          </div>
           <a href="/" data-route class="btn btn-ember" style="margin-top:1.6rem">Back to home</a>
         </div>
       </div>
@@ -2451,7 +2457,7 @@ window.EmberHuman = {
 };
 
 window.EmberLeads = {
-  // Resolves true only once the script confirms the lead was received.
+  // Resolves to the script's response only once it confirms the lead was received, else false.
   async submit(form, fields){
     let utms = {};
     try { utms = window.EmberUTMs ? window.EmberUTMs.get() : {}; } catch(e){}
@@ -2469,7 +2475,8 @@ window.EmberLeads = {
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) });
       const data = await res.json();
       window.EmberLog && window.EmberLog('Lead response', { status: res.status, data });
-      return !!(data && data.ok);
+      // The response object (truthy) on success, so callers can read extras like data.booking.
+      return (data && data.ok) ? data : false;
     } catch(err){
       console.error('[Ember] Lead submit failed', err);
       return false;
@@ -2879,7 +2886,8 @@ window.EmberLeads = {
         elapsed_ms: state.started ? Date.now() - state.started : '',
         turnstile_token: await window.EmberHuman.token(human)
       };
-      if(!(await window.EmberLeads.submit('surrogate', payload))) {
+      const res = await window.EmberLeads.submit('surrogate', payload);
+      if(!res) {
         window.EmberHuman.reset(human);
         submit.disabled = false; submit.textContent = 'Submit application';
         let e = document.getElementById('quizErr');
@@ -2887,6 +2895,9 @@ window.EmberLeads = {
         e.textContent = 'Something went wrong. Please email info@embersurrogacy.com.';
         return;
       }
+      // Only surrogates who were just emailed a scheduling link see the booking message.
+      document.getElementById('quizSuccessBooking').style.display = res.booking ? '' : 'none';
+      document.getElementById('quizSuccessReview').style.display = res.booking ? 'none' : '';
       card.style.display = 'none';
       success.style.display = '';
       window.scrollTo({top:0, behavior:'instant'});
