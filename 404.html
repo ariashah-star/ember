@@ -23,6 +23,16 @@
 
 <!-- Google tag (gtag.js) - GA4 with SPA support. Loads only after the visitor clicks Accept on the cookie banner. -->
 <script>
+// Catches made-up U.S. numbers (555 numbers, 123-456-7890, 999-999-9999, toll-free,
+// area codes that don't exist) before a form is sent. d = 10 digits.
+window.fakeUsPhone = function(d){
+  if(!/^[2-9]\d{2}[2-9]\d{6}$/.test(d)) return true;
+  const area = d.slice(0,3), exch = d.slice(3,6);
+  if(area.charAt(1)==='9' || /^\d11$/.test(area) || /^\d11$/.test(exch) || area==='555' || exch==='555') return true;
+  if(/^8(00|33|44|55|66|77|88)$/.test(area)) return true;
+  if(new Set(d).size <= 2) return true;
+  return '01234567890123456789'.indexOf(d) !== -1 || '98765432109876543210'.indexOf(d) !== -1;
+};
   window.dataLayer = window.dataLayer || [];
   // Until the visitor accepts, gtag() calls are dropped rather than queued, so nothing from before
   // consent is ever sent and gtag.js is never requested. Any new tracker (Meta Pixel, ads tags)
@@ -1548,6 +1558,11 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <input id="f-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
               </div>
               <div class="field">
+                <label for="f-phone">Phone</label>
+                <input id="f-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="20" placeholder="(555) 555-5555">
+                <p class="field-hint">Outside the U.S.? Start with + and your country code.</p>
+              </div>
+              <div class="field">
                 <label for="f-message">Anything you'd like us to know? <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
                 <textarea id="f-message" name="message" rows="3" placeholder="Share as much or as little as you like"></textarea>
               </div>
@@ -1726,7 +1741,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
               </div>
               <div class="field">
                 <label for="c-phone">Phone</label>
-                <input id="c-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="14" placeholder="(555) 555-5555">
+                <input id="c-phone" name="phone" type="tel" required inputmode="tel" autocomplete="tel" maxlength="14" placeholder="(555) 555-5555">
               </div>
               <div class="field">
                 <label for="c-state">State you live in</label>
@@ -1809,6 +1824,10 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <label for="c-resume">Or share your LinkedIn or an online resume link</label>
                 <input id="c-resume" name="resume_link" type="url" placeholder="https://">
               </div>
+              <div class="quiz-consent">
+                <input type="checkbox" id="c-sms" name="consent_sms">
+                <label for="c-sms">I agree Ember Surrogacy may call and text me at this number about my application, such as interview reminders. These are not marketing texts. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="/privacy-policy/#texts" data-route>Privacy Policy</a>.</label>
+              </div>
               <div id="careersHuman" style="margin-bottom:.8rem"></div>
               <button type="submit" class="btn btn-ember" id="careersSubmit" style="width:100%">Submit Application</button>
               <p id="careersErr" aria-live="polite" style="margin-top:.8rem;color:var(--ember);font-size:.85rem"></p>
@@ -1852,6 +1871,9 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
 
       <h3>How we use your information</h3>
       <p>We use the information we collect to respond to your inquiries and requests; to personalize and improve your experience and our website; to provide customer support; to send you relevant information and periodic emails you have requested, including a confirmation and a short series of follow-up emails after you submit a form, which stop as soon as you reply or book a call and which you can stop at any time by replying &ldquo;stop&rdquo;; to verify your identity and evaluate your eligibility for our program; and to provide, coordinate, and facilitate the services you engage us for. We also use it to operate, secure, and improve our site and to meet our legal and regulatory obligations.</p>
+
+      <h3 id="texts">Text messages</h3>
+      <p>When you tick the texting box on our surrogate eligibility quiz or our careers application, Ember Surrogacy may call and text the phone number you gave us about your application or inquiry, such as reminders before a call or interview you booked with us and updates on next steps. If you also tick the separate, optional box on the quiz for tips and news, we may send you up to 4 of those texts in the two weeks after you apply; they stop if you reply, book a call or reply STOP, and ticking it is never a condition of applying. Message frequency varies. Message and data rates may apply. Reply STOP to stop texts at any time, or HELP for help, or email <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>. We do not share or sell your mobile number or your text opt-in with third parties or affiliates for their marketing. We share it only with the text message provider that sends our texts for us.</p>
 
       <h3>How we protect your information</h3>
       <p>We use a range of administrative, technical, and physical safeguards designed to protect your personal information when you provide, submit, or access it. No method of transmission or storage is completely secure, so while we work to protect your information, we cannot guarantee absolute security. Where you are given or choose a password for any part of our site, you are responsible for keeping it confidential.</p>
@@ -2510,15 +2532,22 @@ window.EmberLeads = {
     const email    = (fd.get('email')    || '').toString().trim();
     const interest = (fd.get('interest') || '').toString().trim();
     const msg      = (fd.get('message')  || '').toString().trim();
+    const phoneRaw = (fd.get('phone')    || '').toString().trim();
+    const phoneD   = phoneRaw.replace(/\D/g, '');
 
     if(!interest){ if(errEl) errEl.textContent = 'Please choose what you\'re interested in.'; return; }
     if(!/\p{L}.*\p{L}/u.test(name)){ if(errEl) errEl.textContent = 'Please enter your name.'; return; }
     if(!emailRe.test(email)){ if(errEl) errEl.textContent = 'Please enter a valid email.'; return; }
+    // U.S. numbers are 10 digits (an optional leading 1 is fine); others start with + and a country code.
+    const usPhone = phoneD.replace(/^1(?=\d{10}$)/, '');
+    const phoneOk = phoneRaw.charAt(0) === '+' ? phoneD.length >= 8 && phoneD.length <= 15 : usPhone.length === 10 && !fakeUsPhone(usPhone);
+    if(!phoneOk){ if(errEl) errEl.textContent = 'Please enter a phone number we can reach you on. Outside the U.S.? Start with + and your country code.'; return; }
+    const phone = phoneRaw.charAt(0) === '+' ? '+' + phoneD : '(' + usPhone.slice(0,3) + ') ' + usPhone.slice(3,6) + '-' + usPhone.slice(6);
 
     if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
 
     const ok = await window.EmberLeads.submit('parent', {
-      name, email, interest, message: msg,
+      name, email, phone, interest, message: msg,
       turnstile_token: await window.EmberHuman.token(human),
       company_website: (fd.get('company_website') || '').toString(),
       elapsed_ms: startedAt ? Date.now() - startedAt : ''
@@ -2561,9 +2590,11 @@ window.EmberLeads = {
     const emailEl = document.getElementById('c-email');
     emailEl.value = emailEl.value.trim().toLowerCase();
     if(!emailRe.test(emailEl.value)){ errEl.textContent = 'Please enter a valid email, like name@example.com.'; emailEl.focus(); return; }
-    if(v('phone')){
+    if(!v('phone')){ errEl.textContent = 'Please enter your phone number.'; phoneEl.focus(); return; }
+    {
       const d = phoneDigits(v('phone'));
       if(d.length !== 10 || /^[01]/.test(d)){ errEl.textContent = 'Please enter a 10-digit U.S. phone number.'; phoneEl.focus(); return; }
+      if(fakeUsPhone(d)){ errEl.textContent = 'That number doesn\u2019t look right. Please enter your real cell number.'; phoneEl.focus(); return; }
       phoneEl.value = fmtPhone(d);
     }
     if(!v('former_surrogate')){ errEl.textContent = 'Please tell us whether you\'re a current or former surrogate.'; return; }
@@ -2571,6 +2602,7 @@ window.EmberLeads = {
     if(!v('social_links')){ errEl.textContent = 'Please share at least one social account or post.'; return; }
     const file = form.querySelector('#c-resume-file').files[0];
     if(!file && !v('resume_link')){ errEl.textContent = 'Please attach your resume or share a LinkedIn or resume link.'; return; }
+    if(!fd.get('consent_sms')){ errEl.textContent = 'Please tick the box agreeing to calls and texts about your application.'; return; }
     if(file){
       if(!/\.(pdf|docx?)$/i.test(file.name)){ errEl.textContent = 'Please attach your resume as a PDF or Word file.'; return; }
       if(file.size > 5 * 1024 * 1024){ errEl.textContent = 'Your resume file is over 5 MB. Please attach a smaller file.'; return; }
@@ -2580,6 +2612,8 @@ window.EmberLeads = {
     const payload = {};
     ['name','email','phone','state','former_surrogate','hours_per_week','evenings_weekends','other_agency','journey','social_links','comment_reply','decline_reply','followup_text','support_reply','content_idea','resume_link'].forEach(k => payload[k] = v(k));
     payload.email = document.getElementById('c-email').value;
+    payload.consent_sms = 'Yes';
+    payload.sms_consented_at = new Date().toISOString();
     if(file){
       try {
         payload._resume_data = await new Promise((res, rej) => {
@@ -2807,6 +2841,7 @@ window.EmberLeads = {
         if(s.input==='tel'){
           const d = phoneDigits(v);
           if(d.length !== 10 || /^[01]/.test(d)){ fail('Please enter a 10-digit U.S. phone number.'); return; }
+          if(fakeUsPhone(d)){ fail('That number doesn\u2019t look right. Please enter your real cell number.'); return; }
           v = fmtPhone(d);
         }
         if(s.input==='date'){ const d = parseDob(v); const age = d && ageFrom(d); if(!d || age < 18 || age > 100){ fail(!d ? 'Please enter your full date of birth.' : age < 18 ? 'You need to be at least 18 to apply.' : 'Please check the year of your date of birth.'); return; } }
@@ -2826,6 +2861,8 @@ window.EmberLeads = {
     html += '<ul class="quiz-review-list">'+rows+'</ul>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizConsent"><label for="quizConsent">I consent to Ember collecting and using the information I\u2019ve provided to evaluate my eligibility for the surrogacy program and to contact me, as described in the <a href="/privacy-policy/" data-route>Privacy Policy</a>. I understand this quiz is not medical or legal advice.</label></div>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizHealthConsent"><label for="quizHealthConsent">I also specifically consent to Ember collecting my health information (my pregnancy and birth history, height and weight, health history, and smoking and substance use) only to evaluate my eligibility, as described in the <a href="/health-data-privacy/" data-route>Health Data Privacy Policy</a>. I can withdraw this consent at any time.</label></div>';
+    html += '<div class="quiz-consent"><input type="checkbox" id="quizSmsConsent"><label for="quizSmsConsent">I agree Ember Surrogacy may call and text me at the number I gave about my application, such as reminders before calls I book and updates on next steps. These are not marketing texts. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="/privacy-policy/#texts" data-route>Privacy Policy</a>.</label></div>';
+    html += '<div class="quiz-consent"><input type="checkbox" id="quizMarketingConsent"><label for="quizMarketingConsent">Optional: I&rsquo;d also like occasional texts from Ember Surrogacy with tips and news about becoming a surrogate. Up to 4 texts in the first two weeks. Msg &amp; data rates may apply. Reply STOP to opt out. Not required to apply.</label></div>';
     html += '<div id="quizHuman" style="margin-bottom:.8rem"></div>';
     html += '<button type="button" class="btn btn-ember" id="quizSubmit" style="width:100%" disabled>Submit application</button>';
     html += navHtml();
@@ -2836,8 +2873,9 @@ window.EmberLeads = {
     const submit = document.getElementById('quizSubmit');
     const human = document.getElementById('quizHuman');
     window.EmberHuman.mount(human);
-    const bothChecked = () => consent.checked && healthConsent.checked;
-    consent.onchange = healthConsent.onchange = () => { submit.disabled = !bothChecked(); };
+    const smsConsent = document.getElementById('quizSmsConsent');
+    const bothChecked = () => consent.checked && healthConsent.checked && smsConsent.checked;
+    consent.onchange = healthConsent.onchange = smsConsent.onchange = () => { submit.disabled = !bothChecked(); };
     submit.onclick = async () => {
       if(!bothChecked()) return;
       submit.disabled = true; submit.textContent = 'Sending…';
@@ -2871,6 +2909,10 @@ window.EmberLeads = {
         support_system: a.support || '',
         consent_privacy_policy: 'Yes',
         consent_health_data: 'Yes',
+        consent_sms: 'Yes',
+        sms_consented_at: new Date().toISOString(),
+        consent_sms_marketing: document.getElementById('quizMarketingConsent').checked ? 'Yes' : 'No',
+        sms_marketing_consented_at: document.getElementById('quizMarketingConsent').checked ? new Date().toISOString() : '',
         consented_at: new Date().toISOString(),
         utm_source: utms.utm_source || '',
         utm_medium: utms.utm_medium || '',
