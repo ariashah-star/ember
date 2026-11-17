@@ -1556,6 +1556,10 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <input type="checkbox" id="f-sms" name="consent_sms">
                 <label for="f-sms">Optional: I agree Ember Surrogacy may call and text me at this number about my inquiry, including reminders before calls I book. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="/privacy-policy/#texts" data-route>Privacy Policy</a>.</label>
               </div>
+              <div class="quiz-consent">
+                <input type="checkbox" id="f-sms-marketing" name="consent_sms_marketing">
+                <label for="f-sms-marketing">Optional: I&rsquo;d also like occasional texts from Ember Surrogacy with information about the intended parent program. Up to 4 texts in the first two weeks. Msg &amp; data rates may apply. Reply STOP to opt out.</label>
+              </div>
               <div class="field">
                 <label for="f-message">Anything you'd like us to know? <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
                 <textarea id="f-message" name="message" rows="3" placeholder="Share as much or as little as you like"></textarea>
@@ -1863,7 +1867,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <p>We use the information we collect to respond to your inquiries and requests; to personalize and improve your experience and our website; to provide customer support; to send you relevant information and periodic emails you have requested, including a confirmation and a short series of follow-up emails after you submit a form, which stop as soon as you reply or book a call and which you can stop at any time by replying &ldquo;stop&rdquo;; to verify your identity and evaluate your eligibility for our program; and to provide, coordinate, and facilitate the services you engage us for. We also use it to operate, secure, and improve our site and to meet our legal and regulatory obligations.</p>
 
       <h3 id="texts">Text messages</h3>
-      <p>When you tick the texting box on our surrogate eligibility quiz or our contact form, Ember Surrogacy may call and text the phone number you gave us about your application or inquiry, such as reminders before a call you booked with us and updates on next steps. We do not send marketing texts. On the contact form the box is optional. Message frequency varies. Message and data rates may apply. Reply STOP to stop texts at any time, or HELP for help, or email <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>. We do not share or sell your mobile number or your text opt-in with third parties or affiliates for their marketing. We share it only with the text message provider that sends our texts for us.</p>
+      <p>When you tick the texting box on our surrogate eligibility quiz or our contact form, Ember Surrogacy may call and text the phone number you gave us about your application or inquiry, such as reminders before a call you booked with us and updates on next steps. On the contact form the box is optional. If you also tick the separate, optional box for tips and news, we may send you up to 4 of those texts in the two weeks after you apply; they stop if you reply, book a call or reply STOP, and ticking it is never a condition of applying. Message frequency varies. Message and data rates may apply. Reply STOP to stop texts at any time, or HELP for help, or email <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>. We do not share or sell your mobile number or your text opt-in with third parties or affiliates for their marketing. We share it only with the text message provider that sends our texts for us.</p>
 
       <h3>How we protect your information</h3>
       <p>We use a range of administrative, technical, and physical safeguards designed to protect your personal information when you provide, submit, or access it. No method of transmission or storage is completely secure, so while we work to protect your information, we cannot guarantee absolute security. Where you are given or choose a password for any part of our site, you are responsible for keeping it confidential.</p>
@@ -2525,6 +2529,7 @@ window.EmberLeads = {
     const phoneRaw = (fd.get('phone')    || '').toString().trim();
     const phoneD   = phoneRaw.replace(/\D/g, '');
     const sms      = !!fd.get('consent_sms');
+    const smsMkt   = !!fd.get('consent_sms_marketing');
 
     if(!interest){ if(errEl) errEl.textContent = 'Please choose what you\'re interested in.'; return; }
     if(!/\p{L}.*\p{L}/u.test(name)){ if(errEl) errEl.textContent = 'Please enter your name.'; return; }
@@ -2541,6 +2546,8 @@ window.EmberLeads = {
       name, email, phone, interest, message: msg,
       consent_sms: sms ? 'Yes' : 'No',
       sms_consented_at: sms ? new Date().toISOString() : '',
+      consent_sms_marketing: smsMkt ? 'Yes' : 'No',
+      sms_marketing_consented_at: smsMkt ? new Date().toISOString() : '',
       turnstile_token: await window.EmberHuman.token(human),
       company_website: (fd.get('company_website') || '').toString(),
       elapsed_ms: startedAt ? Date.now() - startedAt : ''
@@ -2853,6 +2860,7 @@ window.EmberLeads = {
     html += '<div class="quiz-consent"><input type="checkbox" id="quizConsent"><label for="quizConsent">I consent to Ember collecting and using the information I\u2019ve provided to evaluate my eligibility for the surrogacy program and to contact me, as described in the <a href="/privacy-policy/" data-route>Privacy Policy</a>. I understand this quiz is not medical or legal advice.</label></div>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizHealthConsent"><label for="quizHealthConsent">I also specifically consent to Ember collecting my health information (my pregnancy and birth history, height and weight, health history, and smoking and substance use) only to evaluate my eligibility, as described in the <a href="/health-data-privacy/" data-route>Health Data Privacy Policy</a>. I can withdraw this consent at any time.</label></div>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizSmsConsent"><label for="quizSmsConsent">I agree Ember Surrogacy may call and text me at the number I gave about my application, such as reminders before calls I book and updates on next steps. These are not marketing texts. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="/privacy-policy/#texts" data-route>Privacy Policy</a>.</label></div>';
+    html += '<div class="quiz-consent"><input type="checkbox" id="quizMarketingConsent"><label for="quizMarketingConsent">Optional: I&rsquo;d also like occasional texts from Ember Surrogacy with tips and news about becoming a surrogate. Up to 4 texts in the first two weeks. Msg &amp; data rates may apply. Reply STOP to opt out. Not required to apply.</label></div>';
     html += '<div id="quizHuman" style="margin-bottom:.8rem"></div>';
     html += '<button type="button" class="btn btn-ember" id="quizSubmit" style="width:100%" disabled>Submit application</button>';
     html += navHtml();
@@ -2901,6 +2909,8 @@ window.EmberLeads = {
         consent_health_data: 'Yes',
         consent_sms: 'Yes',
         sms_consented_at: new Date().toISOString(),
+        consent_sms_marketing: document.getElementById('quizMarketingConsent').checked ? 'Yes' : 'No',
+        sms_marketing_consented_at: document.getElementById('quizMarketingConsent').checked ? new Date().toISOString() : '',
         consented_at: new Date().toISOString(),
         utm_source: utms.utm_source || '',
         utm_medium: utms.utm_medium || '',
