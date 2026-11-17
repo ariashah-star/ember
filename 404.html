@@ -23,6 +23,16 @@
 
 <!-- Google tag (gtag.js) - GA4 with SPA support. Loads only after the visitor clicks Accept on the cookie banner. -->
 <script>
+// Catches made-up U.S. numbers (555 numbers, 123-456-7890, 999-999-9999, toll-free,
+// area codes that don't exist) before a form is sent. d = 10 digits.
+window.fakeUsPhone = function(d){
+  if(!/^[2-9]\d{2}[2-9]\d{6}$/.test(d)) return true;
+  const area = d.slice(0,3), exch = d.slice(3,6);
+  if(area.charAt(1)==='9' || /^\d11$/.test(area) || /^\d11$/.test(exch) || area==='555' || exch==='555') return true;
+  if(/^8(00|33|44|55|66|77|88)$/.test(area)) return true;
+  if(new Set(d).size <= 2) return true;
+  return '01234567890123456789'.indexOf(d) !== -1 || '98765432109876543210'.indexOf(d) !== -1;
+};
   window.dataLayer = window.dataLayer || [];
   // Until the visitor accepts, gtag() calls are dropped rather than queued, so nothing from before
   // consent is ever sent and gtag.js is never requested. Any new tracker (Meta Pixel, ads tags)
@@ -2529,7 +2539,7 @@ window.EmberLeads = {
     if(!emailRe.test(email)){ if(errEl) errEl.textContent = 'Please enter a valid email.'; return; }
     // U.S. numbers are 10 digits (an optional leading 1 is fine); others start with + and a country code.
     const usPhone = phoneD.replace(/^1(?=\d{10}$)/, '');
-    const phoneOk = phoneRaw.charAt(0) === '+' ? phoneD.length >= 8 && phoneD.length <= 15 : usPhone.length === 10 && !/^[01]/.test(usPhone);
+    const phoneOk = phoneRaw.charAt(0) === '+' ? phoneD.length >= 8 && phoneD.length <= 15 : usPhone.length === 10 && !fakeUsPhone(usPhone);
     if(!phoneOk){ if(errEl) errEl.textContent = 'Please enter a phone number we can reach you on. Outside the U.S.? Start with + and your country code.'; return; }
     const phone = phoneRaw.charAt(0) === '+' ? '+' + phoneD : '(' + usPhone.slice(0,3) + ') ' + usPhone.slice(3,6) + '-' + usPhone.slice(6);
 
@@ -2583,6 +2593,7 @@ window.EmberLeads = {
     {
       const d = phoneDigits(v('phone'));
       if(d.length !== 10 || /^[01]/.test(d)){ errEl.textContent = 'Please enter a 10-digit U.S. phone number.'; phoneEl.focus(); return; }
+      if(fakeUsPhone(d)){ errEl.textContent = 'That number doesn\u2019t look right. Please enter your real cell number.'; phoneEl.focus(); return; }
       phoneEl.value = fmtPhone(d);
     }
     if(!v('former_surrogate')){ errEl.textContent = 'Please tell us whether you\'re a current or former surrogate.'; return; }
@@ -2833,6 +2844,7 @@ window.EmberLeads = {
         if(s.input==='tel'){
           const d = phoneDigits(v);
           if(d.length !== 10 || /^[01]/.test(d)){ fail('Please enter a 10-digit U.S. phone number.'); return; }
+          if(fakeUsPhone(d)){ fail('That number doesn\u2019t look right. Please enter your real cell number.'); return; }
           v = fmtPhone(d);
         }
         if(s.input==='date'){ const d = parseDob(v); const age = d && ageFrom(d); if(!d || age < 18 || age > 100){ fail(!d ? 'Please enter your full date of birth.' : age < 18 ? 'You need to be at least 18 to apply.' : 'Please check the year of your date of birth.'); return; } }
