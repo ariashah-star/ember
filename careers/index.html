@@ -1552,14 +1552,6 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <input id="f-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="20" placeholder="(555) 555-5555">
                 <p class="field-hint">Outside the U.S.? Start with + and your country code.</p>
               </div>
-              <div class="quiz-consent">
-                <input type="checkbox" id="f-sms" name="consent_sms">
-                <label for="f-sms">Optional: I agree Ember Surrogacy may call and text me at this number about my inquiry, including reminders before calls I book. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="/privacy-policy/#texts" data-route>Privacy Policy</a>.</label>
-              </div>
-              <div class="quiz-consent">
-                <input type="checkbox" id="f-sms-marketing" name="consent_sms_marketing">
-                <label for="f-sms-marketing">Optional: I&rsquo;d also like occasional texts from Ember Surrogacy with information about the intended parent program. Up to 4 texts in the first two weeks. Msg &amp; data rates may apply. Reply STOP to opt out.</label>
-              </div>
               <div class="field">
                 <label for="f-message">Anything you'd like us to know? <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
                 <textarea id="f-message" name="message" rows="3" placeholder="Share as much or as little as you like"></textarea>
@@ -1871,7 +1863,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <p>We use the information we collect to respond to your inquiries and requests; to personalize and improve your experience and our website; to provide customer support; to send you relevant information and periodic emails you have requested, including a confirmation and a short series of follow-up emails after you submit a form, which stop as soon as you reply or book a call and which you can stop at any time by replying &ldquo;stop&rdquo;; to verify your identity and evaluate your eligibility for our program; and to provide, coordinate, and facilitate the services you engage us for. We also use it to operate, secure, and improve our site and to meet our legal and regulatory obligations.</p>
 
       <h3 id="texts">Text messages</h3>
-      <p>When you tick the texting box on our surrogate eligibility quiz, our contact form or our careers application, Ember Surrogacy may call and text the phone number you gave us about your application or inquiry, such as reminders before a call or interview you booked with us and updates on next steps. On the contact form the box is optional. If you also tick the separate, optional box for tips and news, we may send you up to 4 of those texts in the two weeks after you apply; they stop if you reply, book a call or reply STOP, and ticking it is never a condition of applying. Message frequency varies. Message and data rates may apply. Reply STOP to stop texts at any time, or HELP for help, or email <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>. We do not share or sell your mobile number or your text opt-in with third parties or affiliates for their marketing. We share it only with the text message provider that sends our texts for us.</p>
+      <p>When you tick the texting box on our surrogate eligibility quiz or our careers application, Ember Surrogacy may call and text the phone number you gave us about your application or inquiry, such as reminders before a call or interview you booked with us and updates on next steps. If you also tick the separate, optional box on the quiz for tips and news, we may send you up to 4 of those texts in the two weeks after you apply; they stop if you reply, book a call or reply STOP, and ticking it is never a condition of applying. Message frequency varies. Message and data rates may apply. Reply STOP to stop texts at any time, or HELP for help, or email <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>. We do not share or sell your mobile number or your text opt-in with third parties or affiliates for their marketing. We share it only with the text message provider that sends our texts for us.</p>
 
       <h3>How we protect your information</h3>
       <p>We use a range of administrative, technical, and physical safeguards designed to protect your personal information when you provide, submit, or access it. No method of transmission or storage is completely secure, so while we work to protect your information, we cannot guarantee absolute security. Where you are given or choose a password for any part of our site, you are responsible for keeping it confidential.</p>
@@ -2532,8 +2524,6 @@ window.EmberLeads = {
     const msg      = (fd.get('message')  || '').toString().trim();
     const phoneRaw = (fd.get('phone')    || '').toString().trim();
     const phoneD   = phoneRaw.replace(/\D/g, '');
-    const sms      = !!fd.get('consent_sms');
-    const smsMkt   = !!fd.get('consent_sms_marketing');
 
     if(!interest){ if(errEl) errEl.textContent = 'Please choose what you\'re interested in.'; return; }
     if(!/\p{L}.*\p{L}/u.test(name)){ if(errEl) errEl.textContent = 'Please enter your name.'; return; }
@@ -2548,10 +2538,6 @@ window.EmberLeads = {
 
     const ok = await window.EmberLeads.submit('parent', {
       name, email, phone, interest, message: msg,
-      consent_sms: sms ? 'Yes' : 'No',
-      sms_consented_at: sms ? new Date().toISOString() : '',
-      consent_sms_marketing: smsMkt ? 'Yes' : 'No',
-      sms_marketing_consented_at: smsMkt ? new Date().toISOString() : '',
       turnstile_token: await window.EmberHuman.token(human),
       company_website: (fd.get('company_website') || '').toString(),
       elapsed_ms: startedAt ? Date.now() - startedAt : ''
