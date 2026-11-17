@@ -1738,7 +1738,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
               </div>
               <div class="field">
                 <label for="c-phone">Phone</label>
-                <input id="c-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="14" placeholder="(555) 555-5555">
+                <input id="c-phone" name="phone" type="tel" required inputmode="tel" autocomplete="tel" maxlength="14" placeholder="(555) 555-5555">
               </div>
               <div class="field">
                 <label for="c-state">State you live in</label>
@@ -1821,6 +1821,10 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
                 <label for="c-resume">Or share your LinkedIn or an online resume link</label>
                 <input id="c-resume" name="resume_link" type="url" placeholder="https://">
               </div>
+              <div class="quiz-consent">
+                <input type="checkbox" id="c-sms" name="consent_sms">
+                <label for="c-sms">I agree Ember Surrogacy may call and text me at this number about my application, such as interview reminders. These are not marketing texts. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="/privacy-policy/#texts" data-route>Privacy Policy</a>.</label>
+              </div>
               <div id="careersHuman" style="margin-bottom:.8rem"></div>
               <button type="submit" class="btn btn-ember" id="careersSubmit" style="width:100%">Submit Application</button>
               <p id="careersErr" aria-live="polite" style="margin-top:.8rem;color:var(--ember);font-size:.85rem"></p>
@@ -1866,7 +1870,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <p>We use the information we collect to respond to your inquiries and requests; to personalize and improve your experience and our website; to provide customer support; to send you relevant information and periodic emails you have requested, including a confirmation and a short series of follow-up emails after you submit a form, which stop as soon as you reply or book a call and which you can stop at any time by replying &ldquo;stop&rdquo;; to verify your identity and evaluate your eligibility for our program; and to provide, coordinate, and facilitate the services you engage us for. We also use it to operate, secure, and improve our site and to meet our legal and regulatory obligations.</p>
 
       <h3 id="texts">Text messages</h3>
-      <p>When you tick the texting box on our surrogate eligibility quiz or our contact form, Ember Surrogacy may call and text the phone number you gave us about your application or inquiry, such as reminders before a call you booked with us and updates on next steps. On the contact form the box is optional. If you also tick the separate, optional box for tips and news, we may send you up to 4 of those texts in the two weeks after you apply; they stop if you reply, book a call or reply STOP, and ticking it is never a condition of applying. Message frequency varies. Message and data rates may apply. Reply STOP to stop texts at any time, or HELP for help, or email <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>. We do not share or sell your mobile number or your text opt-in with third parties or affiliates for their marketing. We share it only with the text message provider that sends our texts for us.</p>
+      <p>When you tick the texting box on our surrogate eligibility quiz, our contact form or our careers application, Ember Surrogacy may call and text the phone number you gave us about your application or inquiry, such as reminders before a call or interview you booked with us and updates on next steps. On the contact form the box is optional. If you also tick the separate, optional box for tips and news, we may send you up to 4 of those texts in the two weeks after you apply; they stop if you reply, book a call or reply STOP, and ticking it is never a condition of applying. Message frequency varies. Message and data rates may apply. Reply STOP to stop texts at any time, or HELP for help, or email <a href="mailto:info@embersurrogacy.com">info@embersurrogacy.com</a>. We do not share or sell your mobile number or your text opt-in with third parties or affiliates for their marketing. We share it only with the text message provider that sends our texts for us.</p>
 
       <h3>How we protect your information</h3>
       <p>We use a range of administrative, technical, and physical safeguards designed to protect your personal information when you provide, submit, or access it. No method of transmission or storage is completely secure, so while we work to protect your information, we cannot guarantee absolute security. Where you are given or choose a password for any part of our site, you are responsible for keeping it confidential.</p>
@@ -2589,7 +2593,8 @@ window.EmberLeads = {
     const emailEl = document.getElementById('c-email');
     emailEl.value = emailEl.value.trim().toLowerCase();
     if(!emailRe.test(emailEl.value)){ errEl.textContent = 'Please enter a valid email, like name@example.com.'; emailEl.focus(); return; }
-    if(v('phone')){
+    if(!v('phone')){ errEl.textContent = 'Please enter your phone number.'; phoneEl.focus(); return; }
+    {
       const d = phoneDigits(v('phone'));
       if(d.length !== 10 || /^[01]/.test(d)){ errEl.textContent = 'Please enter a 10-digit U.S. phone number.'; phoneEl.focus(); return; }
       phoneEl.value = fmtPhone(d);
@@ -2599,6 +2604,7 @@ window.EmberLeads = {
     if(!v('social_links')){ errEl.textContent = 'Please share at least one social account or post.'; return; }
     const file = form.querySelector('#c-resume-file').files[0];
     if(!file && !v('resume_link')){ errEl.textContent = 'Please attach your resume or share a LinkedIn or resume link.'; return; }
+    if(!fd.get('consent_sms')){ errEl.textContent = 'Please tick the box agreeing to calls and texts about your application.'; return; }
     if(file){
       if(!/\.(pdf|docx?)$/i.test(file.name)){ errEl.textContent = 'Please attach your resume as a PDF or Word file.'; return; }
       if(file.size > 5 * 1024 * 1024){ errEl.textContent = 'Your resume file is over 5 MB. Please attach a smaller file.'; return; }
@@ -2608,6 +2614,8 @@ window.EmberLeads = {
     const payload = {};
     ['name','email','phone','state','former_surrogate','hours_per_week','evenings_weekends','other_agency','journey','social_links','comment_reply','decline_reply','followup_text','support_reply','content_idea','resume_link'].forEach(k => payload[k] = v(k));
     payload.email = document.getElementById('c-email').value;
+    payload.consent_sms = 'Yes';
+    payload.sms_consented_at = new Date().toISOString();
     if(file){
       try {
         payload._resume_data = await new Promise((res, rej) => {
