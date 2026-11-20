@@ -794,6 +794,12 @@ footer{background:#2A1B15;color:rgba(250,243,234,.72);padding:5rem 0 2.5rem;font
 .quiz-back:hover{color:var(--ember)}
 .quiz-back[hidden]{visibility:hidden}
 .quiz-hint{font-size:.85rem;color:var(--espresso-soft);margin:-1rem 0 1.4rem}
+.quiz-options.multi{margin-bottom:1.2rem}
+.quiz-option.multi{display:flex;align-items:center;gap:.8rem;padding:.85rem 1.1rem}
+.quiz-option.multi::before{content:'';flex:none;width:1.1rem;height:1.1rem;border:1.5px solid rgba(59,38,32,.35);border-radius:4px;background:var(--white)}
+.quiz-option.multi.selected::before{border-color:var(--ember);background:var(--ember) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat}
+.quiz-err{margin-top:.5rem;color:var(--ember);font-size:.85rem}
+.field textarea.quiz-note{min-height:7.5rem;resize:vertical;line-height:1.5}
 .quiz-body-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 .quiz-review-list{list-style:none;padding:0;margin:0 0 1.6rem}
 .quiz-review-list li{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 0;border-bottom:1px solid rgba(59,38,32,.1);font-size:.9rem}
@@ -1933,7 +1939,7 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
       <p>This Consumer Health Data Privacy Policy supplements our <a href="/privacy-policy/" data-route>Privacy Policy</a>. It explains how Ember Families LLC, doing business as Ember Surrogacy (&ldquo;Ember,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;) handles &ldquo;consumer health data&rdquo; as defined by laws such as Washington&rsquo;s My Health My Data Act, Nevada SB 370, and the Connecticut Data Privacy Act. Ember is not a healthcare provider and is not subject to HIPAA, but we treat the health information you share with care.</p>
 
       <h3>Health data we collect</h3>
-      <p>When you complete our surrogate eligibility quiz, we collect your answers about your pregnancy and birth history (including how many births and C-sections you have had and whether your pregnancies were healthy and full-term), your height and weight (which we use to calculate your BMI), whether you have had weight-loss surgery, an eating disorder in the last five years, or a history of serious mental illness or suicidal thoughts, and whether you smoke, vape, or use illegal drugs or live in a smoke-free home. We collect this together with your name, date of birth, state, email address, and phone number, and your answers about citizenship, government assistance, criminal history in your household, transportation, and support at home.</p>
+      <p>When you complete our surrogate eligibility quiz, we collect your answers about your pregnancy and birth history (including how many births and C-sections you have had and whether your pregnancies were healthy and full-term), your height and weight (which we use to calculate your BMI), whether you have had weight-loss surgery, an eating disorder in the last five years, or a history of serious mental illness or suicidal thoughts, and whether you smoke, vape, or use illegal drugs or live in a smoke-free home. We collect this together with your name, date of birth, state, email address, and phone number, and your answers about citizenship, government assistance, criminal history in your household, transportation, and support at home. If you tell us you receive government assistance, we also ask which programs, who lives in your home and brings in income, whether you are working or in school, and anything else you choose to share about your situation.</p>
 
       <h3>Where it comes from</h3>
       <p>We collect this information only from you, directly, when you submit the quiz.</p>
@@ -2705,6 +2711,8 @@ window.EmberLeads = {
 (function(){
   const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','I live outside the U.S.'];
   const hadBirth = a => a.given_birth === 'Yes';
+  // Receiving assistance never rules anyone out. These follow-ups help the team see the whole picture.
+  const onAssist = a => a.gov_assistance === 'Yes';
   // A step with `when` is skipped unless when(answers) is true.
   const steps = [
     {tag:'About you', q:"What's your date of birth?", key:'dob', input:'date', placeholder:'', auto:'bday'},
@@ -2718,7 +2726,13 @@ window.EmberLeads = {
     {tag:'Health', q:'What are your height and weight?', key:'body', input:'body'},
     {tag:'Health', q:'Have you ever had weight-loss surgery, an eating disorder in the last 5 years, or a history of serious mental illness or suicidal thoughts?', hint:'Mild anxiety, depression, or postpartum depression doesn’t count here.', key:'health_history', options:['No','Yes']},
     {tag:'Lifestyle', q:'Do you avoid smoking, vaping, and illegal drugs, and live in a smoke-free home?', key:'nonsmoker', options:['Yes','No']},
-    {tag:'Lifestyle', q:'Do you currently receive government financial assistance, such as SNAP, TANF, or housing assistance?', hint:'State health insurance for your children is fine to leave out.', key:'gov_assistance', options:['No','Yes']},
+    {tag:'Lifestyle', q:'Do you currently receive government financial assistance, such as SNAP, TANF, or housing assistance?', hint:'Student aid like Pell grants, loans, or scholarships doesn\u2019t count, and state health insurance for your children is fine to leave out. Answering yes doesn\u2019t rule you out.', key:'gov_assistance', options:['No','Yes']},
+    {tag:'Your household', q:'Which programs do you receive right now?', hint:'Choose all that apply. This just helps us understand your situation.', key:'gov_programs', input:'checks', choices:['SNAP (food stamps)','WIC','TANF or cash assistance','Section 8 or other housing assistance','Medicaid for myself','Medicaid or CHIP for my children','SSI or SSDI','Childcare assistance','Unemployment'], other:'Something else', when:onAssist, extra:true},
+    {tag:'Your household', q:'Who lives in your home with you?', hint:'Choose all that apply.', key:'household', input:'checks', choices:['My children','My spouse or partner','My parents or other family','Roommates or other adults'], when:onAssist, extra:true},
+    {tag:'Your household', q:'Who brings in income for your household?', hint:'Choose all that apply.', key:'household_income', input:'checks', choices:['Me','My spouse or partner','My parents or other family','Child support or alimony'], other:'Something else', when:onAssist, extra:true},
+    {tag:'Your household', q:'Are you working right now?', key:'working', options:['Yes, full-time','Yes, part-time','Not right now'], when:onAssist, extra:true},
+    {tag:'Your household', q:'Are you in school right now?', key:'in_school', options:['Yes, full-time','Yes, part-time','No'], when:onAssist, extra:true},
+    {tag:'Your household', q:'Anything else you\u2019d like us to share about your situation?', hint:'Optional. For example, family who help out, or your plans for work or school.', key:'household_note', input:'textarea', placeholder:'Share as much or as little as you like', when:onAssist, extra:true},
     {tag:'Lifestyle', q:'Have you, your partner, or any other adult in your home ever been convicted of a felony?', key:'felony', options:['No','Yes']},
     {tag:'Lifestyle', q:'Do you have a car, a valid driver’s license, and childcare for appointments?', key:'transport', options:['Yes','No']},
     {tag:'Lifestyle', q:'Do you have a reliable support system at home?', key:'support', options:['Yes','No']},
@@ -2729,7 +2743,10 @@ window.EmberLeads = {
   ];
   const body = document.getElementById('quizBody');
   if(!body) return;
-  const total = steps.length + 1; // + review step
+  // Follow-up steps marked `extra` only count toward "Step X of Y" when they're shown,
+  // so most applicants see the same step count as before.
+  const counted = i => !steps[i].extra || shown(i);
+  const totalNow = () => steps.filter((_, i) => counted(i)).length + 1; // + review step
   const bar = document.getElementById('quizBar');
   const count = document.getElementById('quizCount');
   const card = document.getElementById('quizCard');
@@ -2752,8 +2769,9 @@ window.EmberLeads = {
     return '<div class="quiz-nav"><button type="button" class="quiz-back" id="quizBack"'+(state.i===0?' hidden':'')+'>&larr; Back</button><span></span></div>';
   }
   function setProgress(){
-    bar.style.width = (state.i/total*100)+'%';
-    count.textContent = 'Step '+Math.min(state.i+1,total)+' of '+total;
+    const total = totalNow(), at = steps.slice(0, state.i).filter((_, i) => counted(i)).length;
+    bar.style.width = (at/total*100)+'%';
+    count.textContent = 'Step '+Math.min(at+1,total)+' of '+total;
   }
   function render(){
     if(!state.started) state.started = Date.now();
@@ -2771,6 +2789,20 @@ window.EmberLeads = {
         html += '<button type="button" class="quiz-option'+sel+'" data-opt="'+esc(opt)+'">'+esc(opt)+'</button>';
       });
       html += '</div>';
+    } else if(s.input==='checks'){
+      const picked = state.answers[s.key+'_list'] || [];
+      html += '<div class="quiz-options multi" role="group" aria-label="'+esc(s.q)+'">';
+      s.choices.concat(s.other ? [s.other] : []).forEach(c => {
+        const on = picked.includes(c);
+        html += '<button type="button" class="quiz-option multi'+(on?' selected':'')+'" aria-pressed="'+on+'" data-opt="'+esc(c)+'">'+esc(c)+'</button>';
+      });
+      html += '</div>';
+      if(s.other) html += '<div class="field" id="quizOtherWrap"'+(picked.includes(s.other)?'':' hidden')+'><input id="quizOther" type="text" placeholder="Tell us what else" aria-label="'+esc(s.other)+'"'+(state.answers[s.key+'_other']?' value="'+esc(state.answers[s.key+'_other'])+'"':'')+'></div>';
+      html += '<p id="quizFieldErr" class="quiz-err" aria-live="polite"></p>';
+      html += '<button type="button" class="btn btn-ember" id="quizContinue" style="width:100%">Continue</button>';
+    } else if(s.input==='textarea'){
+      html += '<div class="field"><textarea id="quizInput" class="quiz-note" maxlength="1000" placeholder="'+esc(s.placeholder)+'" aria-label="'+esc(s.q)+'">'+esc(state.answers[s.key]||'')+'</textarea></div>';
+      html += '<button type="button" class="btn btn-ember" id="quizContinue" style="width:100%">Continue</button>';
     } else if(s.input==='select'){
       html += '<div class="field"><select id="quizInput" autocomplete="address-level1"><option value="">'+esc(s.placeholder)+'</option>';
       s.choices.forEach(c => { html += '<option'+(state.answers[s.key]===c?' selected':'')+'>'+esc(c)+'</option>'; });
@@ -2811,6 +2843,33 @@ window.EmberLeads = {
       };
       document.getElementById('quizContinue').onclick = go;
       w.onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); go(); } };
+      return;
+    }
+    if(s.input==='checks'){
+      const btns = [...body.querySelectorAll('.quiz-option.multi')];
+      const otherWrap = document.getElementById('quizOtherWrap'), other = document.getElementById('quizOther');
+      const errEl = document.getElementById('quizFieldErr');
+      btns.forEach(btn => btn.onclick = () => {
+        const on = !btn.classList.contains('selected');
+        btn.classList.toggle('selected', on); btn.setAttribute('aria-pressed', on);
+        if(btn.dataset.opt === s.other){ otherWrap.hidden = !on; if(on) other.focus(); }
+        errEl.textContent = '';
+      });
+      document.getElementById('quizContinue').onclick = () => {
+        const list = btns.filter(b => b.classList.contains('selected')).map(b => b.dataset.opt);
+        const otherText = other ? other.value.trim() : '';
+        if(!list.length){ errEl.textContent = 'Please choose at least one.'; return; }
+        if(s.other && list.includes(s.other) && !otherText){ errEl.textContent = 'Please tell us what else.'; other.focus(); return; }
+        state.answers[s.key+'_list'] = list;
+        state.answers[s.key+'_other'] = otherText;
+        state.answers[s.key] = list.map(c => c === s.other ? otherText : c).join(', ');
+        next();
+      };
+      return;
+    }
+    if(s.input==='textarea'){
+      const input = document.getElementById('quizInput');
+      document.getElementById('quizContinue').onclick = () => { state.answers[s.key] = input.value.trim(); next(); };
       return;
     }
     if(s.options){
@@ -2854,7 +2913,7 @@ window.EmberLeads = {
     }
   }
   function renderReview(){
-    const labels = {dob:'Date of birth', state:'State', citizen:'U.S. citizen or permanent resident', given_birth:'Given birth to a child', births:'Number of births', c_sections:'C-sections', healthy_preg:'Healthy, full-term pregnancies', raising_child:'Currently raising a child', body:'Height and weight', health_history:'Weight-loss surgery, eating disorder, or serious mental illness', nonsmoker:'No smoking, vaping, or drugs', gov_assistance:'Government financial assistance', felony:'Felony in household', transport:'Car, license, and childcare', support:'Reliable support system', first_name:'First name', last_name:'Last name', email:'Email', phone:'Phone'};
+    const labels = {dob:'Date of birth', state:'State', citizen:'U.S. citizen or permanent resident', given_birth:'Given birth to a child', births:'Number of births', c_sections:'C-sections', healthy_preg:'Healthy, full-term pregnancies', raising_child:'Currently raising a child', body:'Height and weight', health_history:'Weight-loss surgery, eating disorder, or serious mental illness', nonsmoker:'No smoking, vaping, or drugs', gov_assistance:'Government financial assistance', gov_programs:'Programs', household:'Lives with', household_income:'Household income from', working:'Working', in_school:'In school', household_note:'About your situation', felony:'Felony in household', transport:'Car, license, and childcare', support:'Reliable support system', first_name:'First name', last_name:'Last name', email:'Email', phone:'Phone'};
     let rows = '';
     steps.forEach((s, i) => { const v = state.answers[s.key]; if(v && shown(i)) rows += '<li><span class="rq">'+esc(labels[s.key])+'</span><span class="ra">'+esc(s.key==='dob' ? fmtDob(v) : v)+'</span></li>'; });
     let html = '<span class="quiz-tag">Review</span><h2 class="quiz-q">Ready to send your application?</h2>';
@@ -2904,6 +2963,12 @@ window.EmberLeads = {
         weight_loss_surgery_eating_disorder_or_mental_illness: a.health_history || '',
         no_smoking_vaping_or_drugs: a.nonsmoker || '',
         government_assistance: a.gov_assistance || '',
+        government_programs: onAssist(a) ? (a.gov_programs || '') : '',
+        household_members: onAssist(a) ? (a.household || '') : '',
+        household_income_from: onAssist(a) ? (a.household_income || '') : '',
+        working: onAssist(a) ? (a.working || '') : '',
+        in_school: onAssist(a) ? (a.in_school || '') : '',
+        household_note: onAssist(a) ? (a.household_note || '') : '',
         felony_in_household: a.felony || '',
         car_license_and_childcare: a.transport || '',
         support_system: a.support || '',
