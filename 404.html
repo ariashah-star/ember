@@ -1936,12 +1936,12 @@ section[id]{scroll-margin-top:var(--hdr,82px)}
   </div>
   <section>
     <div class="wrap legal-prose">
-      <p><strong>Last updated:</strong> October 2026</p>
+      <p><strong>Last updated:</strong> November 2026</p>
 
       <p>This Consumer Health Data Privacy Policy supplements our <a href="/privacy-policy/" data-route>Privacy Policy</a>. It explains how Ember Families LLC, doing business as Ember Surrogacy (&ldquo;Ember,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;) handles &ldquo;consumer health data&rdquo; as defined by laws such as Washington&rsquo;s My Health My Data Act, Nevada SB 370, and the Connecticut Data Privacy Act. Ember is not a healthcare provider and is not subject to HIPAA, but we treat the health information you share with care.</p>
 
       <h3>Health data we collect</h3>
-      <p>When you complete our surrogate eligibility quiz, we collect your answers about your pregnancy and birth history (including how many births and C-sections you have had and whether your pregnancies were healthy and full-term), your height and weight (which we use to calculate your BMI), whether you have had weight-loss surgery, an eating disorder in the last five years, or a history of serious mental illness or suicidal thoughts, and whether you smoke, vape, or use illegal drugs or live in a smoke-free home. We collect this together with your name, date of birth, state, email address, and phone number, and your answers about citizenship, government assistance, criminal history in your household, transportation, and support at home. If you tell us you receive government assistance, we also ask which programs, who helps pay the bills at home, whether you are working or in school, and anything else you choose to share.</p>
+      <p>When you complete our surrogate eligibility quiz, we collect your answers about your pregnancy and birth history (including how many births and C-sections you have had and whether your pregnancies were healthy and full-term), your height and weight (which we use to calculate your BMI), whether you have had weight-loss surgery, an eating disorder in the last five years, or a history of serious mental illness or suicidal thoughts, whether you currently have an IUD and would be willing to have it removed, and whether you smoke, vape, or use illegal drugs or live in a smoke-free home. We collect this together with your name, date of birth, state, email address, and phone number, and your answers about citizenship, government assistance, criminal history in your household, transportation, and support at home. If you tell us you receive government assistance, we also ask which programs, who helps pay the bills at home, whether you are working or in school, and anything else you choose to share.</p>
 
       <h3>Where it comes from</h3>
       <p>We collect this information only from you, directly, when you submit the quiz.</p>
@@ -2715,6 +2715,7 @@ window.EmberLeads = {
   const hadBirth = a => a.given_birth === 'Yes';
   // Receiving assistance never rules anyone out. These follow-ups help the team see the whole picture.
   const onAssist = a => a.gov_assistance === 'Yes';
+  const hasIud = a => a.iud === 'Yes';
   // A step with `when` is skipped unless when(answers) is true.
   const steps = [
     {tag:'About you', q:"What's your date of birth?", key:'dob', input:'date', placeholder:'', auto:'bday'},
@@ -2727,6 +2728,8 @@ window.EmberLeads = {
     {tag:'Pregnancy history', q:'Are you currently raising a child of your own?', key:'raising_child', options:['Yes','No']},
     {tag:'Health', q:'What are your height and weight?', key:'body', input:'body'},
     {tag:'Health', q:'Have you ever had weight-loss surgery, an eating disorder in the last 5 years, or a history of serious mental illness or suicidal thoughts?', hint:'Mild anxiety, depression, or postpartum depression doesn’t count here.', key:'health_history', options:['No','Yes']},
+    {tag:'Health', q:'Do you currently have an IUD?', hint:'This includes hormonal IUDs like Mirena, Kyleena, Liletta, or Skyla, and copper IUDs like Paragard. Saying yes won\u2019t rule you out.', key:'iud', options:['No','Yes']},
+    {tag:'Health', q:'Would you be comfortable removing it when screening starts?', hint:'Removing it early gives your uterine lining time to rebuild, which helps the embryo transfer succeed.', key:'iud_remove', options:['Yes','No','Not sure'], when:hasIud, extra:true},
     {tag:'Lifestyle', q:'Do you avoid smoking, vaping, and illegal drugs, and live in a smoke-free home?', key:'nonsmoker', options:['Yes','No']},
     {tag:'Lifestyle', q:'Do you currently receive government financial assistance, such as SNAP, TANF, or housing assistance?', hint:'Student loans and grants don\u2019t count, and you can leave out your kids\u2019 health insurance. Saying yes won\u2019t rule you out.', key:'gov_assistance', options:['No','Yes']},
     {tag:'Your household', q:'Which of these do you get right now?', hint:'Pick all that apply.', key:'gov_programs', input:'checks', choices:['Food stamps (SNAP)','WIC','Cash assistance (TANF)','Housing help, like Section 8','Medicaid for me','SSI or disability','Help paying for childcare','Unemployment'], other:'Something else', when:onAssist, extra:true},
@@ -2917,13 +2920,13 @@ window.EmberLeads = {
     }
   }
   function renderReview(){
-    const labels = {dob:'Date of birth', state:'State', citizen:'U.S. citizen or permanent resident', given_birth:'Given birth to a child', births:'Number of births', c_sections:'C-sections', healthy_preg:'Healthy, full-term pregnancies', raising_child:'Currently raising a child', body:'Height and weight', health_history:'Weight-loss surgery, eating disorder, or serious mental illness', nonsmoker:'No smoking, vaping, or drugs', gov_assistance:'Government financial assistance', gov_programs:'Programs', household_income:'Helps pay the bills', work_school:'Working or in school', household_note:'Anything else', felony:'Felony in household', transport:'Car, license, and childcare', support:'Reliable support system', first_name:'First name', last_name:'Last name', email:'Email', phone:'Phone'};
+    const labels = {dob:'Date of birth', state:'State', citizen:'U.S. citizen or permanent resident', given_birth:'Given birth to a child', births:'Number of births', c_sections:'C-sections', healthy_preg:'Healthy, full-term pregnancies', raising_child:'Currently raising a child', body:'Height and weight', health_history:'Weight-loss surgery, eating disorder, or serious mental illness', iud:'Current IUD', iud_remove:'Willing to remove IUD at screening', nonsmoker:'No smoking, vaping, or drugs', gov_assistance:'Government financial assistance', gov_programs:'Programs', household_income:'Helps pay the bills', work_school:'Working or in school', household_note:'Anything else', felony:'Felony in household', transport:'Car, license, and childcare', support:'Reliable support system', first_name:'First name', last_name:'Last name', email:'Email', phone:'Phone'};
     let rows = '';
     steps.forEach((s, i) => { const v = state.answers[s.key]; if(v && shown(i)) { rows += '<li><span class="rq">'+esc(labels[s.key])+'</span><span class="ra">'+esc(s.key==='dob' ? fmtDob(v) : v)+'</span></li>'; const n = s.note && state.answers[s.note.key]; if(n) rows += '<li><span class="rq">'+esc(labels[s.note.key])+'</span><span class="ra">'+esc(n)+'</span></li>'; } });
     let html = '<span class="quiz-tag">Review</span><h2 class="quiz-q">Ready to send your application?</h2>';
     html += '<ul class="quiz-review-list">'+rows+'</ul>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizConsent"><label for="quizConsent">I consent to Ember collecting and using the information I\u2019ve provided to evaluate my eligibility for the surrogacy program and to contact me, as described in the <a href="/privacy-policy/" data-route>Privacy Policy</a>. I understand this quiz is not medical or legal advice.</label></div>';
-    html += '<div class="quiz-consent"><input type="checkbox" id="quizHealthConsent"><label for="quizHealthConsent">I also specifically consent to Ember collecting my health information (my pregnancy and birth history, height and weight, health history, and smoking and substance use) only to evaluate my eligibility, as described in the <a href="/health-data-privacy/" data-route>Health Data Privacy Policy</a>. I can withdraw this consent at any time.</label></div>';
+    html += '<div class="quiz-consent"><input type="checkbox" id="quizHealthConsent"><label for="quizHealthConsent">I also specifically consent to Ember collecting my health information (my pregnancy and birth history, height and weight, health history, IUD use, and smoking and substance use) only to evaluate my eligibility, as described in the <a href="/health-data-privacy/" data-route>Health Data Privacy Policy</a>. I can withdraw this consent at any time.</label></div>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizSmsConsent"><label for="quizSmsConsent">I agree Ember Surrogacy may call and text me at the number I gave about my application, such as reminders before calls I book and updates on next steps. These are not marketing texts. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="/privacy-policy/#texts" data-route>Privacy Policy</a>.</label></div>';
     html += '<div class="quiz-consent"><input type="checkbox" id="quizMarketingConsent"><label for="quizMarketingConsent">Optional: I&rsquo;d also like occasional texts from Ember Surrogacy with tips and news about becoming a surrogate. Up to 4 texts in the first two weeks. Msg &amp; data rates may apply. Reply STOP to opt out. Not required to apply.</label></div>';
     html += '<div id="quizHuman" style="margin-bottom:.8rem"></div>';
@@ -2965,6 +2968,8 @@ window.EmberLeads = {
         weight_lbs: a.weight || '',
         bmi: bmiOf(a),
         weight_loss_surgery_eating_disorder_or_mental_illness: a.health_history || '',
+        current_iud: a.iud || '',
+        willing_to_remove_iud: hasIud(a) ? (a.iud_remove || '') : '',
         no_smoking_vaping_or_drugs: a.nonsmoker || '',
         government_assistance: a.gov_assistance || '',
         government_programs: onAssist(a) ? (a.gov_programs || '') : '',
